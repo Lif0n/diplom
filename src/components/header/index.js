@@ -2,12 +2,9 @@ import { memo } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import logo from '../../img/logo.png';
 import './style.css'
 
-function Header() {
-
-  console.log('img/logo.png')
+function Header({logo, headers}) {
 
   return (
     <Navbar bg='light' data-bs-theme="light">
