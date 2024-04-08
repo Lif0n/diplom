@@ -1,0 +1,14 @@
+.Weekday-container {
+  display: flex;
+  align-items: center;
+  width: 30px !important;
+  left: 5px;
+  position: sticky;
+  background-color: white;
+}
+
+.Weekday-text {
+  width: 1px;
+  word-wrap: break-word;
+  vertical-align: middle;
+}
