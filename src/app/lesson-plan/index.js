@@ -5,6 +5,7 @@ import Header from "../../components/header";
 import groupsActions from '../../store/groups/actions'
 import useInit from "../../hooks/use-init";
 import logo from '../../img/logo.png';
+import LessonPlanHead from "../../components/lesson-plan-head";
 
 function LessonPlan() {
 
@@ -23,6 +24,7 @@ function LessonPlan() {
   return(
     <PageLayout>
       <Header logo={logo}/>
+      <LessonPlanHead groups={select.groups}/>
     </PageLayout>
   )
 }

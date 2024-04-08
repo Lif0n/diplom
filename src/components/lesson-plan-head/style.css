@@ -1,0 +1,9 @@
+.LessonPlanHead{
+  top: 60px;
+}
+.LessonPlanHead-element{
+  width: 350px !important;
+}
+.LessonPlanHead-space {
+  width: 30px !important;
+}

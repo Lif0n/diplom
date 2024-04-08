@@ -3,3 +3,8 @@
   width: 55px;
   vertical-align: middle;
 }
+
+.sticky{
+  width: 100vw;
+  position: sticky;
+}
