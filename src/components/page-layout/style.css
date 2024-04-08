@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  position: relative;
   display: inline-block;
 }
 
@@ -8,5 +9,6 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   margin: 0 auto;
+  position: relative;
   background: #fff;
 }

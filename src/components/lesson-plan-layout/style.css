@@ -1,0 +1,7 @@
+.LessonPlanLayout{
+  top: 76px;
+  position: relative;
+  min-height: 100vh;
+  display: inline-block;
+  background: white;
+}

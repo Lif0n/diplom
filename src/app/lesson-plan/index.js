@@ -1,11 +1,12 @@
 import { memo } from "react";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import groupsActions from '../../store/groups/actions'
 import useInit from "../../hooks/use-init";
 import logo from '../../img/logo.png';
 import LessonPlanHead from "../../components/lesson-plan-head";
+import LessonPlanLayout from "../../components/lesson-plan-layout";
 
 function LessonPlan() {
 
@@ -21,10 +22,12 @@ function LessonPlan() {
 
   console.log(select.groups);
 
-  return(
+  return (
     <PageLayout>
-      <Header logo={logo}/>
-      <LessonPlanHead groups={select.groups}/>
+      <Header logo={logo} />
+      <LessonPlanLayout>
+        <LessonPlanHead groups={select.groups} />
+      </LessonPlanLayout>
     </PageLayout>
   )
 }

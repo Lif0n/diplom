@@ -7,7 +7,7 @@ import './style.css'
 function Header({ logo, headers }) {
 
   return (
-    <div className='sticky'>
+    <div className='header'>
       <Navbar bg='light' data-bs-theme="light">
         <Container>
           <Navbar.Brand>
@@ -19,7 +19,6 @@ function Header({ logo, headers }) {
         </Container>
       </Navbar>
     </div>
-
   );
 }
 

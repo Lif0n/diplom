@@ -4,7 +4,9 @@
   vertical-align: middle;
 }
 
-.sticky{
+.header {
+  position: fixed;
+  z-index: 1;
+  transition: top 0.3s;
   width: 100vw;
-  position: sticky;
 }
