@@ -9,7 +9,7 @@ function LessonPlanHead({ groups }) {
     <div className={'row flex-nowrap '+cn()}>
       <div className={'col-1 '+cn('space')}></div>
       {groups.map((group) => {
-        return (<div className={cn('element')}>
+        return (<div key={group.id} className={cn('element')}>
           <h6 className='text-center'>{group.speciality.shortname+'-'+group.name}</h6>
         </div>)
       })}

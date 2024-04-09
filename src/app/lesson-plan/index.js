@@ -8,7 +8,7 @@ import useInit from "../../hooks/use-init";
 import logo from '../../img/logo.png';
 import LessonPlanHead from "../../components/lesson-plan-head";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
-import Weekday from "../../components/weekday";
+import Spinner from '../../components/spinner'
 import LessonPlanRow from "../../components/lesson-plan-row";
 
 function LessonPlan() {
@@ -23,26 +23,30 @@ function LessonPlan() {
   const select = useSelector(state => ({
     groups: state.groups.list,
     lessonPlan: state.lessonPlan.list,
+    waiting: state.lessonPlan.waiting
   }));
 
   const rows = useMemo(() => {
     const rows = [];
-    for(let i = 1; i < 7; i++){
-      rows.push(<LessonPlanRow groups={select.groups} list={select.lessonPlan.filter(
-        function(item) {
+    for (let i = 1; i < 7; i++) {
+      rows.push(<LessonPlanRow key={i} groups={select.groups} weekday={i} list={select.lessonPlan.filter(
+        function (item) {
           return item.weekday === i;
         }
-      )}/>);
+      )} />);
+      rows.push(<hr style={{ top: '20px', bottom: '20px' }} />);
     }
     return rows;
-  }, [select.lessonPlan])
+  }, [select.lessonPlan, select.waiting])
 
   return (
     <PageLayout>
       <Header logo={logo} />
       <LessonPlanLayout>
-        <LessonPlanHead groups={select.groups} />
-        {rows}
+        <Spinner active={select.waiting}>
+          <LessonPlanHead groups={select.groups} />
+          {rows}
+        </Spinner>
       </LessonPlanLayout>
     </PageLayout>
   )

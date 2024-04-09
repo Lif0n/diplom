@@ -7,9 +7,11 @@ function LessonPlanColumn({list}) {
 
   const items = [];
 
+  console.log(list);
+
   for(let lessonNumber = 1; lessonNumber < 7; lessonNumber++){
     const res = list.filter((item) => item.lessonNumber === lessonNumber);
-    items.push(<Lesson items={res.length > 0 ? res : ''}/>);
+    items.push(<Lesson key={res.length > 0 ? res[0].id : ''} items={res.length > 0 ? res : ''}/>);
   }
 
   return(

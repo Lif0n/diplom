@@ -1,4 +1,9 @@
 .Lesson {
-  height: 17%;
+  height: 16%;
   width: 350px !important;
+  cursor: pointer;
+}
+
+.Lesson:hover {
+  color: #0d6efd;
 }

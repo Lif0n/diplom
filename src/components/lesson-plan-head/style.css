@@ -3,6 +3,7 @@
   position: sticky !important;
 }
 .LessonPlanHead-element{
+  margin-left: 10px;
   width: 350px !important;
 }
 .LessonPlanHead-space {
