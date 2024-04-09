@@ -1,0 +1,13 @@
+version: "0.1"
+services:
+  AKVT-raspisanie-frontend:
+    build: ../
+    image: akvt-raspisanie:dev
+    restart: always
+    container_name: akvt-raspisanie-dev
+    networks:
+      - AKVT-raspisanie-frontend
+
+networks:
+  AKVT-raspisanie-frontend:
+    name: AKVT-raspisanie-frontend
