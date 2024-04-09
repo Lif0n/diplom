@@ -3,7 +3,7 @@ pipeline {
     environment {
         registry = ""
         dockerContainerName = 'akvt-raspisanie-dev'
-        dockerImageName = 'sakvt-raspisanie:dev'
+        dockerImageName = 'akvt-raspisanie:dev'
     }
     stages {
         stage('clean container') {
