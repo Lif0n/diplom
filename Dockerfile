@@ -7,8 +7,10 @@ RUN npm install --no-cached
 RUN npm run build
 
 
+FROM node:21-alpine
+COPY --from=builder /react-app/build /usr/share/nginx/html
 ENV NODE_ENV production
-EXPOSE 8080
-CMD [ "npm", "run", "prod"]
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;"]
 
 

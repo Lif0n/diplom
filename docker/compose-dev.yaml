@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: akvt-raspisanie-dev
     ports:
-      - 4910:8080
+      - 4910:80
     networks:
       - AKVT-raspisanie-frontend
 

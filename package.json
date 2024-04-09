@@ -6,8 +6,7 @@
   "scripts": {
     "start": "webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
-    "test": "jest",
-    "prod": "webpack serve --mode production"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
