@@ -4,6 +4,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install --no-cached
+ENV NODE_ENV production
 RUN npm run build
 
 
