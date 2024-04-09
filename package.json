@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/ylabio/react-webinar-3/issues"
   },
-  "homepage": "https://github.com/ylabio/react-webinar-3#readme",
+  "homepage": "https://raspisanie.hnt8.ru/",
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
     "@reduxjs/toolkit": "^2.2.3",
