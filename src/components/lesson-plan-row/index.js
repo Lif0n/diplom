@@ -5,13 +5,13 @@ import Weekday from '../weekday';
 import Lesson from '../lesson';
 import LessonPlanColumn from '../lesson-plan-column';
 
-function LessonPlanRow({ list, weekday, groups }) {
+function LessonPlanRow({ list, weekday, groups, onItemClick }) {
   const cn = bem('LessonPlanRow');
 
   const cols = [];
 
   groups.forEach((group) => {
-    cols.push(<LessonPlanColumn key={group.id} list={list.filter(function (item){
+    cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} list={list.filter(function (item){
       return item.group.id === group.id;
     })}/>);
   })

@@ -2,10 +2,10 @@ import { memo } from 'react'
 import { cn as bem } from '@bem-react/classname';
 import './style.css'
 
-function LessonContent({ item }) {
+function LessonContent({ item, onItemClick }) {
 
   return (
-    <div className='LessonContent'>
+    <div className='LessonContent' onClick={onItemClick}>
       <h6 className='h-50'>{item.subject?.name}</h6>
       <div className='row h-50'>
         {item.audience && <h6 className='col'>{item.audience?.number}</h6>}

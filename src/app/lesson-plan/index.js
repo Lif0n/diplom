@@ -1,14 +1,15 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import groupsActions from '../../store/groups/actions';
-import lessonPlanActions from '../../store/lesson-plan/actions'
+import lessonPlanActions from '../../store/lesson-plan/actions';
+import modalsActions from '../../store/modals/actions';
 import useInit from "../../hooks/use-init";
 import logo from '../../img/logo.png';
 import LessonPlanHead from "../../components/lesson-plan-head";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
-import Spinner from '../../components/spinner'
+import Spinner from '../../components/spinner';
 import LessonPlanRow from "../../components/lesson-plan-row";
 
 function LessonPlan() {
@@ -26,10 +27,16 @@ function LessonPlan() {
     waiting: state.lessonPlan.waiting
   }));
 
+  const callbacks = {
+    openModalLesson: useCallback(() => {
+      dispatch(modalsActions.open('lesson'));
+    })
+  }
+
   const rows = useMemo(() => {
     const rows = [];
     for (let i = 1; i < 7; i++) {
-      rows.push(<LessonPlanRow key={i} groups={select.groups} weekday={i} list={select.lessonPlan.filter(
+      rows.push(<LessonPlanRow key={i} groups={select.groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
         function (item) {
           return item.weekday === i;
         }
