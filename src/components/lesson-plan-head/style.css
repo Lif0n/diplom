@@ -1,5 +1,6 @@
 .LessonPlanHead{
   top: 76px;
+  background: white;
   position: sticky !important;
 }
 .LessonPlanHead-element{
