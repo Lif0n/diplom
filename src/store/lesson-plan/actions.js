@@ -11,7 +11,7 @@ export default {
 
         dispatch({type: 'lesson-plan/load-success', payload: {data: res.data}})
       } catch (e) {
-        dispatch({type: 'groups/load-error'})
+        dispatch({type: 'lesson-plan/load-error'})
       }
     }
   }
