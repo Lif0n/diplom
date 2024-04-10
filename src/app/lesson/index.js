@@ -8,6 +8,7 @@ function Lesson({lessonPlan}) {
 
   console.log(lessonPlan);
 
+  const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
   const callbacks = {
     closeModal: useCallback(() => {
       dispatch(modalsActions.close('lesson'));
@@ -15,7 +16,8 @@ function Lesson({lessonPlan}) {
   }
 
   return (
-    <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}>
+    <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
+     title={`${lessonPlan.group.speciality.shortname}-${lessonPlan.group?.name}, ${weekdays[lessonPlan.weekday-1]}, ${lessonPlan.lessonNumber}-я пара`}>
 
     </ModalLayout>
   )
