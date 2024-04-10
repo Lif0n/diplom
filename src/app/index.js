@@ -6,7 +6,7 @@ import Lesson from './lesson';
 
 function App() {
 
-  const activeModal = useSelector(state => state.modals.name);
+  const activeModals = useSelector(state => state.modals.list);
 
   return (
     <>
@@ -14,7 +14,11 @@ function App() {
       <Route path={''} element={<LessonPlan/>}/>
     </Routes>
 
-    {activeModal === 'lesson' && <Lesson/>}
+    {activeModals.some(item => {
+      return item.name === 'lesson'
+    }) && <Lesson lessonPlan={activeModals.find((item) => {
+      return item.name === 'lesson'
+    })}/>}
     </>
   )
 }

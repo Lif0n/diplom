@@ -3,15 +3,15 @@ export default {
    * Открытие модалки по названию
    * @param name
    */
-  open: (name) => {
-    return {type: 'modal/open', payload: {name}};
+  open: (name, params) => {
+    return {type: 'modal/open', payload: {name, params}};
   },
 
   /**
    * Закрытие модалки
    * @param name
    */
-  close: () => {
-    return {type: 'modal/close'}
+  close: (name) => {
+    return {type: 'modal/close', payload: {name}}
   }
 }

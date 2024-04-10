@@ -11,7 +11,7 @@ function LessonPlanRow({ list, weekday, groups, onItemClick }) {
   const cols = [];
 
   groups.forEach((group) => {
-    cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} list={list.filter(function (item){
+    cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} weekday={weekday} group={group} list={list.filter(function (item){
       return item.group.id === group.id;
     })}/>);
   })
