@@ -20,7 +20,9 @@
   "homepage": "https://raspisanie.hnt8.ru/",
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
+    "@nlmk/ds-2.0": "^1.5.5",
     "@reduxjs/toolkit": "^2.2.3",
+    "antd": "^5.16.1",
     "bootstrap": "^5.3.3",
     "file-loader": "^6.2.0",
     "lodash.debounce": "^4.0.8",
