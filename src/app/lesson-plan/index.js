@@ -35,14 +35,14 @@ function LessonPlan() {
 
   const rows = useMemo(() => {
     const rows = [];
-    for (let i = 1; i < 7; i++) {
-      rows.push(<LessonPlanRow key={i} groups={select.groups} onItemClick={(item) => callbacks.openModalLesson(item)} weekday={i} list={select.lessonPlan.filter(
+    [1,2,3,4,5,6].forEach((i) => {
+      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={select.groups} onItemClick={(item) => callbacks.openModalLesson(item)} weekday={i} list={select.lessonPlan.filter(
         function (item) {
           return item.weekday === i;
         }
       )} />);
-      rows.push(<hr style={{ top: '20px', bottom: '20px' }} />);
-    }
+      rows.push(<hr key={`hr-${i}`} style={{ top: '20px', bottom: '20px' }} />);
+    })
     return rows;
   }, [select.lessonPlan, select.waiting])
 

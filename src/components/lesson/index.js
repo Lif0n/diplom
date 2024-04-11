@@ -7,6 +7,7 @@ function Lesson({ items, weekday, group, onItemClick, lessonNumber }) {
 
   const cn = bem('Lesson');
 
+
   const callbacks = {
     onEmptyClick: (e) => onItemClick({lessonNumber: lessonNumber, weekday: weekday, group: group}),
   }

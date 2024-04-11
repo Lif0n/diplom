@@ -6,6 +6,7 @@ import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
 import subjectsActions from '../../store/subjects/actions';
 import groupTeachersActions from '../../store/group-teachers/actions';
+import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
 import Spinner from "../../components/spinner";
 import { Select, Radio, Flex, Button } from "antd";
@@ -43,7 +44,8 @@ function Lesson({ lessonPlan }) {
       console.log({...lesson, teachers: teachers});
     }),
     onDelete: useCallback(() => {
-      
+      dispatch(lessonPlanActions.delete(lessonPlan.id));
+      dispatch(modalsActions.close('lesson'));
     })
   }
 
@@ -113,7 +115,7 @@ function Lesson({ lessonPlan }) {
         </Flex>
         <Flex gap='middle' style={{margin: '15px 0px', position: "relative" , width: '50%', transform: 'translate(-50%)', left: '50%'}}>
           <Button type="primary" size="large" onClick={callbacks.onAccept}>{lessonPlan.id ? 'Изменить пару' : 'Добавить пару'}</Button>
-          {lessonPlan.id && <Button type="primary" size="large" danger>Удалить пару</Button>}
+          {lessonPlan.id && <Button type="primary" size="large" danger onClick={callbacks.onDelete}>Удалить пару</Button>}
         </Flex>
       </Spinner>
     </ModalLayout>
