@@ -9,13 +9,14 @@ import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
 import Spinner from "../../components/spinner";
-import { Select, Radio, Flex, Button } from "antd";
+import { Radio, Flex, Button } from "antd";
+import LessonSelect from "../../components/lesson-select";
 
 function Lesson({ lessonPlan }) {
 
   const [lesson, setLesson] = useState(lessonPlan);
 
-  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0].id : 0), (lessonPlan.teachers[1] ? lessonPlan.teachers[1].id : 0)] : [0,0]);
+  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0].id : 0), (lessonPlan.teachers[1] ? lessonPlan.teachers[1].id : 0)] : [0, 0]);
 
   const dispatch = useDispatch();
 
@@ -41,7 +42,8 @@ function Lesson({ lessonPlan }) {
       dispatch(modalsActions.close('lesson'));
     }),
     onAccept: useCallback(() => {
-      console.log({...lesson, teachers: teachers});
+      console.log(lesson);
+      console.log(teachers);
     }),
     onDelete: useCallback(() => {
       dispatch(lessonPlanActions.delete(lessonPlan.id));
@@ -53,67 +55,50 @@ function Lesson({ lessonPlan }) {
     <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
       title={`${lessonPlan.group.speciality.shortname}-${lessonPlan.group?.name}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
       <Spinner active={select.waiting}>
-        <Select style={{ zIndex: 10, width: '50%', transform: 'translate(-50%)', left: '50%', margin: '15px 0px' }} size="large"
+        <LessonSelect placeholder='Предмет'
           defaultValue={lessonPlan.subject && lessonPlan.subject.id}
-          showSearch
-          onChange={(value) => setLesson({...lesson, subject: {id: value}})}
-          placeholder='Предмет'
-          optionFilterProp="children"
-          filterOption={(input, option) => (option?.label ?? '').includes(input)}
-          options={select.subjects.map((subject) => {
+          onChange={(value) => setLesson({ ...lesson, subject: { id: value } })}
+          selectOptions={select.subjects.map((subject) => {
             return {
               value: subject.id,
               label: subject.name
             }
           })} />
-        <Select style={{ zIndex: 10, width: '50%', transform: 'translate(-50%)', left: '50%', margin: '15px 0px' }} size="large"
+        <LessonSelect placeholder='Основной преподаватель'
           defaultValue={lessonPlan.teachers && lessonPlan.teachers[0] && lessonPlan.teachers[0].id}
-          showSearch
-          placeholder='Основной преподаватель'
-          onChange={(value) =>setTeachers(value, teachers[1])}
-          optionFilterProp="children"
-          filterOption={(input, option) => (option?.label ?? '').includes(input)}
-          options={select.teachers.map((teacher) => {
+          onChange={(value) => setTeachers([value, teachers[1]])}
+          selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
               label: `${teacher.surname} ${teacher.name}. ${teacher.patronymic}`
             }
           })} />
-        <Select style={{ zIndex: 10, width: '50%', transform: 'translate(-50%)', left: '50%', margin: '15px 0px' }} size="large"
+        <LessonSelect placeholder='Запасной преподаватель'
           defaultValue={lessonPlan.teachers && lessonPlan.teachers[1] && lessonPlan.teachers[1].id}
-          showSearch
-          placeholder='Запасной преподаватель'
-          onChange={(value) =>setTeachers(teacher[0], value)}
-          optionFilterProp="children"
-          filterOption={(input, option) => (option?.label ?? '').includes(input)}
-          options={select.teachers.map((teacher) => {
+          onChange={(value) => setTeachers([teachers[0], value])}
+          selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
               label: `${teacher.surname} ${teacher.name}. ${teacher.patronymic}`
             }
-          })} />
-        <Select style={{ zIndex: 10, width: '50%', transform: 'translate(-50%)', left: '50%', margin: '15px 0px' }} size="large"
+          })}/>
+          <LessonSelect placeholder='Кабинет'
           defaultValue={lessonPlan.audience && lessonPlan.audience.id}
-          showSearch
-          onChange={(value) =>setLesson({...lesson, audience: {id: value}})}
-          placeholder='Кабинет'
-          optionFilterProp="children"
-          filterOption={(input, option) => (option?.label ?? '').includes(input)}
-          options={select.audiences.map((audience) => {
+          onChange={(value) => setLesson({ ...lesson, audience: { id: value } })}
+          selectOptions={select.audiences.map((audience) => {
             return {
               value: audience.id,
               label: audience.number
             }
-          })} />
-        <Flex vertical gap='middle' style={{margin: '15px 0px', position: "relative" , width: '50%', transform: 'translate(-50%)', left: '50%'}}>
+          })}/>
+        <Flex vertical gap='middle' style={{ margin: '15px 0px', position: "relative", width: '50%', transform: 'translate(-50%)', left: '50%' }}>
           <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
             buttonStyle="solid" size="large"
-            onChange={(value) =>setLesson({...lesson, weekNumber: value})}>
-            <Radio.Button value={0}>Первая неделя</Radio.Button>
-            <Radio.Button value={1}>Вторая неделя</Radio.Button>
-          </Radio.Group>
+            onChange={(value) => setLesson({ ...lesson, weekNumber: value.target.value })}
+            options={[{label: 'Первая неделя', value: 0},{label: 'Вторая неделя', value: 1}]}
+            optionType="button"/>
         </Flex>
-        <Flex gap='middle' style={{margin: '15px 0px', position: "relative" , width: '50%', transform: 'translate(-50%)', left: '50%'}}>
+        <Flex gap='middle' style={{ margin: '15px 0px', position: "relative", width: '50%', transform: 'translate(-50%)', left: '50%' }}>
           <Button type="primary" size="large" onClick={callbacks.onAccept}>{lessonPlan.id ? 'Изменить пару' : 'Добавить пару'}</Button>
           {lessonPlan.id && <Button type="primary" size="large" danger onClick={callbacks.onDelete}>Удалить пару</Button>}
         </Flex>
