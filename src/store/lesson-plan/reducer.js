@@ -32,7 +32,7 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'lesson-plan/post-success':
-      return { ...state, list: [...state.list, action.payload.data], waiting: false }
+      return { ...state, waiting: false }
 
     case 'lesson-plan/post-error':
       return { ...state, waiting: false };

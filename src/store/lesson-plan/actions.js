@@ -35,6 +35,7 @@ export default {
       dispatch({type: 'lesson-plan/post-start'});
 
       try {
+        console.log(JSON.stringify(lesson));
         const res = await services.api.request({
           url: `/api/LessonPlan`,
           method: 'POST',

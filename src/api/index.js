@@ -8,7 +8,7 @@ class APIService {
     this.services = services;
     this.config = config
     this.defaultHeaders = {
-      //'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
     }
   }
 

@@ -16,7 +16,7 @@ function Lesson({ lessonPlan }) {
 
   const [lesson, setLesson] = useState(lessonPlan);
 
-  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0].id : 0), (lessonPlan.teachers[1] ? lessonPlan.teachers[1].id : 0)] : [0, 0]);
+  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0].id : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1].id : null)] : [null, null]);
 
   const dispatch = useDispatch();
 
@@ -41,11 +41,15 @@ function Lesson({ lessonPlan }) {
     closeModal: useCallback(() => {
       dispatch(modalsActions.close('lesson'));
     }),
-    onAccept: useCallback(() => {
-      console.log(lesson);
-      console.log([{ lessonPlan: lesson, teacher: teachers[0], isGeneral: true },
-      { lessonPlan: lesson, teacher: teachers[1], isGeneral: false }]);
-      console.log(JSON.stringify({...lesson, teachers: teachers, isDistance: false}));
+    onAccept: useCallback(async () => {
+      if(lesson.id){
+        console.log(JSON.stringify({...lesson, teachers: teachers, isDistance: false}));
+      }
+      else{
+        await Promise.all([dispatch(lessonPlanActions.post({...lesson, teachers: teachers, isDistance: false}))]);
+        dispatch(lessonPlanActions.load());
+        dispatch(modalsActions.close('lesson'));
+      }
     }),
     onDelete: useCallback(() => {
       dispatch(lessonPlanActions.delete(lessonPlan.id));
