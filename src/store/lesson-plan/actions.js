@@ -29,5 +29,22 @@ export default {
         dispatch({type: 'lesson-plan/delete-error'})
       }
     }
+  },
+  post: (lesson) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'lesson-plan/post-start'});
+
+      try {
+        const res = await services.api.request({
+          url: `/api/LessonPlan`,
+          method: 'POST',
+          body: JSON.stringify(lesson)
+        });
+        dispatch({type: 'lesson-plan/post-success', payload: {data: res.data}})
+      } catch (e) {
+        console.log(e);
+        dispatch({type: 'lesson-plan/post-error'})
+      }
+    }
   }
 }

@@ -28,6 +28,15 @@ function reducer(state = initialState, action) {
     case 'lesson-plan/delete-error':
       return { ...state, waiting: false };
 
+    case 'lesson-plan/post-start':
+      return { ...state, waiting: true };
+
+    case 'lesson-plan/post-success':
+      return { ...state, list: [...state.list, action.payload.data], waiting: false }
+
+    case 'lesson-plan/post-error':
+      return { ...state, waiting: false };
+
     default:
       return state;
   }
