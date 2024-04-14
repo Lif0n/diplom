@@ -91,14 +91,14 @@ function Lesson({ lessonPlan }) {
               label: audience.number
             }
           })}/>
-        <Flex vertical gap='middle' style={{ margin: '15px 0px', position: "relative", width: '50%', transform: 'translate(-50%)', left: '50%' }}>
+        <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
           <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
             buttonStyle="solid" size="large"
             onChange={(value) => setLesson({ ...lesson, weekNumber: value.target.value })}
             options={[{label: 'Первая неделя', value: 0},{label: 'Вторая неделя', value: 1}]}
             optionType="button"/>
         </Flex>
-        <Flex gap='middle' style={{ margin: '15px 0px', position: "relative", width: '50%', transform: 'translate(-50%)', left: '50%' }}>
+        <Flex gap='middle' style={{ margin: '15px 0px', justifySelf: 'center' }}>
           <Button type="primary" size="large" onClick={callbacks.onAccept}>{lessonPlan.id ? 'Изменить пару' : 'Добавить пару'}</Button>
           {lessonPlan.id && <Button type="primary" size="large" danger onClick={callbacks.onDelete}>Удалить пару</Button>}
         </Flex>

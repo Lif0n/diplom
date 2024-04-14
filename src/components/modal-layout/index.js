@@ -2,6 +2,7 @@ import {memo, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {cn as bem} from '@bem-react/classname';
 import './style.css';
+import { Modal } from 'antd';
 
 function ModalLayout(props) {
 
@@ -21,7 +22,7 @@ function ModalLayout(props) {
         : 'center';
     });
     // Следим за изменениями размеров layout
-    resizeObserver.observe(layout.current);
+    //resizeObserver.observe(layout.current);
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'auto';
@@ -29,18 +30,29 @@ function ModalLayout(props) {
     }
   }, []);
 
+  // return (
+  //   <div className={cn()} ref={layout}>
+  //     <div className={cn('frame')} ref={frame}>
+  //       <div className={cn('head')}>
+  //         <h3 className={cn('title')}>{props.title}</h3>
+  //         <button className={cn('close')} onClick={props.onClose}>{props.labelClose}</button>
+  //       </div>
+  //       <div className={cn('content')}>
+  //         {props.children}
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
   return (
-    <div className={cn()} ref={layout}>
-      <div className={cn('frame')} ref={frame}>
-        <div className={cn('head')}>
-          <h3 className={cn('title')}>{props.title}</h3>
-          <button className={cn('close')} onClick={props.onClose}>{props.labelClose}</button>
-        </div>
-        <div className={cn('content')}>
-          {props.children}
-        </div>
-      </div>
-    </div>
+    <Modal title={props.title}
+    footer={props.footer ? props.footer : ''}
+    open={true}
+    style={{display: 'grid'}}
+    onCancel={props.onClose}
+    children={props.children}
+    classNames={{body: 'ModalLayout-content'}}>
+    </Modal>
   );
 }
 
