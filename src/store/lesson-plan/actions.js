@@ -24,7 +24,6 @@ export default {
           url: `/api/LessonPlan?id=${id}`,
           method: 'DELETE'
         });
-
         dispatch({type: 'lesson-plan/delete-success', payload: {id}})
       } catch (e) {
         dispatch({type: 'lesson-plan/delete-error'})

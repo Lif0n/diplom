@@ -43,7 +43,9 @@ function Lesson({ lessonPlan }) {
     }),
     onAccept: useCallback(() => {
       console.log(lesson);
-      console.log(teachers);
+      console.log([{ lessonPlan: lesson, teacher: teachers[0], isGeneral: true },
+      { lessonPlan: lesson, teacher: teachers[1], isGeneral: false }]);
+      console.log(JSON.stringify({...lesson, teachers: teachers, isDistance: false}));
     }),
     onDelete: useCallback(() => {
       dispatch(lessonPlanActions.delete(lessonPlan.id));
@@ -57,7 +59,9 @@ function Lesson({ lessonPlan }) {
       <Spinner active={select.waiting}>
         <LessonSelect placeholder='Предмет'
           defaultValue={lessonPlan.subject && lessonPlan.subject.id}
-          onChange={(value) => setLesson({ ...lesson, subject: { id: value } })}
+          onChange={(value) => setLesson({ ...lesson, subject: select.subjects.find((subject) => {
+            return subject.id === value
+          }) })}
           selectOptions={select.subjects.map((subject) => {
             return {
               value: subject.id,
@@ -66,7 +70,9 @@ function Lesson({ lessonPlan }) {
           })} />
         <LessonSelect placeholder='Основной преподаватель'
           defaultValue={lessonPlan.teachers && lessonPlan.teachers[0] && lessonPlan.teachers[0].id}
-          onChange={(value) => setTeachers([value, teachers[1]])}
+          onChange={(value) => setTeachers([select.teachers.find((teacher) => {
+            return teacher.id === value
+          }), teachers[1]])}
           selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
@@ -75,28 +81,34 @@ function Lesson({ lessonPlan }) {
           })} />
         <LessonSelect placeholder='Запасной преподаватель'
           defaultValue={lessonPlan.teachers && lessonPlan.teachers[1] && lessonPlan.teachers[1].id}
-          onChange={(value) => setTeachers([teachers[0], value])}
+          onChange={(value) => setTeachers([teachers[0], select.teachers.find((teacher) => {
+            return teacher.id === value
+          })])}
           selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
               label: `${teacher.surname} ${teacher.name}. ${teacher.patronymic}`
             }
-          })}/>
-          <LessonSelect placeholder='Кабинет'
+          })} />
+        <LessonSelect placeholder='Кабинет'
           defaultValue={lessonPlan.audience && lessonPlan.audience.id}
-          onChange={(value) => setLesson({ ...lesson, audience: { id: value } })}
+          onChange={(value) => setLesson({
+            ...lesson, audience: select.audiences.find((audience) => {
+              return audience.id === value
+            })
+          })}
           selectOptions={select.audiences.map((audience) => {
             return {
               value: audience.id,
               label: audience.number
             }
-          })}/>
+          })} />
         <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
           <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
             buttonStyle="solid" size="large"
             onChange={(value) => setLesson({ ...lesson, weekNumber: value.target.value })}
-            options={[{label: 'Первая неделя', value: 0},{label: 'Вторая неделя', value: 1}]}
-            optionType="button"/>
+            options={[{ label: 'Первая неделя', value: 0 }, { label: 'Вторая неделя', value: 1 }]}
+            optionType="button" />
         </Flex>
         <Flex gap='middle' style={{ margin: '15px 0px', justifySelf: 'center' }}>
           <Button type="primary" size="large" onClick={callbacks.onAccept}>{lessonPlan.id ? 'Изменить пару' : 'Добавить пару'}</Button>

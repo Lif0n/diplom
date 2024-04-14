@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { cn as bem } from '@bem-react/classname';
 import './style.css'
 import Weekday from '../weekday';
@@ -8,14 +8,15 @@ import LessonPlanColumn from '../lesson-plan-column';
 function LessonPlanRow({ list, weekday, groups, onItemClick }) {
   const cn = bem('LessonPlanRow');
 
-  const cols = [];
-
-  groups.forEach((group) => {
-    cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} weekday={weekday} group={group} list={list.filter(function (item){
-      return item.group.id === group.id;
-    })}/>);
-  })
-
+  const cols = useMemo(() => {
+    const cols = [];
+    groups.forEach((group) => {
+      cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} weekday={weekday} group={group} list={list.filter(function (item){
+        return item.group.id === group.id;
+      })}/>);
+    });
+    return cols;
+  }, [list])
 
   return (
     <div className={'row flex-nowrap ' + cn()}>
