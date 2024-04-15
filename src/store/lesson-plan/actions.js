@@ -47,5 +47,23 @@ export default {
         dispatch({type: 'lesson-plan/post-error'})
       }
     }
+  },
+  put: (lesson) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'lesson-plan/put-start'});
+
+      try {
+        console.log(JSON.stringify(lesson));
+        const res = await services.api.request({
+          url: `/api/LessonPlan`,
+          method: 'PUT',
+          body: JSON.stringify(lesson)
+        });
+        dispatch({type: 'lesson-plan/put-success', payload: {data: res.data}})
+      } catch (e) {
+        console.log(e);
+        dispatch({type: 'lesson-plan/put-error'})
+      }
+    }
   }
 }

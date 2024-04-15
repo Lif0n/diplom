@@ -29,15 +29,15 @@ function LessonPlan() {
   }));
 
   const callbacks = {
-    openModalLesson: useCallback((item) => {
-      dispatch(modalsActions.open('lesson', item));
+    openModalLesson: useCallback((item, notChangeWeek) => {
+      dispatch(modalsActions.open('lesson', {item, notChangeWeek}));
     })
   }
 
   const rows = useMemo(() => {
     const rows = [];
     [1,2,3,4,5,6].forEach((i) => {
-      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={select.groups} onItemClick={(item) => callbacks.openModalLesson(item)} weekday={i} list={select.lessonPlan.filter(
+      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={select.groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
         function (item) {
           return item.weekday === i;
         }

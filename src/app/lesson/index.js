@@ -12,7 +12,7 @@ import Spinner from "../../components/spinner";
 import { Radio, Flex, Button } from "antd";
 import LessonSelect from "../../components/lesson-select";
 
-function Lesson({ lessonPlan }) {
+function Lesson({ lessonPlan, notChangeWeek }) {
 
   const [lesson, setLesson] = useState(lessonPlan);
 
@@ -42,18 +42,44 @@ function Lesson({ lessonPlan }) {
       dispatch(modalsActions.close('lesson'));
     }),
     onAccept: useCallback(async () => {
-      if(lesson.id){
-        console.log(JSON.stringify({...lesson, teachers: teachers, isDistance: false}));
+      console.log(teachers, lesson.subject);
+
+      if (!teachers[0]) {
+        console.log('2');
+        alert('Не выбран основной преподаватель');
+        return;
       }
-      else{
-        await Promise.all([dispatch(lessonPlanActions.post({...lesson, teachers: teachers, isDistance: false}))]);
-        dispatch(lessonPlanActions.load());
-        dispatch(modalsActions.close('lesson'));
+      if (!lesson.subject) {
+        console.log('3');
+        alert('Не выбран предмет');
+        return;
+      }
+
+      if (teachers[0] == teachers[1]) {
+        console.log('1');
+        alert('Основной и запасной преподаватель не могут быть одинаковыми');
+        return;   
+      }
+
+      if(lesson.subject && teachers[0] != teachers[1] && teachers[0]){
+        console.log(lesson.subject, teachers);
+        if (lesson.id && lessonPlan.weekNumber == lesson.weekNumber && confirm('Вы действительно хотите обновить пару?') ) {
+          await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistance: false }))]);
+          dispatch(lessonPlanActions.load());
+          dispatch(modalsActions.close('lesson'));
+          
+        }
+        else if(confirm('Вы действительно хотите добавить новую пару?') ){
+          await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistance: false }))]);
+          dispatch(lessonPlanActions.load());
+          dispatch(modalsActions.close('lesson'));
+        }
       }
     }),
     onDelete: useCallback(() => {
+      if(confirm('Вы действительно хотите удалить пару?')){
       dispatch(lessonPlanActions.delete(lessonPlan.id));
-      dispatch(modalsActions.close('lesson'));
+      dispatch(modalsActions.close('lesson'));}
     })
   }
 
@@ -63,9 +89,11 @@ function Lesson({ lessonPlan }) {
       <Spinner active={select.waiting}>
         <LessonSelect placeholder='Предмет'
           defaultValue={lessonPlan.subject && lessonPlan.subject.id}
-          onChange={(value) => setLesson({ ...lesson, subject: select.subjects.find((subject) => {
-            return subject.id === value
-          }) })}
+          onChange={(value) => setLesson({
+            ...lesson, subject: select.subjects.find((subject) => {
+              return subject.id === value
+            })
+          })}
           selectOptions={select.subjects.map((subject) => {
             return {
               value: subject.id,
@@ -107,16 +135,16 @@ function Lesson({ lessonPlan }) {
               label: audience.number
             }
           })} />
-        <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
+        {!notChangeWeek && <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
           <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
             buttonStyle="solid" size="large"
             onChange={(value) => setLesson({ ...lesson, weekNumber: value.target.value })}
             options={[{ label: 'Первая неделя', value: 0 }, { label: 'Вторая неделя', value: 1 }]}
             optionType="button" />
-        </Flex>
+        </Flex>}
         <Flex gap='middle' style={{ margin: '15px 0px', justifySelf: 'center' }}>
-          <Button type="primary" size="large" onClick={callbacks.onAccept}>{lessonPlan.id ? 'Изменить пару' : 'Добавить пару'}</Button>
-          {lessonPlan.id && <Button type="primary" size="large" danger onClick={callbacks.onDelete}>Удалить пару</Button>}
+          <Button type="primary" size="large" onClick={callbacks.onAccept}>{(lessonPlan.id && lesson.weekNumber == lessonPlan.weekNumber) ? 'Изменить пару' : 'Добавить пару'}</Button>
+          {(lessonPlan.id && lesson.weekNumber == lessonPlan.weekNumber) && <Button type="primary" size="large" danger onClick={callbacks.onDelete}>Удалить пару</Button>}
         </Flex>
       </Spinner>
     </ModalLayout>

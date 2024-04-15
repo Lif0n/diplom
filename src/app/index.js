@@ -20,7 +20,9 @@ function App() {
       return item.name === 'lesson'
     }) && <Lesson lessonPlan={activeModals.find((item) => {
       return item.name === 'lesson'
-    }).params}/>}
+    }).params.item} notChangeWeek={activeModals.find((item) => {
+      return item.name === 'lesson'
+    }).params.notChangeWeek}/>}
     </>
   )
 }

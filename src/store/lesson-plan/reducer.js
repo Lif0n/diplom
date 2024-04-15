@@ -37,6 +37,14 @@ function reducer(state = initialState, action) {
     case 'lesson-plan/post-error':
       return { ...state, waiting: false };
 
+      case 'lesson-plan/put-start':
+        return { ...state, waiting: true };
+  
+      case 'lesson-plan/put-success':
+        return { ...state, waiting: false }
+  
+      case 'lesson-plan/put-error':
+        return { ...state, waiting: false };
     default:
       return state;
   }
