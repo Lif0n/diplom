@@ -3,6 +3,7 @@ import LessonPlan from './lesson-plan';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
 import Lesson from './lesson';
+import TeacherLessonPlan from './teacher-lesson-plan';
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
     <>
     <Routes>
       <Route path={''} element={<LessonPlan/>}/>
+      {/* <Route path='teacher-lesson-plan' element={<TeacherLessonPlan/>}/> */}
     </Routes>
 
     {activeModals.some(item => {

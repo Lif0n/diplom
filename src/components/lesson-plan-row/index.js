@@ -11,9 +11,15 @@ function LessonPlanRow({ list, weekday, groups, onItemClick }) {
   const cols = useMemo(() => {
     const cols = [];
     groups.forEach((group) => {
-      cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} weekday={weekday} group={group} list={list.filter(function (item){
-        return item.group.id === group.id;
-      })}/>);
+      cols.push(<LessonPlanColumn key={group.id} onItemClick={onItemClick} weekday={weekday} group={group} list={list.filter(function (item) {
+        if (group.patronymic) {
+          return item.teachers.find((teacher) => {
+            return teacher.id === group.id;
+          })
+        } else {
+          return item.group.id === group.id;
+        }
+      })} />);
     });
     return cols;
   }, [list])
@@ -21,7 +27,7 @@ function LessonPlanRow({ list, weekday, groups, onItemClick }) {
   return (
     <div className={'row flex-nowrap ' + cn()}>
       <Weekday id={weekday} />
-        {cols}
+      {cols}
     </div>
   );
 }
