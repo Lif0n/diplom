@@ -12,7 +12,7 @@ import Spinner from "../../components/spinner";
 import { Radio, Flex, Button } from "antd";
 import LessonSelect from "../../components/lesson-select";
 
-function Lesson({ lessonPlan, notChangeWeek }) {
+function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const [lesson, setLesson] = useState(lessonPlan);
 
@@ -151,4 +151,4 @@ function Lesson({ lessonPlan, notChangeWeek }) {
   )
 }
 
-export default memo(Lesson);
+export default memo(LessonModal);

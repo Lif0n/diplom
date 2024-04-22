@@ -2,7 +2,7 @@ import {Routes, Route} from 'react-router-dom';
 import LessonPlan from './lesson-plan';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
-import Lesson from './lesson';
+import LessonModal from './lesson-modal';
 import TeacherLessonPlan from './teacher-lesson-plan';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
 
     {activeModals.some(item => {
       return item.name === 'lesson'
-    }) && <Lesson lessonPlan={activeModals.find((item) => {
+    }) && <LessonModal lessonPlan={activeModals.find((item) => {
       return item.name === 'lesson'
     }).params.item} notChangeWeek={activeModals.find((item) => {
       return item.name === 'lesson'

@@ -11,7 +11,6 @@ import LessonPlanHead from "../../components/lesson-plan-head";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import Spinner from '../../components/spinner';
 import LessonPlanRow from "../../components/lesson-plan-row";
-import shallowEqual from "shallowequal";
 
 function LessonPlan() {
 
