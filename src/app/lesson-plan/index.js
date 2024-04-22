@@ -48,7 +48,7 @@ function LessonPlan() {
 
   return (
     <PageLayout>
-      <Header logo={logo} />
+      <Header logo={logo} selected=''/>
       <LessonPlanLayout>
         <Spinner active={select.waiting}>
           <LessonPlanHead groups={select.groups} />

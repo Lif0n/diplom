@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
 import LessonModal from './lesson-modal';
 import TeacherLessonPlan from './teacher-lesson-plan';
+import Teachers from './teachers';
 
 function App() {
 
@@ -12,7 +13,8 @@ function App() {
   return (
     <>
     <Routes>
-      <Route path={''} element={<LessonPlan/>}/>
+      {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan/>}/>)}
+      <Route path={'teachers'} element={<Teachers/>}/>
       {/* <Route path='teacher-lesson-plan' element={<TeacherLessonPlan/>}/> */}
     </Routes>
 

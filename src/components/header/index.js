@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import './style.css'
 import { Link } from 'react-router-dom';
 
-function Header({ logo, headers }) {
+function Header({ logo, selected }) {
 
   return (
     <div className='header'>
@@ -15,7 +15,8 @@ function Header({ logo, headers }) {
             <img className='ms-2 logo' alt='logo' src={logo} />
           </Navbar.Brand>
           <Nav className='me-auto'>
-            <Nav.Link href=''>Основное расписание</Nav.Link>
+            <Nav.Link className={selected === '' ? 'active' : ''} href='lesson-plan'>Основное расписание</Nav.Link>
+            <Nav.Link className={selected === 'teachers' ? 'active' : ''} href='teachers'>Преподаватели</Nav.Link>
             {/* <Nav.Link href='teacher-lesson-plan'>Расписание преподавателей</Nav.Link> */}
           </Nav>
         </Container>
