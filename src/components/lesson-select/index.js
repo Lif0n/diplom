@@ -12,7 +12,7 @@ function LessonSelect({ defaultValue, onChange, placeholder, selectOptions }) {
       onChange={onChange}
       placeholder={placeholder}
       optionFilterProp="children"
-      filterOption={(input, option) => (option?.label ?? '').includes(input)}
+      filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
       options={selectOptions} />
   )
 }
