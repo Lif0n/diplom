@@ -16,7 +16,7 @@ function Lesson({ lessonPlan, notChangeWeek }) {
 
   const [lesson, setLesson] = useState(lessonPlan);
 
-  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0] : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1].id : null)] : [null, null]);
+  const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0] : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1] : null)] : [null, null]);
 
   const dispatch = useDispatch();
 
