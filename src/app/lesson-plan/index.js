@@ -11,32 +11,37 @@ import LessonPlanHead from "../../components/lesson-plan-head";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import Spinner from '../../components/spinner';
 import LessonPlanRow from "../../components/lesson-plan-row";
+import uniqueValues from '../../utils/unique-values'
 
 function LessonPlan() {
 
   const dispatch = useDispatch();
 
   useInit(() => {
-    dispatch(groupsActions.load());
     dispatch(lessonPlanActions.load());
   })
 
   const select = useSelector(state => ({
-    groups: state.groups.list,
     lessonPlan: state.lessonPlan.list,
     waiting: state.lessonPlan.waiting
   }));
 
   const callbacks = {
     openModalLesson: useCallback((item, notChangeWeek) => {
-      dispatch(modalsActions.open('lesson', {item, notChangeWeek}));
+      dispatch(modalsActions.open('lesson', { item, notChangeWeek }));
     })
   }
 
+  const groups = useMemo(() => {
+    return uniqueValues(select.lessonPlan, 'group');
+  }, [select.lessonPlan])
+
+  console.log(groups);
+
   const rows = useMemo(() => {
     const rows = [];
-    [1,2,3,4,5,6].forEach((i) => {
-      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={select.groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
+    [1, 2, 3, 4, 5, 6].forEach((i) => {
+      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
         function (item) {
           return item.weekday === i;
         }
@@ -48,10 +53,10 @@ function LessonPlan() {
 
   return (
     <PageLayout>
-      <Header logo={logo} selected=''/>
+      <Header logo={logo} selected='' />
       <LessonPlanLayout>
         <Spinner active={select.waiting}>
-          <LessonPlanHead groups={select.groups} />
+          <LessonPlanHead groups={groups} />
           {rows}
         </Spinner>
       </LessonPlanLayout>
