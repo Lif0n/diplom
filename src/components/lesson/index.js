@@ -18,10 +18,10 @@ function Lesson({ items, weekday, group, onItemClick, lessonNumber }) {
       {items.length === 2 &&
         <>
           <div className='border' style={{ height: '50%' }}>
-            <LessonContent item={items[0]} onItemClick={onItemClick}/>
+            <LessonContent item={items[0]} onItemClick={(item) => onItemClick(item, true)}/>
           </div>
           <div className='border' style={{ height: '50%' }}>
-            <LessonContent item={items[1]} onItemClick={onItemClick}/>
+            <LessonContent item={items[1]} onItemClick={(item) => onItemClick(item, true)}/>
           </div>
         </>
       }
