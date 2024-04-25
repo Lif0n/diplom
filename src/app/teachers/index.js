@@ -1,26 +1,43 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
-import teachersActions from '../../store/teachers/actions'
+import teachersActions from '../../store/teachers/actions';
+import groupTeachersActions from '../../store/group-teachers/actions';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
+import { Collapse } from "antd";
+import LessonPlanLayout from "../../components/lesson-plan-layout";
+import uniqueValues from "../../utils/unique-values";
+import TeacherComponent from "../../components/teacher-component";
 
 function Teachers() {
 
   const dispatch = useDispatch();
 
   useInit(() => {
-    dispatch(teachersActions.load());
+    dispatch(groupTeachersActions.load());
   })
 
   const select = useSelector(state => ({
-    teachers: state.teachers.list,
+    groupTeachers: state.groupTeachers.list,
   }))
 
-  return(
+  const teachers = useMemo(() => {
+    const teachers = [];
+    uniqueValues(select.groupTeachers, 'teacher').forEach(teacher => {
+      teachers.push({ key: teacher.id, label: `${teacher.surname} ${teacher.name} ${teacher.patronymic}`,
+       children: <TeacherComponent arr={select.groupTeachers.filter(gt => gt.teacher.id === teacher.id)}/> })
+    });
+    return teachers;
+  }, [select.groupTeachers])
+
+  return (
     <PageLayout>
-      <Header logo={logo} selected={'teachers'}/>
+      <Header logo={logo} selected={'teachers'} />
+      <LessonPlanLayout>
+        <Collapse items={teachers} />
+      </LessonPlanLayout>
     </PageLayout>
   )
 
