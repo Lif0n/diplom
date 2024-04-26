@@ -6,10 +6,11 @@ import groupTeachersActions from '../../store/group-teachers/actions';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
-import { Collapse } from "antd";
+import { Collapse, Input } from "antd";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import uniqueValues from "../../utils/unique-values";
 import TeacherComponent from "../../components/teacher-component";
+import Wrapper from "../../components/wrapper";
 
 function Teachers() {
 
@@ -26,8 +27,10 @@ function Teachers() {
   const teachers = useMemo(() => {
     const teachers = [];
     uniqueValues(select.groupTeachers, 'teacher').forEach(teacher => {
-      teachers.push({ key: teacher.id, label: `${teacher.surname} ${teacher.name} ${teacher.patronymic}`,
-       children: <TeacherComponent arr={select.groupTeachers.filter(gt => gt.teacher.id === teacher.id)}/> })
+      teachers.push({
+        key: teacher.id, label: `${teacher.surname} ${teacher.name} ${teacher.patronymic}`,
+        children: <TeacherComponent arr={select.groupTeachers.filter(gt => gt.teacher.id === teacher.id)} />
+      })
     });
     return teachers;
   }, [select.groupTeachers])
@@ -36,7 +39,10 @@ function Teachers() {
     <PageLayout>
       <Header logo={logo} selected={'teachers'} />
       <LessonPlanLayout>
-        <Collapse items={teachers} />
+        <Wrapper>
+          <Input className="mt-2" placeholder="Поиск"/>
+          <Collapse items={teachers} />
+        </Wrapper>
       </LessonPlanLayout>
     </PageLayout>
   )
