@@ -60,7 +60,7 @@ let config = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        //API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://raspisanie.hnt8.ru':'https://raspisanie.hnt8.ru')
+        API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'http://hnt8.ru:1149':'http://hnt8.ru:1149')
       },
     }),
   ],
@@ -81,20 +81,20 @@ if (process.env.NODE_ENV === 'development') {
     }
   };
 }
-if(process.env.NODE_ENV === 'production'){
-  config.devtool = 'inline-source-map';
-  config.devServer = {
-    static: path.join(__dirname, 'dist'),
-    port: 8010,
-    historyApiFallback: true,
-    proxy: {
-      '/api/**': {
-        target: 'http://hnt8.ru:1149',
-        secure: false,
-        changeOrigin: true,
-      }
-    }
-  };
-}
+// if(process.env.NODE_ENV === 'production'){
+//   config.devtool = 'inline-source-map';
+//   config.devServer = {
+//     static: path.join(__dirname, 'dist'),
+//     port: 8010,
+//     historyApiFallback: true,
+//     proxy: {
+//       '/api/**': {
+//         target: 'http://hnt8.ru:1149',
+//         secure: false,
+//         changeOrigin: true,
+//       }
+//     }
+//   };
+// }
 
 module.exports = config;
