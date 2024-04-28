@@ -81,20 +81,20 @@ if (process.env.NODE_ENV === 'development') {
     }
   };
 }
-// if(process.env.NODE_ENV === 'production'){
-//   config.devtool = 'inline-source-map';
-//   config.devServer = {
-//     static: path.join(__dirname, 'dist'),
-//     port: 8010,
-//     historyApiFallback: true,
-//     proxy: {
-//       '/api/**': {
-//         target: 'http://hnt8.ru:1149',
-//         secure: false,
-//         changeOrigin: true,
-//       }
-//     }
-//   };
-// }
+if(process.env.NODE_ENV === 'production'){
+  config.devtool = 'inline-source-map';
+  config.devServer = {
+    static: path.join(__dirname, 'dist'),
+    port: 8010,
+    historyApiFallback: true,
+    proxy: {
+      '/api/**': {
+        target: 'http://hnt8.ru:1149',
+        secure: false,
+        changeOrigin: true,
+      }
+    }
+  };
+}
 
 module.exports = config;
