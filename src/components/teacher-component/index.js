@@ -23,10 +23,15 @@ function TeacherComponent({ arr }) {
     const contentList = {};
     groups.forEach(group => {
       const subjs = arr.filter(groupTeacher => groupTeacher.group.id === group.key);
-      subjs.forEach(subj => {
-        console.log(subj);
-        contentList[group.key] = <h4>{subj.subject.name}</h4>
-      });
+      contentList[group.key] = <div>
+        {subjs.forEach(subj => {
+          return <h4>{subj.subject.name}</h4>
+        })}
+      </div>
+      // subjs.forEach(subj => {
+      //   console.log(subj);
+      //   contentList[group.key] = <h4>{subj.subject.name}</h4>
+      // });
     })
     return contentList;
   }, [arr, groups])
