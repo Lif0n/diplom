@@ -1,5 +1,5 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-//process.env.NODE_ENV = 'production';
+//process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = 'production';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
@@ -65,9 +65,7 @@ let config = {
         API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'http://hnt8.ru:1149':'http://hnt8.ru:1149')
       },
     }),
-    new BundleAnalyzerPlugin()
   ],
-
   optimization: {
     runtimeChunk: 'single',
   },
@@ -87,6 +85,8 @@ if (process.env.NODE_ENV === 'development') {
       }
     }
   };
+
+  config.plugins.push(new BundleAnalyzerPlugin());
 }
 if(process.env.NODE_ENV === 'production'){
   config.devtool = 'inline-source-map';
