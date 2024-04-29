@@ -1,7 +1,6 @@
 import { memo, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
-import teachersActions from '../../store/teachers/actions';
 import groupTeachersActions from '../../store/group-teachers/actions';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";

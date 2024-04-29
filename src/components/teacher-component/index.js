@@ -1,6 +1,4 @@
 import { memo, useMemo, useState } from 'react'
-import { cn as bem } from '@bem-react/classname';
-import Spinner from '../spinner/index'
 import { Input, Card, Button } from 'antd';
 import './style.css'
 import Wrapper from '../wrapper';
@@ -28,10 +26,6 @@ function TeacherComponent({ arr }) {
           return <h4>{subj.subject.name}</h4>
         })}
       </div>
-      // subjs.forEach(subj => {
-      //   console.log(subj);
-      //   contentList[group.key] = <h4>{subj.subject.name}</h4>
-      // });
     })
     return contentList;
   }, [arr, groups])

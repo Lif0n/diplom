@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from 'react'
-import { cn as bem } from '@bem-react/classname';
 import './style.css'
 import Lesson from '../lesson';
 

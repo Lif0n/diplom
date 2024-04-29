@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { cn as bem } from '@bem-react/classname';
 import './style.css'
 
 function LessonContent({ item, onItemClick }) {

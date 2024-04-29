@@ -2,7 +2,6 @@ import { memo, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
-import groupsActions from '../../store/groups/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions';
 import modalsActions from '../../store/modals/actions';
 import useInit from "../../hooks/use-init";

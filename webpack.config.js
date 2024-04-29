@@ -1,5 +1,7 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+//process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = 'production';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -63,38 +65,43 @@ let config = {
         API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'http://hnt8.ru:1149':'http://hnt8.ru:1149')
       },
     }),
+    new BundleAnalyzerPlugin()
   ],
+
+  optimization: {
+    runtimeChunk: 'single',
+  },
 }
 
-// if (process.env.NODE_ENV === 'development') {
-//   config.devtool = 'inline-source-map';
-//   config.devServer = {
-//     static: path.join(__dirname, 'dist'),
-//     port: 8010,
-//     historyApiFallback: true,
-//     proxy: {
-//       '/api/**': {
-//         target: 'http://hnt8.ru:1149',
-//         secure: false,
-//         changeOrigin: true,
-//       }
-//     }
-//   };
-// }
-// if(process.env.NODE_ENV === 'production'){
-//   config.devtool = 'inline-source-map';
-//   config.devServer = {
-//     static: path.join(__dirname, 'dist'),
-//     port: 8010,
-//     historyApiFallback: true,
-//     proxy: {
-//       '/api/**': {
-//         target: 'http://hnt8.ru:1149',
-//         secure: false,
-//         changeOrigin: true,
-//       }
-//     }
-//   };
-// }
+if (process.env.NODE_ENV === 'development') {
+  config.devtool = 'inline-source-map';
+  config.devServer = {
+    static: path.join(__dirname, 'dist'),
+    port: 8010,
+    historyApiFallback: true,
+    proxy: {
+      '/api/**': {
+        target: 'http://hnt8.ru:1149',
+        secure: false,
+        changeOrigin: true,
+      }
+    }
+  };
+}
+if(process.env.NODE_ENV === 'production'){
+  config.devtool = 'inline-source-map';
+  config.devServer = {
+    static: path.join(__dirname, 'dist'),
+    port: 8010,
+    historyApiFallback: true,
+    proxy: {
+      '/api/**': {
+        target: 'http://hnt8.ru:1149',
+        secure: false,
+        changeOrigin: true,
+      }
+    }
+  };
+}
 
 module.exports = config;

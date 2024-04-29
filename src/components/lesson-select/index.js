@@ -1,5 +1,4 @@
 import { memo, useCallback } from 'react'
-import { cn as bem } from '@bem-react/classname';
 import { Select } from 'antd';
 import './style.css'
 

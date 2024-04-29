@@ -15,7 +15,6 @@ function App() {
     <Routes>
       {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan/>}/>)}
       <Route path={'teachers'} element={<Teachers/>}/>
-      {/* <Route path='teacher-lesson-plan' element={<TeacherLessonPlan/>}/> */}
     </Routes>
 
     {activeModals.some(item => {
