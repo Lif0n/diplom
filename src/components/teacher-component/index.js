@@ -21,22 +21,22 @@ function TeacherComponent({ arr }) {
     const contentList = {};
     groups.forEach(group => {
       const subjs = arr.filter(groupTeacher => groupTeacher.group.id === group.key);
-      contentList[group.key] = <div>
-        {subjs.forEach(subj => {
-          return <h4>{subj.subject.name}</h4>
-        })}
-      </div>
-    })
+      contentList[group.key] = [];
+      subjs.forEach(subj => {
+        contentList[group.key] = [...contentList[group.key], <h6>{subj.subject.name}</h6>]
+      });
+      contentList[group.key] = [...contentList[group.key], <Button>Добавить предмет</Button>]
+    });
     return contentList;
   }, [arr, groups])
 
-  const [activeTab, setActiveTab] = useState(groups[0].id);
+  console.log(contentList);
+
+  const [activeTab, setActiveTab] = useState(groups[0].key);
 
   const onTabChange = (key) => {
     setActiveTab(key);
   }
-
-  console.log(contentList);
 
   return (
     <Wrapper>

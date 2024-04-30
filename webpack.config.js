@@ -3,6 +3,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
@@ -65,9 +67,16 @@ let config = {
         API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://raspisanie.hnt8.ru':'https://raspisanie.hnt8.ru')
       },
     }),
+    new CompressionPlugin({
+      threshold: 8192,
+    })
   ],
   optimization: {
     runtimeChunk: 'single',
+    minimize: true,
+    minimizer: [
+      new TerserPlugin(),
+    ]
   },
 }
 
