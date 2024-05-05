@@ -14,8 +14,6 @@ import LessonSelect from "../../components/lesson-select";
 
 function LessonModal({ lessonPlan, notChangeWeek }) {
 
-  console.log(lessonPlan);
-
   const [lesson, setLesson] = useState(lessonPlan);
 
   const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0] : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1] : null)] : [null, null]);
@@ -44,27 +42,22 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       dispatch(modalsActions.close('lesson'));
     }),
     onAccept: useCallback(async () => {
-      console.log(teachers, lesson.subject);
 
       if (!teachers[0]) {
-        console.log('2');
         alert('Не выбран основной преподаватель');
         return;
       }
       if (!lesson.subject) {
-        console.log('3');
         alert('Не выбран предмет');
         return;
       }
 
       if (teachers[0] == teachers[1]) {
-        console.log('1');
         alert('Основной и запасной преподаватель не могут быть одинаковыми');
         return;   
       }
 
       if(lesson.subject && teachers[0] != teachers[1] && teachers[0]){
-        console.log(lesson.subject, teachers);
         if (lesson.id && lessonPlan.weekNumber == lesson.weekNumber && confirm('Вы действительно хотите обновить пару?') ) {
           await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistance: false }))]);
           dispatch(lessonPlanActions.load());

@@ -35,7 +35,6 @@ export default {
       dispatch({type: 'lesson-plan/post-start'});
 
       try {
-        console.log(JSON.stringify(lesson));
         const res = await services.api.request({
           url: `/api/LessonPlan`,
           method: 'POST',
@@ -43,7 +42,6 @@ export default {
         });
         dispatch({type: 'lesson-plan/post-success', payload: {data: res.data}})
       } catch (e) {
-        console.log(e);
         dispatch({type: 'lesson-plan/post-error'})
       }
     }
@@ -53,7 +51,6 @@ export default {
       dispatch({type: 'lesson-plan/put-start'});
 
       try {
-        console.log(JSON.stringify(lesson));
         const res = await services.api.request({
           url: `/api/LessonPlan`,
           method: 'PUT',
@@ -61,7 +58,6 @@ export default {
         });
         dispatch({type: 'lesson-plan/put-success', payload: {data: res.data}})
       } catch (e) {
-        console.log(e);
         dispatch({type: 'lesson-plan/put-error'})
       }
     }

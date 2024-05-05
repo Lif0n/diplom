@@ -53,8 +53,6 @@ function LessonPlan() {
     return rows;
   }, [lessonPlan, select.waiting])
 
-  console.log(lessonPlan);
-
   return (
     <PageLayout>
       <Header logo={logo} selected='' />

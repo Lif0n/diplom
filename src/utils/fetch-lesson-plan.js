@@ -22,6 +22,5 @@ export default function FetchLessonPlan(arr) {
     }
     return lp
   });
-  console.log(newArr.filter(lp => lp.errors));
   return newArr;
 }

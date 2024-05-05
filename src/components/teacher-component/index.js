@@ -30,8 +30,6 @@ function TeacherComponent({ arr }) {
     return contentList;
   }, [arr, groups])
 
-  console.log(contentList);
-
   const [activeTab, setActiveTab] = useState(groups[0].key);
 
   const onTabChange = (key) => {

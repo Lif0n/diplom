@@ -12,14 +12,10 @@ function LessonContent({ item, onItemClick }) {
     let errors = '';
     if (item.errors) {
       item.errors.forEach(error => {
-        errors += `\n${error}`;
+        errors += `${error}\r\n`;
       });
     }
     return errors;
-  }
-
-  if(item.id == 602 || item.id == 51 || item.id == 249 ){
-    console.log(item);
   }
 
   return (
