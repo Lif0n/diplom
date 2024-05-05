@@ -14,6 +14,8 @@ import LessonSelect from "../../components/lesson-select";
 
 function LessonModal({ lessonPlan, notChangeWeek }) {
 
+  console.log(lessonPlan);
+
   const [lesson, setLesson] = useState(lessonPlan);
 
   const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0] : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1] : null)] : [null, null]);
