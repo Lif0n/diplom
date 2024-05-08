@@ -11,7 +11,6 @@ import LessonPlanLayout from "../../components/lesson-plan-layout";
 import Spinner from '../../components/spinner';
 import LessonPlanRow from "../../components/lesson-plan-row";
 import uniqueValues from '../../utils/unique-values'
-import FetchLessonPlan from "../../utils/fetch-lesson-plan";
 
 function LessonPlan() {
 
@@ -36,14 +35,10 @@ function LessonPlan() {
     return uniqueValues(select.lessonPlan, 'group');
   }, [select.lessonPlan])
 
-  const lessonPlan = useMemo(() => {
-    return FetchLessonPlan(select.lessonPlan);
-  }, [select.lessonPlan])
-
   const rows = useMemo(() => {
     const rows = [];
     [1, 2, 3, 4, 5, 6].forEach((i) => {
-      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={groups} onItemClick={callbacks.openModalLesson} weekday={i} list={lessonPlan.filter(
+      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
         function (item) {
           return item.weekday === i;
         }
@@ -51,7 +46,7 @@ function LessonPlan() {
       rows.push(<hr key={`hr-${i}`} style={{ top: '20px', bottom: '20px' }} />);
     })
     return rows;
-  }, [lessonPlan, select.waiting])
+  }, [select.lessonPlan, select.waiting])
 
   return (
     <PageLayout>

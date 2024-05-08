@@ -1,3 +1,5 @@
+import FetchLessonPlan from '../../utils/fetch-lesson-plan'
+
 export const initialState = {
   list: [],
   waiting: false
@@ -9,7 +11,7 @@ function reducer(state = initialState, action) {
       return { ...state, list: [], waiting: true };
 
     case 'lesson-plan/load-success':
-      return { ...state, list: action.payload.data, waiting: false };
+      return { ...state, list: FetchLessonPlan(action.payload.data), waiting: false };
 
     case 'lesson-plan/load-error':
       return { ...state, list: [], waiting: false };

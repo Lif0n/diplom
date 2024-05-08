@@ -3,6 +3,7 @@ export default function FetchLessonPlan(arr) {
   const newArr = arr.map(lp => {
     //получение пар, которые идут в одно и тоже время
     const lpAtSameTime = arr.filter(lp1 => lp1.weekday === lp.weekday && lp1.weeknumber === lp.weeknumber && lp1.lessonNumber === lp.lessonNumber && lp1.id !== lp.id);
+    //массив с ошибками
     let errors = [];
     //проход по преподам которые ведут текущую пару
     lp.teachers.forEach(teacher => {
