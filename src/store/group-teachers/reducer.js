@@ -1,3 +1,5 @@
+import FetchGroupTeachers from "../../utils/fetch-group-teachers";
+
 export const initialState = {
   list: [],
   waiting: false
@@ -9,7 +11,7 @@ function reducer(state = initialState, action) {
       return { ...state, list: [], waiting: true };
 
     case 'group-teachers/load-success':
-      return { ...state, list: action.payload.data, waiting: false };
+      return { ...state, list: FetchGroupTeachers(state.list, action.payload.data), waiting: false };
 
     case 'group-teachers/load-error':
       return { ...state, list: [], waiting: false }
