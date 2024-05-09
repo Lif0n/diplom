@@ -21,11 +21,9 @@ function TeacherComponent({ teacher }) {
     waiting: state.groupTeachers.waiting
   }))
 
-  console.log(select.groupTeachers);
-
   const groupTeachers = useMemo(() => {
     return select.groupTeachers.filter((gt) => gt.teacher.id === teacher.id)
-  }, [select.groupTeachers])
+  }, [select.groupTeachers, select.waiting])
 
   const groups = useMemo(() => {
     const groups = [];
