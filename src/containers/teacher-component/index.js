@@ -1,10 +1,11 @@
 import { memo, useMemo, useState } from 'react';
 import useInit from '../../hooks/use-init';
 import { useSelector, useDispatch } from 'react-redux';
-import { Input, Card, Button } from 'antd';
+import { Input, Card, Button, Tabs } from 'antd';
 import groupTeachersActions from '../../store/group-teachers/actions';
 import Wrapper from '../../components/wrapper';
 import uniqueValues from '../../utils/unique-values';
+import './style.css'
 
 function TeacherComponent({ teacher }) {
 
@@ -30,7 +31,7 @@ function TeacherComponent({ teacher }) {
     uniqueValues(groupTeachers, 'group').forEach(group => {
       groups.push({
         key: group.id,
-        tab: `${group.speciality.shortname}-${group.name}`
+        label: `${group.speciality.shortname}-${group.name}`
       });
     });
     if(groups.length > 0){
@@ -63,7 +64,8 @@ function TeacherComponent({ teacher }) {
       <Input defaultValue={teacher.patronymic} style={{ width: '80%' }} className='teacherPatronymic' size='large' addonBefore='Отчество' />
       <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
         extra={<Button>Добавить группу к преподавателю</Button>}
-        tabList={groups} onTabChange={onTabChange} loading={select.waiting}>
+        loading={select.waiting}>
+        <Tabs items={groups} onChange={onTabChange} activeKey={activeTab}/>
         {contentList[activeTab]}
       </Card>
     </Wrapper>
