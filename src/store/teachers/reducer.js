@@ -1,6 +1,6 @@
 export const initialState = {
   list: [],
-  waiting: false
+  waiting: false,
 }
 
 function reducer(state = initialState, action) {

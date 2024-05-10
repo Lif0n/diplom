@@ -20,11 +20,11 @@ export default {
       dispatch({ type: 'teachers/search-start' });
       try {
         const res = await services.api.request({
-          url: `api/Teacher&query=${query}`
+          url: `/api/Teacher?query=${query}`
         });
-        dispatch({type: 'teachers/search-success'})
+        dispatch({ type: 'teachers/search-success', payload: { data: res.data, query: query } })
       } catch (e) {
-        dispatch({type: 'teachers/search-error'})
+        dispatch({ type: 'teachers/search-error' })
       }
     }
   }

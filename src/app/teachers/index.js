@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
@@ -16,6 +16,8 @@ import Spinner from "../../components/spinner";
 function Teachers() {
 
   const dispatch = useDispatch();
+
+  const [query, setQuery] = useState('');
 
   useInit(() => {
     dispatch(teachersActions.load());
@@ -38,23 +40,27 @@ function Teachers() {
   }, [select.teachers])
 
   const callbacks = {
-    onSearch: useCallback()
+    onSearch: useCallback(query => {
+      dispatch(teachersActions.search(query));
+      setQuery(query);
+    })
   }
 
   return (
     <PageLayout>
       <Header logo={logo} selected={'teachers'} />
-      <Spinner active={select.waiting}>
         <LessonPlanLayout>
           <Wrapper>
             <InputSearch
+              value={query}
               placeholder='Поиск'
               prefix={<SearchOutlined />}
-              size='large' />
-            <Collapse items={teachers} />
+              size='large' onChange={callbacks.onSearch} />
+            <Spinner active={select.waiting}>
+              <Collapse items={teachers} />
+            </Spinner>
           </Wrapper>
         </LessonPlanLayout>
-      </Spinner>
     </PageLayout>
   )
 
