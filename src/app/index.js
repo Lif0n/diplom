@@ -3,8 +3,8 @@ import LessonPlan from './lesson-plan';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
 import LessonModal from './lesson-modal';
-import TeacherLessonPlan from './teacher-lesson-plan';
 import Teachers from './teachers';
+import ConfirmModal from './confirm-modal';
 
 function App() {
 
@@ -24,6 +24,12 @@ function App() {
     }).params.item} notChangeWeek={activeModals.find((item) => {
       return item.name === 'lesson'
     }).params.notChangeWeek}/>}
+
+    {activeModals.some(item => {
+      return item.name === 'confirmDelete'
+    }) && <ConfirmModal props={activeModals.find((item) => {
+      return item.name === 'confirmDelete'
+    }).params}/>}
     </>
   )
 }
