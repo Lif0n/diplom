@@ -13,6 +13,12 @@ function TeacherComponent({ teacher }) {
 
   const dispatch = useDispatch();
 
+  const [surname, setSurname] = useState(teacher.surname);
+
+  const [name, setName] = useState(teacher.name);
+
+  const [patronymic, setPatronymic] = useState(teacher.patronymic);
+
   const [activeTab, setActiveTab] = useState(0);
 
   useInit(() => {
@@ -22,7 +28,6 @@ function TeacherComponent({ teacher }) {
   const select = useSelector(state => ({
     groupTeachers: state.groupTeachers.list,
     waiting: state.groupTeachers.waiting,
-    modals: state.modals.list
   }))
 
   const groupTeachers = useMemo(() => {
@@ -46,7 +51,15 @@ function TeacherComponent({ teacher }) {
   const callbacks = {
     openConfirmDelete: useCallback(() => {
       dispatch(modalsActions.open('confirmDelete', {title: 'Внимание', text: 'Вы уверены, что хотите удалить предмет у преподавателя?'}));
-    })
+    }),
+    onTabChange: (key) => {
+      setActiveTab(key);
+    },
+    onCancelTeacherChange: () => {
+      setSurname(teacher.surname);
+      setPatronymic(teacher.patronymic);
+      setName(teacher.name);
+    }
   }
 
   const contentList = useMemo(() => {
@@ -62,20 +75,20 @@ function TeacherComponent({ teacher }) {
     return contentList;
   }, [groupTeachers, groups])
 
-  const onTabChange = (key) => {
-    setActiveTab(key);
-  }
-
   return (
     <Wrapper>
       <Flex vertical gap='middle'>
-        <Input defaultValue={teacher.surname} style={{ width: '80%' }} className='teacherSurname' size='large' addonBefore='Фамилия' />
-        <Input defaultValue={teacher.name} style={{ width: '80%' }} className='teacherName' size='large' addonBefore='Имя' />
-        <Input defaultValue={teacher.patronymic} style={{ width: '80%' }} className='teacherPatronymic' size='large' addonBefore='Отчество' />
+        <Input value={surname} style={{ width: '80%' }} className='teacherSurname' id={`${teacher.id}S`} size='large' addonBefore='Фамилия' onChange={(e) => setSurname(e.target.value)}/>
+        <Input value={name} style={{ width: '80%' }} className='teacherName' id={`${teacher.id}N`} size='large' addonBefore='Имя' onChange={(e) => setName(e.target.value)}/>
+        <Input value={patronymic} style={{ width: '80%' }} className='teacherPatronymic' id={`${teacher.id}P`} size='large' addonBefore='Отчество' onChange={(e) => setPatronymic(e.target.value)}/>
+        <Flex gap='middle' justify='center' style={(name == teacher.name && surname == teacher.surname && patronymic == teacher.patronymic) ? {display: 'none'} : {width: '80%'}}>
+          <Button type='primary'>Сохранить изменения</Button>
+          <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
+        </Flex>
         <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
           extra={<Button>Добавить группу к преподавателю</Button>}
           loading={select.waiting}>
-          <Tabs items={groups} onChange={onTabChange} activeKey={activeTab} />
+          <Tabs items={groups} onChange={callbacks.onTabChange} activeKey={activeTab} />
           <Flex vertical gap='middle'>
             {contentList[activeTab]}
           </Flex>
