@@ -3,6 +3,7 @@ import useInit from '../../hooks/use-init';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Card, Button, Tabs, Flex } from 'antd';
 import groupTeachersActions from '../../store/group-teachers/actions';
+import teachersActions from '../../store/teachers/actions';
 import Wrapper from '../../components/wrapper';
 import uniqueValues from '../../utils/unique-values';
 import modalsActions from '../../store/modals/actions';
@@ -26,9 +27,21 @@ function TeacherComponent({ teacher }) {
   }, [teacher])
 
   const select = useSelector(state => ({
+    query: state.teachers.query,
     groupTeachers: state.groupTeachers.list,
     waiting: state.groupTeachers.waiting,
   }))
+
+  const putTeacher = (bool) => {
+    if(bool){
+      dispatch(teachersActions.put({ ...teacher, surname: surname, name: name, patronymic: patronymic }));
+      if(select.query){
+        dispatch(teachersActions.search(select.query));
+      } else {
+        dispatch(teachersActions.load());
+      }
+    }
+  }
 
   const groupTeachers = useMemo(() => {
     return select.groupTeachers.filter((gt) => gt.teacher.id === teacher.id)
@@ -47,10 +60,10 @@ function TeacherComponent({ teacher }) {
     }
     return groups;
   }, [groupTeachers])
-  
+
   const callbacks = {
     openConfirmDelete: useCallback(() => {
-      dispatch(modalsActions.open('confirmDelete', {title: 'Внимание', text: 'Вы уверены, что хотите удалить предмет у преподавателя?'}));
+      dispatch(modalsActions.open('confirm', { title: 'Внимание', text: 'Вы уверены, что хотите удалить предмет у преподавателя?' }));
     }),
     onTabChange: (key) => {
       setActiveTab(key);
@@ -59,6 +72,14 @@ function TeacherComponent({ teacher }) {
       setSurname(teacher.surname);
       setPatronymic(teacher.patronymic);
       setName(teacher.name);
+    },
+    onAcceptTeacherChange: () => {
+      dispatch(modalsActions.open('confirm', {
+        title: 'Внимание',
+        text: 'Вы уверены, что хотите обновить данные преподавателя?',
+        onOk: putTeacher
+      }))
+
     }
   }
 
@@ -68,7 +89,7 @@ function TeacherComponent({ teacher }) {
       const subjs = groupTeachers.filter(groupTeacher => groupTeacher.group.id === group.key);
       contentList[group.key] = [];
       subjs.forEach(subj => {
-        contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent subject={subj.subject} onDelete={callbacks.openConfirmDelete}/>]
+        contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent subject={subj.subject} onDelete={callbacks.openConfirmDelete} />]
       });
       contentList[group.key] = [...contentList[group.key], <Button>Добавить предмет</Button>]
     });
@@ -78,11 +99,11 @@ function TeacherComponent({ teacher }) {
   return (
     <Wrapper>
       <Flex vertical gap='middle'>
-        <Input value={surname} style={{ width: '80%' }} className='teacherSurname' id={`${teacher.id}S`} size='large' addonBefore='Фамилия' onChange={(e) => setSurname(e.target.value)}/>
-        <Input value={name} style={{ width: '80%' }} className='teacherName' id={`${teacher.id}N`} size='large' addonBefore='Имя' onChange={(e) => setName(e.target.value)}/>
-        <Input value={patronymic} style={{ width: '80%' }} className='teacherPatronymic' id={`${teacher.id}P`} size='large' addonBefore='Отчество' onChange={(e) => setPatronymic(e.target.value)}/>
-        <Flex gap='middle' justify='center' style={(name == teacher.name && surname == teacher.surname && patronymic == teacher.patronymic) ? {display: 'none'} : {width: '80%'}}>
-          <Button type='primary'>Сохранить изменения</Button>
+        <Input value={surname} style={{ width: '80%' }} className='teacherSurname' size='large' addonBefore='Фамилия' onChange={(e) => setSurname(e.target.value)} />
+        <Input value={name} style={{ width: '80%' }} className='teacherName' size='large' addonBefore='Имя' onChange={(e) => setName(e.target.value)} />
+        <Input value={patronymic} style={{ width: '80%' }} className='teacherPatronymic' size='large' addonBefore='Отчество' onChange={(e) => setPatronymic(e.target.value)} />
+        <Flex gap='middle' justify='center' style={(name == teacher.name && surname == teacher.surname && patronymic == teacher.patronymic) ? { display: 'none' } : { width: '80%' }}>
+          <Button type='primary' onClick={callbacks.onAcceptTeacherChange}>Сохранить изменения</Button>
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>
         <Card key={teacher.id} title='Связи' style={{ width: '80%' }}

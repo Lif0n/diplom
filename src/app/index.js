@@ -26,9 +26,9 @@ function App() {
     }).params.notChangeWeek}/>}
 
     {activeModals.some(item => {
-      return item.name === 'confirmDelete'
+      return item.name === 'confirm'
     }) && <ConfirmModal props={activeModals.find((item) => {
-      return item.name === 'confirmDelete'
+      return item.name === 'confirm'
     }).params}/>}
     </>
   )

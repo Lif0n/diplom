@@ -81,7 +81,7 @@ let config = {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  config.devtool = 'inline-source-map';
+  config.devtool = 'eval';
   config.devServer = {
     static: path.join(__dirname, 'dist'),
     port: 8010,
@@ -98,7 +98,7 @@ if (process.env.NODE_ENV === 'development') {
   config.plugins.push(new BundleAnalyzerPlugin());
 }
 if(process.env.NODE_ENV === 'production'){
-  config.devtool = 'inline-source-map';
+  config.devtool = 'eval';
   config.devServer = {
     static: path.join(__dirname, 'dist'),
     port: 8010,
