@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { Select } from 'antd';
 import './style.css'
 
-function LessonSelect({ defaultValue, onChange, placeholder, selectOptions }) {
+function LessonSelect({ defaultValue, onChange, placeholder, selectOptions, loading }) {
 
   return (
     <Select className='LessonSelect' size="large"
@@ -12,7 +12,7 @@ function LessonSelect({ defaultValue, onChange, placeholder, selectOptions }) {
       placeholder={placeholder}
       optionFilterProp="children"
       filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-      options={selectOptions} />
+      options={selectOptions} loading={loading}/>
   )
 }
 

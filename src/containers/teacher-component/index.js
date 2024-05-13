@@ -4,11 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Input, Card, Button, Tabs, Flex } from 'antd';
 import groupTeachersActions from '../../store/group-teachers/actions';
 import teachersActions from '../../store/teachers/actions';
+import subjectsActions from '../../store/subjects/actions'
 import Wrapper from '../../components/wrapper';
 import uniqueValues from '../../utils/unique-values';
 import modalsActions from '../../store/modals/actions';
 import './style.css'
 import TeacherSubjectComponent from '../teacher-subject-component';
+import LessonSelect from '../../components/lesson-select';
 
 function TeacherComponent({ teacher }) {
 
@@ -24,12 +26,15 @@ function TeacherComponent({ teacher }) {
 
   useInit(() => {
     dispatch(groupTeachersActions.load({ teacherId: teacher.id }));
+    dispatch(subjectsActions.load());
   }, [teacher])
 
   const select = useSelector(state => ({
     query: state.teachers.query,
     groupTeachers: state.groupTeachers.list,
-    waiting: state.groupTeachers.waiting,
+    subjects: state.subjects.list,
+    waitingGroupTeachers: state.groupTeachers.waiting,
+    waitingSubjects: state.subjects.waiting,
   }))
 
   const putTeacher = (bool) => {
@@ -45,7 +50,7 @@ function TeacherComponent({ teacher }) {
 
   const groupTeachers = useMemo(() => {
     return select.groupTeachers.filter((gt) => gt.teacher.id === teacher.id)
-  }, [select.groupTeachers, select.waiting])
+  }, [select.groupTeachers, select.waitingGroupTeachers])
 
   const groups = useMemo(() => {
     const groups = [];
@@ -76,7 +81,6 @@ function TeacherComponent({ teacher }) {
         text: 'Вы уверены, что хотите обновить данные преподавателя?',
         onOk: putTeacher
       }))
-
     }
   }
 
@@ -88,10 +92,18 @@ function TeacherComponent({ teacher }) {
       subjs.forEach(subj => {
         contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent groupTeacher={subj} />]
       });
-      contentList[group.key] = [...contentList[group.key], <Button>Добавить предмет</Button>]
+      contentList[group.key] = [...contentList[group.key],
+      <LessonSelect placeholder='Добавить предмет'
+        defaultValue={null}
+        selectOptions={select.subjects.map((subject) => {
+          return {
+            value: subject.id,
+            label: subject.name
+          }
+        })} />]
     });
     return contentList;
-  }, [groupTeachers, groups])
+  }, [groupTeachers, groups, select.subjects])
 
   return (
     <Wrapper>
