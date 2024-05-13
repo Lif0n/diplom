@@ -103,7 +103,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
           selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
-              label: `${teacher.surname} ${teacher.name}. ${teacher.patronymic}`
+              label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
             }
           })} />
         <LessonSelect placeholder='Запасной преподаватель'
@@ -114,7 +114,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
           selectOptions={select.teachers.map((teacher) => {
             return {
               value: teacher.id,
-              label: `${teacher.surname} ${teacher.name}. ${teacher.patronymic}`
+              label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
             }
           })} />
         <LessonSelect placeholder='Кабинет'

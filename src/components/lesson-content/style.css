@@ -2,6 +2,18 @@
   color: #0d6efd;
 }
 
+.LessonContent:hover .second{
+  color: #0d6efd;
+}
+
 .ant-tooltip-inner {
   white-space: pre-line;
+}
+
+.h-33 {
+  height: 33%;
+}
+
+.second {
+  color: gray;
 }
