@@ -8,7 +8,7 @@ import Wrapper from '../../components/wrapper';
 import uniqueValues from '../../utils/unique-values';
 import modalsActions from '../../store/modals/actions';
 import './style.css'
-import TeacherSubjectComponent from '../../components/teacher-subject-component';
+import TeacherSubjectComponent from '../teacher-subject-component';
 
 function TeacherComponent({ teacher }) {
 
@@ -33,9 +33,9 @@ function TeacherComponent({ teacher }) {
   }))
 
   const putTeacher = (bool) => {
-    if(bool){
+    if (bool) {
       dispatch(teachersActions.put({ ...teacher, surname: surname, name: name, patronymic: patronymic }));
-      if(select.query){
+      if (select.query) {
         dispatch(teachersActions.search(select.query));
       } else {
         dispatch(teachersActions.load());
@@ -62,9 +62,6 @@ function TeacherComponent({ teacher }) {
   }, [groupTeachers])
 
   const callbacks = {
-    openConfirmDelete: useCallback(() => {
-      dispatch(modalsActions.open('confirm', { title: 'Внимание', text: 'Вы уверены, что хотите удалить предмет у преподавателя?' }));
-    }),
     onTabChange: (key) => {
       setActiveTab(key);
     },
@@ -89,7 +86,7 @@ function TeacherComponent({ teacher }) {
       const subjs = groupTeachers.filter(groupTeacher => groupTeacher.group.id === group.key);
       contentList[group.key] = [];
       subjs.forEach(subj => {
-        contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent subject={subj.subject} onDelete={callbacks.openConfirmDelete} />]
+        contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent groupTeacher={subj} />]
       });
       contentList[group.key] = [...contentList[group.key], <Button>Добавить предмет</Button>]
     });
