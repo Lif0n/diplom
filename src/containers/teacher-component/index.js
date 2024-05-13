@@ -59,7 +59,7 @@ function TeacherComponent({ teacher }) {
       setActiveTab(groups[0].key)
     }
     return groups;
-  }, [groupTeachers])
+  }, [groupTeachers, select.groupTeachers])
 
   const callbacks = {
     onTabChange: (key) => {

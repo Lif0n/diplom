@@ -16,14 +16,14 @@ function reducer(state = initialState, action) {
     case 'group-teachers/load-error':
       return { ...state, waiting: false };
 
-      case 'group-teachers/delete-start':
-        return { ...state, waiting: true };
-  
-      case 'group-teachers/delete-success':
-        return { ...state, list: action.payload.data, waiting: false };
-  
-      case 'group-teachers/delete-error':
-        return { ...state, waiting: false };
+    case 'group-teachers/delete-start':
+      return { ...state, waiting: true };
+
+    case 'group-teachers/delete-success':
+      return { ...state, list: state.list.filter(gt => gt.id !== action.payload.data), waiting: false };
+
+    case 'group-teachers/delete-error':
+      return { ...state, waiting: false };
 
     default:
       return state;

@@ -23,8 +23,9 @@ export default {
           url: `/api/GroupTeacher?id=${id}`,
           method: 'DELETE'
         });
-        dispatch({type: 'group-teachers/delete-success', payload: {data: getState.list.filter(gt => gt.id !== id)}})
+        dispatch({type: 'group-teachers/delete-success', payload: {data: id}})
       } catch (e) {
+        console.log(e);
         dispatch({type: 'group-teachers/delete-error'})
       }
     }
