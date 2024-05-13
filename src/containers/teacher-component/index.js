@@ -1,17 +1,13 @@
-import { memo, useCallback, useMemo, useState } from 'react';
-import useInit from '../../hooks/use-init';
+import { memo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Input, Card, Button, Tabs, Flex } from 'antd';
-import groupTeachersActions from '../../store/group-teachers/actions';
+import { Input, Button, Flex } from 'antd';
 import teachersActions from '../../store/teachers/actions';
-import subjectsActions from '../../store/subjects/actions'
 import Wrapper from '../../components/wrapper';
-import uniqueValues from '../../utils/unique-values';
 import modalsActions from '../../store/modals/actions';
 import './style.css'
-import TeacherSubjectComponent from '../teacher-subject-component';
-import LessonSelect from '../../components/lesson-select';
+import TeacherGroups from '../teacher-groups';
 
+//элемент со всей информацией по преподавателю
 function TeacherComponent({ teacher }) {
 
   const dispatch = useDispatch();
@@ -22,19 +18,8 @@ function TeacherComponent({ teacher }) {
 
   const [patronymic, setPatronymic] = useState(teacher.patronymic);
 
-  const [activeTab, setActiveTab] = useState(0);
-
-  useInit(() => {
-    dispatch(groupTeachersActions.load({ teacherId: teacher.id }));
-    dispatch(subjectsActions.load());
-  }, [teacher])
-
   const select = useSelector(state => ({
     query: state.teachers.query,
-    groupTeachers: state.groupTeachers.list,
-    subjects: state.subjects.list,
-    waitingGroupTeachers: state.groupTeachers.waiting,
-    waitingSubjects: state.subjects.waiting,
   }))
 
   const putTeacher = (bool) => {
@@ -48,28 +33,7 @@ function TeacherComponent({ teacher }) {
     }
   }
 
-  const groupTeachers = useMemo(() => {
-    return select.groupTeachers.filter((gt) => gt.teacher.id === teacher.id)
-  }, [select.groupTeachers, select.waitingGroupTeachers])
-
-  const groups = useMemo(() => {
-    const groups = [];
-    uniqueValues(groupTeachers, 'group').forEach(group => {
-      groups.push({
-        key: group.id,
-        label: `${group.speciality.shortname}-${group.name}`
-      });
-    });
-    if (groups.length > 0) {
-      setActiveTab(groups[0].key)
-    }
-    return groups;
-  }, [groupTeachers, select.groupTeachers])
-
   const callbacks = {
-    onTabChange: (key) => {
-      setActiveTab(key);
-    },
     onCancelTeacherChange: () => {
       setSurname(teacher.surname);
       setPatronymic(teacher.patronymic);
@@ -84,27 +48,6 @@ function TeacherComponent({ teacher }) {
     }
   }
 
-  const contentList = useMemo(() => {
-    const contentList = {};
-    groups.forEach(group => {
-      const subjs = groupTeachers.filter(groupTeacher => groupTeacher.group.id === group.key);
-      contentList[group.key] = [];
-      subjs.forEach(subj => {
-        contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent groupTeacher={subj} />]
-      });
-      contentList[group.key] = [...contentList[group.key],
-      <LessonSelect placeholder='Добавить предмет'
-        defaultValue={null}
-        selectOptions={select.subjects.map((subject) => {
-          return {
-            value: subject.id,
-            label: subject.name
-          }
-        })} />]
-    });
-    return contentList;
-  }, [groupTeachers, groups, select.subjects])
-
   return (
     <Wrapper>
       <Flex vertical gap='middle'>
@@ -115,14 +58,7 @@ function TeacherComponent({ teacher }) {
           <Button type='primary' onClick={callbacks.onAcceptTeacherChange}>Сохранить изменения</Button>
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>
-        <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
-          extra={<Button>Добавить группу к преподавателю</Button>}
-          loading={select.waiting}>
-          <Tabs items={groups} onChange={callbacks.onTabChange} activeKey={activeTab} />
-          <Flex vertical gap='middle'>
-            {contentList[activeTab]}
-          </Flex>
-        </Card>
+        <TeacherGroups teacher={teacher}/>
       </Flex>
     </Wrapper>
   );
