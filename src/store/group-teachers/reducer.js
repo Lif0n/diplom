@@ -25,6 +25,15 @@ function reducer(state = initialState, action) {
     case 'group-teachers/delete-error':
       return { ...state, waiting: false };
 
+    case 'group-teachers/post-start':
+      return { ...state, waiting: true };
+
+    case 'group-teachers/post-success':
+      return { ...state, list: [...state.list, action.payload.data], waiting: false };
+
+    case 'group-teachers/post-error':
+      return { ...state, waiting: false };
+
     default:
       return state;
   }

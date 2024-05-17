@@ -1,6 +1,7 @@
 import { Card, Flex, Tabs, Button } from "antd";
 import useInit from '../../hooks/use-init';
 import subjectsActions from '../../store/subjects/actions'
+import modalsActions from '../../store/modals/actions'
 import groupTeachersActions from '../../store/group-teachers/actions';
 import TeacherSubjectComponent from '../teacher-subject-component'
 import LessonSelect from '../../components/lesson-select'
@@ -15,6 +16,8 @@ function TeacherGroup({ teacher }) {
   const dispatch = useDispatch();
 
   const [activeTab, setActiveTab] = useState(0);
+
+  const [subject, setSubject] = useState({});
 
   useInit(() => {
     dispatch(groupTeachersActions.load({ teacherId: teacher.id }));
@@ -46,6 +49,26 @@ function TeacherGroup({ teacher }) {
     return groups;
   }, [groupTeachers, select.groupTeachers])
 
+  const putSubject = (bool) => {
+    if (bool) {
+      dispatch();
+    }
+  }
+
+  const callbacks = {
+    onTabChange: (key) => {
+      setActiveTab(key);
+    },
+    onAcceptAddSubject: (value) => {
+      dispatch(modalsActions.open('confirm', {
+        title: 'Внимание',
+        text: `Вы уверены, что хотите добавить ${subject.name}
+         в группе ${groups[activeTab].speciality.shortname}-${group.name} к ${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
+        onOk: {}
+      }))
+    }
+  }
+
   const contentList = useMemo(() => {
     const contentList = {};
     groups.forEach(group => {
@@ -63,16 +86,12 @@ function TeacherGroup({ teacher }) {
             label: subject.name
           }
         })}
-        onChange={(value) => { }} />]
+        onChange={(value) => {
+          setSubject(value);
+        }} />]
     });
     return contentList;
   }, [groupTeachers, groups, select.subjects])
-
-  const callbacks = {
-    onTabChange: (key) => {
-      setActiveTab(key);
-    }
-  }
 
   return (
     <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
