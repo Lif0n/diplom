@@ -17,8 +17,6 @@ function TeacherGroup({ teacher }) {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [subject, setSubject] = useState({});
-
   useInit(() => {
     dispatch(groupTeachersActions.load({ teacherId: teacher.id }));
     dispatch(subjectsActions.load());
@@ -49,9 +47,11 @@ function TeacherGroup({ teacher }) {
     return groups;
   }, [groupTeachers, select.groupTeachers])
 
-  const putSubject = (bool) => {
+  const putSubject = (bool, value) => {
     if (bool) {
-      dispatch();
+      const group = uniqueValues(groupTeachers, 'group').find(g => g.id == activeTab);
+      console.log({ teacher: teacher, subject: value, group: group });
+      dispatch(groupTeachersActions.post({ teacher: teacher, subject: value, group: group }));
     }
   }
 
@@ -60,11 +60,14 @@ function TeacherGroup({ teacher }) {
       setActiveTab(key);
     },
     onAcceptAddSubject: (value) => {
+      const newSubject = select.subjects.find(s => s.id == value);
+      const group = uniqueValues(groupTeachers, 'group').find(g => g.id == activeTab);
       dispatch(modalsActions.open('confirm', {
         title: 'Внимание',
-        text: `Вы уверены, что хотите добавить ${subject.name}
-         в группе ${groups[activeTab].speciality.shortname}-${group.name} к ${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
-        onOk: {}
+        text: `Вы уверены, что хотите добавить ${newSubject.name}
+         в группе ${group?.speciality?.shortname}-${group.name} к ${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
+        value: newSubject,
+        onOk: putSubject
       }))
     }
   }
@@ -87,7 +90,7 @@ function TeacherGroup({ teacher }) {
           }
         })}
         onChange={(value) => {
-          setSubject(value);
+          callbacks.onAcceptAddSubject(value);
         }} />]
     });
     return contentList;

@@ -36,7 +36,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/GroupTeacher?id=${id}`,
+          url: `/api/GroupTeacher`,
           method: 'POST',
           body: JSON.stringify(groupTeacher)
         });

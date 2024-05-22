@@ -13,7 +13,11 @@ function ConfirmModal({ props }) {
       dispatch(modalsActions.close('confirm'));
     }, [dispatch]),
     onOk: useCallback(() => {
-      props.onOk(true);
+      if (props.value) {
+        props.onOk(true, props.value)
+      } else {
+        props.onOk(true);
+      }
       dispatch(modalsActions.close('confirm'));
     }, [dispatch])
   }
