@@ -39,6 +39,25 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
 
+  const putLesson = async (bool) => {
+    if (bool) {
+      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistance: false }))]);
+      dispatch(lessonPlanActions.load());
+      dispatch(modalsActions.close('lesson'));
+    }
+  }
+
+  const postLesson = async (bool) => {
+    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistance: false }))]);
+    dispatch(lessonPlanActions.load());
+    dispatch(modalsActions.close('lesson'));
+  }
+
+  const deleteLesson = async (bool) => {
+    dispatch(lessonPlanActions.delete(lessonPlan.id));
+    dispatch(modalsActions.close('lesson'));
+  }
+
   const callbacks = {
     closeModal: useCallback(() => {
       dispatch(modalsActions.close('lesson'));
@@ -60,30 +79,34 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       }
 
       if (lesson.subject && teachers[0] != teachers[1] && teachers[0]) {
-        if (lesson.id && lessonPlan.weekNumber == lesson.weekNumber && confirm('Вы действительно хотите обновить пару?')) {
-          await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistance: false }))]);
-          dispatch(lessonPlanActions.load());
-          dispatch(modalsActions.close('lesson'));
-
+        if (lesson.id && lessonPlan.weekNumber == lesson.weekNumber) {
+          dispatch(modalsActions.open('confirm', {
+            title: 'Внимание',
+            text: 'Вы действительно хотите обновить пару?',
+            onOk: putLesson
+          }))
         }
-        else if (confirm('Вы действительно хотите добавить новую пару?')) {
-          await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistance: false }))]);
-          dispatch(lessonPlanActions.load());
-          dispatch(modalsActions.close('lesson'));
+        else {
+          dispatch(modalsActions.open('confirm', {
+            title: 'Внимание',
+            text: 'Вы действительно хотите добавить новую пару пару?',
+            onOk: postLesson
+          }))
         }
       }
     }),
     onDelete: useCallback(() => {
-      if (confirm('Вы действительно хотите удалить пару?')) {
-        dispatch(lessonPlanActions.delete(lessonPlan.id));
-        dispatch(modalsActions.close('lesson'));
-      }
+      dispatch(modalsActions.open('confirm', {
+        title: 'Внимание',
+        text: 'Вы действительно удалить пару?',
+        onOk: deleteLesson
+      }))
     })
   }
 
   return (
     <>
-      <ToastContainer position="top-center" autoClose={2000}/>
+      <ToastContainer position="top-center" autoClose={2000} />
       <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
         title={`${lessonPlan.group.speciality.shortname}-${lessonPlan.group?.name}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
         <Spinner active={select.waiting}>
