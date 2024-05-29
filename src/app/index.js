@@ -1,10 +1,11 @@
-import {Routes, Route} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import LessonPlan from './lesson-plan';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
 import LessonModal from './lesson-modal';
 import Teachers from './teachers';
 import ConfirmModal from './confirm-modal';
+import TeacherModal from './teacher-modal';
 
 function App() {
 
@@ -12,24 +13,30 @@ function App() {
 
   return (
     <>
-    <Routes>
-      {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan/>}/>)}
-      <Route path={'teachers'} element={<Teachers/>}/>
-    </Routes>
+      <Routes>
+        {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
+        <Route path={'teachers'} element={<Teachers />} />
+      </Routes>
 
-    {activeModals.some(item => {
-      return item.name === 'lesson'
-    }) && <LessonModal lessonPlan={activeModals.find((item) => {
-      return item.name === 'lesson'
-    }).params.item} notChangeWeek={activeModals.find((item) => {
-      return item.name === 'lesson'
-    }).params.notChangeWeek}/>}
+      {activeModals.some(item => {
+        return item.name === 'lesson'
+      }) && <LessonModal lessonPlan={activeModals.find((item) => {
+        return item.name === 'lesson'
+      }).params.item} notChangeWeek={activeModals.find((item) => {
+        return item.name === 'lesson'
+      }).params.notChangeWeek} />}
 
-    {activeModals.some(item => {
-      return item.name === 'confirm'
-    }) && <ConfirmModal props={activeModals.find((item) => {
-      return item.name === 'confirm'
-    }).params}/>}
+      {activeModals.some(item => {
+        return item.name === 'confirm'
+      }) && <ConfirmModal props={activeModals.find((item) => {
+        return item.name === 'confirm'
+      }).params} />}
+
+      {activeModals.some(item => {
+        return item.name === 'newTeacher'
+      }) && <TeacherModal props={activeModals.find((item) => {
+        return item.name === 'newTeacher'
+      }).params} />}
     </>
   )
 }

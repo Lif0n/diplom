@@ -58,7 +58,7 @@ function TeacherComponent({ teacher }) {
           <Button type='primary' onClick={callbacks.onAcceptTeacherChange}>Сохранить изменения</Button>
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>
-        <TeacherGroups teacher={teacher}/>
+        <TeacherGroups teacher={teacher} />
       </Flex>
     </Wrapper>
   );

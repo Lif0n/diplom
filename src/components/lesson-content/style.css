@@ -1,8 +1,12 @@
-.LessonContent:hover{
+.LessonContent {
+  height: 100%;
+}
+
+.LessonContent:hover {
   color: #0d6efd;
 }
 
-.LessonContent:hover .second{
+.LessonContent:hover .second {
   color: #0d6efd;
 }
 

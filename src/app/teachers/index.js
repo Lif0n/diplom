@@ -2,11 +2,12 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
+import modalsActions from '../../store/modals/actions';
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
 import { SearchOutlined } from '@ant-design/icons';
-import { Collapse } from "antd";
+import { Collapse, Button } from "antd";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import TeacherComponent from "../../containers/teacher-component";
 import Wrapper from "../../components/wrapper";
@@ -43,7 +44,10 @@ function Teachers() {
     onSearch: useCallback(query => {
       dispatch(teachersActions.search(query));
       setQuery(query);
-    })
+    }),
+    newTeacher: () => {
+      dispatch(modalsActions.open('newTeacher'))
+    }
   }
 
   return (
@@ -56,6 +60,7 @@ function Teachers() {
               placeholder='Поиск'
               prefix={<SearchOutlined />}
               size='large' onChange={callbacks.onSearch} />
+              <Button type="primary" onClick={callbacks.newTeacher}>Добавить нового преподавателя</Button>
             <Spinner active={select.waiting}>
               <Collapse items={teachers} />
             </Spinner>
