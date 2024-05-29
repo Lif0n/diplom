@@ -16,6 +16,8 @@ function App() {
       <Routes>
         {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
         <Route path={'teachers'} element={<Teachers />} />
+        <Route path={'groups'}/>
+        <Route path={'subjects'}/>
       </Routes>
 
       {activeModals.some(item => {

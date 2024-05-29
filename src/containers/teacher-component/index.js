@@ -31,6 +31,12 @@ function TeacherComponent({ teacher }) {
         dispatch(teachersActions.load());
       }
     }
+  };
+
+  const deleteTeacher = (bool) => {
+    if (bool) {
+      dispatch(teachersActions.delete(teacher.id));
+    }
   }
 
   const callbacks = {
@@ -44,6 +50,13 @@ function TeacherComponent({ teacher }) {
         title: 'Внимание',
         text: 'Вы уверены, что хотите обновить данные преподавателя?',
         onOk: putTeacher
+      }))
+    },
+    deleteTeacher: () => {
+      dispatch(modalsActions.open('confirm', {
+        title: 'Внимание',
+        text: 'Вы уверены, что хотите удалить преподавателя?',
+        onOk: deleteTeacher
       }))
     }
   }
@@ -59,6 +72,7 @@ function TeacherComponent({ teacher }) {
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>
         <TeacherGroups teacher={teacher} />
+        <Button type='primary' danger style={{ width: '80%' }} onClick={callbacks.deleteTeacher}>Удалить преподавателя</Button>
       </Flex>
     </Wrapper>
   );
