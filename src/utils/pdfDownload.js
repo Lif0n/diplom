@@ -1,6 +1,6 @@
 export default function pdfDownload(base64) {
     const binaryString = atob(base64);
-    const uint8Array = new Uint16Array(binaryString.length);
+    const uint8Array = new Uint8Array(binaryString.length);
 
     for (let i = 0; i < binaryString.length; i++) {
         uint8Array[i] = binaryString.charCodeAt(i);
@@ -10,14 +10,14 @@ export default function pdfDownload(base64) {
         type: "application/pdf"
     });
     const url = URL.createObjectURL(blob);
-
+    // window.open(url);
     const a = document.createElement("a");
     a.href = url;
-    a.download = 'расписание';
-
+    a.download = 'plan';
+    
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
+    
     URL.revokeObjectURL(url);
 }

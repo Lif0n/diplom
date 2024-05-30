@@ -31,6 +31,17 @@ class APIService {
     return {data: await res.json(), status: res.status, headers: res.headers};
   }
 
+  async requestPlainText({url, method = 'GET', headers = {}, ...options}) {
+    if (!url.match(/^(http|\/\/)/)) url = this.config.baseUrl + url;
+    const res = await fetch(url, {
+      method,
+      headers: {...this.defaultHeaders, ...headers},
+      ...options,
+    });
+    console.log(url);
+    return {data: await res.text(), status: res.status, headers: res.headers};
+  }
+
   /**
    * Установка или сброс заголовка
    * @param name {String} Название заголовка

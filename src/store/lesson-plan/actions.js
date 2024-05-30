@@ -69,7 +69,7 @@ export default {
       dispatch({ type: 'lesson-plan/getPdf-start' });
 
       try {
-        const res = await services.api.request({
+        const res = await services.api.requestPlainText({
           url: `/api/LessonPlan/${groupId}`,
           method: 'GET'
         });

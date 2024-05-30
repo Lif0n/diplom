@@ -52,8 +52,8 @@ function reducer(state = initialState, action) {
     case 'lesson-plan/getPdf-start':
       return { ...state, waiting: true };
 
-    case 'lesson-plan/getPdf-success':
-      return { ...state, waiting: false }
+    case 'lesson-plan/getPdf-success':{
+      return { ...state, waiting: false }}
 
     case 'lesson-plan/getPdf-error':
       return { ...state, waiting: false };
