@@ -70,7 +70,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan${groupId}`,
+          url: `/api/LessonPlan/${groupId}`,
           method: 'GET'
         });
         pdfDownload(res.data);
