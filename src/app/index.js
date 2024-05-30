@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { useSelector } from 'react-redux';
 import LessonModal from './lesson-modal';
 import Teachers from './teachers';
+import Groups from './groups'
 import ConfirmModal from './confirm-modal';
 import TeacherModal from './teacher-modal';
 import ListModal from './list-modal';
@@ -17,7 +18,7 @@ function App() {
       <Routes>
         {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
         <Route path={'teachers'} element={<Teachers />} />
-        <Route path={'groups'} />
+        <Route path={'groups'} element={<Groups />}/>
         <Route path={'subjects'} />
       </Routes>
 
