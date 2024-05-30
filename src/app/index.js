@@ -6,6 +6,7 @@ import LessonModal from './lesson-modal';
 import Teachers from './teachers';
 import ConfirmModal from './confirm-modal';
 import TeacherModal from './teacher-modal';
+import ListModal from './list-modal';
 
 function App() {
 
@@ -16,8 +17,8 @@ function App() {
       <Routes>
         {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
         <Route path={'teachers'} element={<Teachers />} />
-        <Route path={'groups'}/>
-        <Route path={'subjects'}/>
+        <Route path={'groups'} />
+        <Route path={'subjects'} />
       </Routes>
 
       {activeModals.some(item => {
@@ -38,6 +39,12 @@ function App() {
         return item.name === 'newTeacher'
       }) && <TeacherModal props={activeModals.find((item) => {
         return item.name === 'newTeacher'
+      }).params} />}
+
+      {activeModals.some(item => {
+        return item.name === 'list'
+      }) && <ListModal props={activeModals.find((item) => {
+        return item.name === 'list'
       }).params} />}
     </>
   )

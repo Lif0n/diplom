@@ -4,10 +4,12 @@ import subjectsActions from '../../store/subjects/actions'
 import modalsActions from '../../store/modals/actions'
 import groupTeachersActions from '../../store/group-teachers/actions';
 import TeacherSubjectComponent from '../teacher-subject-component'
+import groupsActions from '../../store/groups/actions'
 import LessonSelect from '../../components/lesson-select'
 import uniqueValues from '../../utils/unique-values';
-import { memo, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 //карточка с группами и предметами преподавателя
@@ -17,9 +19,12 @@ function TeacherGroup({ teacher }) {
 
   const [activeTab, setActiveTab] = useState(0);
 
+  const [newGroups, setNewGroups] = useState([]);
+
   useInit(() => {
     dispatch(groupTeachersActions.load({ teacherId: teacher.id }));
     dispatch(subjectsActions.load());
+    dispatch(groupsActions.load())
   }, [teacher])
 
   const select = useSelector(state => ({
@@ -27,47 +32,68 @@ function TeacherGroup({ teacher }) {
     subjects: state.subjects.list,
     waitingGroupTeachers: state.groupTeachers.waiting,
     waitingSubjects: state.subjects.waiting,
+    groups: state.groups.list
   }))
 
   const groupTeachers = useMemo(() => {
     return select.groupTeachers.filter((gt) => gt.teacher.id === teacher.id)
   }, [select.groupTeachers, select.waitingGroupTeachers])
 
-  const groups = useMemo(() => {
-    const groups = [];
-    uniqueValues(groupTeachers, 'group').forEach(group => {
-      groups.push({
-        key: group.id,
-        label: `${group.speciality.shortname}-${group.name}`
-      });
-    });
-    if (groups.length > 0) {
-      setActiveTab(groups[0].key)
-    }
-    return groups;
-  }, [groupTeachers, select.groupTeachers])
+  const groups = uniqueValues(groupTeachers, 'group').map(group => ({
+    key: group.id,
+    label: `${group.speciality.shortname}-${group.name}`
+  })).concat(newGroups);
 
   const putSubject = (bool, value) => {
     if (bool) {
-      const group = uniqueValues(groupTeachers, 'group').find(g => g.id == activeTab);
-      console.log({ teacher: teacher, subject: value, group: group });
+      const group = select.groups.find(g => g.id == activeTab);
       dispatch(groupTeachersActions.post({ teacher: teacher, subject: value, group: group }));
+      setNewGroups([]);
+    }
+  }
+
+  const putGroup = (bool, value) => {
+    if (bool) {
+      if (groups.some((group) => group.key == value)) {
+        toast.error('Такая группа уже есть у преподавателя');
+        return;
+      }
+      setNewGroups([...newGroups, {
+        key: value,
+        label: select.groups.find(group => group.id == value).speciality.shortname +
+          '-' + select.groups.find(group => group.id == value).name
+      }]);
+      dispatch(modalsActions.close('list'));
     }
   }
 
   const callbacks = {
-    onTabChange: (key) => {
+    onTabChange: useCallback((key) => {
       setActiveTab(key);
-    },
+    }, [groups, newGroups]),
     onAcceptAddSubject: (value) => {
       const newSubject = select.subjects.find(s => s.id == value);
-      const group = uniqueValues(groupTeachers, 'group').find(g => g.id == activeTab);
+      const group = select.groups.find(g => g.id == activeTab);
       dispatch(modalsActions.open('confirm', {
         title: 'Внимание',
         text: `Вы уверены, что хотите добавить ${newSubject.name}
          в группе ${group?.speciality?.shortname}-${group.name} к ${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
         value: newSubject,
         onOk: putSubject
+      }))
+    },
+    onAddGroup: () => {
+      dispatch(modalsActions.open('list', {
+        title: 'Добавление группы к преподавателю',
+        text: 'Выберите группу',
+        placeholder: 'Группы',
+        selectOptions: select.groups.map((group) => {
+          return {
+            value: group.id,
+            label: group.speciality.shortname + '-' + group.name
+          }
+        }),
+        onChange: putGroup
       }))
     }
   }
@@ -98,7 +124,7 @@ function TeacherGroup({ teacher }) {
 
   return (
     <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
-      extra={<Button>Добавить группу к преподавателю</Button>}
+      extra={<Button onClick={callbacks.onAddGroup}>Добавить группу к преподавателю</Button>}
       loading={select.waiting}>
       <Tabs items={groups} onChange={callbacks.onTabChange} activeKey={activeTab} />
       <Flex vertical gap='middle'>
