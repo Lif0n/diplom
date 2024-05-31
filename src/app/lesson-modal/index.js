@@ -65,7 +65,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
     onAccept: useCallback(async () => {
 
       if (!teachers[0]) {
-        toast.error('Не выбран основной преподаватель');
+        toast.error('Не выбран первый преподаватель');
         return;
       }
       if (!lesson.subject) {
@@ -74,7 +74,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       }
 
       if (teachers[0] == teachers[1]) {
-        toast.error('Основной и запасной преподаватель не могут быть одинаковыми');
+        toast.error('Первый и второй преподаватель не могут быть одинаковыми');
         return;
       }
 
@@ -123,7 +123,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 label: subject.name
               }
             })} />
-          <LessonSelect placeholder='Основной преподаватель'
+          <LessonSelect placeholder='Первый преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[0] && lessonPlan.teachers[0].id}
             onChange={(value) => setTeachers([select.teachers.find((teacher) => {
               return teacher.id === value
@@ -134,7 +134,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
               }
             })} />
-          <LessonSelect placeholder='Запасной преподаватель'
+          <LessonSelect placeholder='Второй преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[1] && lessonPlan.teachers[1].id}
             onChange={(value) => setTeachers([teachers[0], select.teachers.find((teacher) => {
               return teacher.id === value

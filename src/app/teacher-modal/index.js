@@ -26,9 +26,9 @@ function TeacherModal({ props }) {
     }, [dispatch]),
     addTeacher: useCallback(() => {
       if (select.teachers.find(teacher => {
-        return (teacher.name.toLowerCase() == name.toLowerCase()
-          && teacher.surname.toLowerCase() == surname.toLowerCase()
-          && teacher.patronymic.toLowerCase() == patronymic.toLowerCase());
+        return (teacher.name.toLowerCase() == name.trim().toLowerCase()
+          && teacher.surname.toLowerCase() == surname.trim().toLowerCase()
+          && teacher.patronymic.toLowerCase() == patronymic.trim().toLowerCase());
       })) {
         toast.error('Такой преподаватель уже есть');
         return;

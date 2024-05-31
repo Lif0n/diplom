@@ -1,4 +1,4 @@
-export default function pdfDownload(base64) {
+export default function base64ToPdf(base64) {
     const binaryString = atob(base64);
     const uint8Array = new Uint8Array(binaryString.length);
 
