@@ -39,6 +39,18 @@ function TeacherModal({ props }) {
         toast.error('Все поля должны быть заполненны');
         return;
       }
+      if (name.match(/[^а-яА-ЯёЁ]/)
+        || surname.match(/[^а-яА-ЯёЁ]/)
+        || patronymic.match(/[^а-яА-ЯёЁ]/)) {
+        toast.error('Текст во всех полях должен состоять только из символов кирилиицы');
+        return;
+      }
+      if (name.length > 30
+        || surname.length > 30
+        || patronymic.length > 30) {
+          toast.error('Текст во всех полях не может превышать 30 символов');
+          return;
+      }
       dispatch(teachersActions.post({ name: name, surname: surname, patronymic: patronymic }));
       dispatch(modalsActions.close('newTeacher'))
     }, [patronymic, name, surname])
@@ -46,7 +58,7 @@ function TeacherModal({ props }) {
 
   return (
     <>
-    <ToastContainer position="top-center" autoClose={2000}/>
+      <ToastContainer position="top-center" autoClose={2000} />
       <ModalLayout labelClose='X' title='Добавление нового преподавателя' onClose={callbacks.closeModal}>
         <Wrapper>
           <Flex vertical gap='large' style={{ margin: '15px 0px' }} >

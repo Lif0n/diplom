@@ -6,6 +6,7 @@ import Wrapper from '../../components/wrapper';
 import modalsActions from '../../store/modals/actions';
 import './style.css'
 import TeacherGroups from '../teacher-groups';
+import { toast } from 'react-toastify';
 
 //элемент со всей информацией по преподавателю
 function TeacherComponent({ teacher }) {
@@ -19,7 +20,7 @@ function TeacherComponent({ teacher }) {
   const [patronymic, setPatronymic] = useState(teacher.patronymic);
 
   const select = useSelector(state => ({
-    query: state.teachers.query,
+    query: state.teachers.query
   }))
 
   const putTeacher = (bool) => {
@@ -46,6 +47,24 @@ function TeacherComponent({ teacher }) {
       setName(teacher.name);
     },
     onAcceptTeacherChange: () => {
+      if (name.trim() == ''
+        || surname.trim() == ''
+        || patronymic.trim() == '') {
+        toast.error('Все поля должны быть заполненны');
+        return;
+      }
+      if (name.match(/[^а-яА-ЯёЁ]/)
+        || surname.match(/[^а-яА-ЯёЁ]/)
+        || patronymic.match(/[^а-яА-ЯёЁ]/)) {
+        toast.error('Текст во всех полях должен состоять только из символов кирилиицы');
+        return;
+      }
+      if (name.length > 30
+        || surname.length > 30
+        || patronymic.length > 30) {
+        toast.error('Текст во всех полях не может превышать 30 символов');
+        return;
+      }
       dispatch(modalsActions.open('confirm', {
         title: 'Внимание',
         text: 'Вы уверены, что хотите обновить данные преподавателя?',

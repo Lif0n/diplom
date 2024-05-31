@@ -13,6 +13,7 @@ import TeacherComponent from "../../containers/teacher-component";
 import Wrapper from "../../components/wrapper";
 import InputSearch from "../../components/input-search";
 import Spinner from "../../components/spinner";
+import { ToastContainer } from "react-toastify";
 
 function Teachers() {
 
@@ -53,6 +54,7 @@ function Teachers() {
   return (
     <PageLayout>
       <Header logo={logo} selected={'teachers'} />
+      <ToastContainer position="top-center" autoClose={2000}/>
         <LessonPlanLayout>
           <Wrapper>
             <InputSearch
