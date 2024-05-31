@@ -1,4 +1,4 @@
-import pdfDownload from "../../utils/pdfDownload";
+import base64ToPdf from '../../utils/base64-to-pdf';
 
 export default {
 
@@ -73,7 +73,7 @@ export default {
           url: `/api/LessonPlan/${groupId}`,
           method: 'GET'
         });
-        pdfDownload(res.data);
+        base64ToPdf(res.data);
         dispatch({ type: 'lesson-plan/getPdf-success', payload: { data: res.data } })
       } catch (e) {
         dispatch({ type: 'lesson-plan/getPdf-error' })

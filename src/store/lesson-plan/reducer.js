@@ -1,5 +1,4 @@
 import FetchLessonPlan from '../../utils/fetch-lesson-plan';
-import pdfDownload from '../../utils/pdfDownload';
 
 export const initialState = {
   list: [],
