@@ -15,7 +15,7 @@ pipeline {
         }
         stage('docker-compose start') {
             steps {
-                sh 'docker compose -f ./docker/compose-dev.yaml up -d'
+                sh 'docker compose -f ./docker/compose-test.yaml up -d'
             }
         }
     }
