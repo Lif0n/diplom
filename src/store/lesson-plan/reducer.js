@@ -2,6 +2,11 @@ import FetchLessonPlan from '../../utils/fetch-lesson-plan';
 
 export const initialState = {
   list: [],
+  params: {
+    audience: null,
+    group: null,
+    teacher: null
+  },
   waiting: false
 }
 
@@ -51,11 +56,23 @@ function reducer(state = initialState, action) {
     case 'lesson-plan/getPdf-start':
       return { ...state, waiting: true };
 
-    case 'lesson-plan/getPdf-success':{
-      return { ...state, waiting: false }}
+    case 'lesson-plan/getPdf-success': {
+      return { ...state, waiting: false }
+    }
 
     case 'lesson-plan/getPdf-error':
       return { ...state, waiting: false };
+
+    case 'lesson-plan/setParams-start':
+      return { ...state, waiting: true };
+
+    case 'lesson-plan/setParams-success': {
+      return { ...state, list: action.payload.data, params: action.payload.params, waiting: false }
+    }
+
+    case 'lesson-plan/setParams-error':
+      return { ...state, waiting: false };
+
     default:
       return state;
   }
