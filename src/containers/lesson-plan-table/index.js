@@ -28,14 +28,18 @@ function LessonPlanTable() {
 
   const rows = useMemo(() => {
     const rows = [];
-    [1, 2, 3, 4, 5, 6].forEach((i) => {
-      rows.push(<LessonPlanRow key={`lpr-${i}`} groups={groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
-        function (item) {
-          return item.weekday === i;
-        }
-      )} />);
-      rows.push(<hr key={`hr-${i}`} style={{ top: '20px', bottom: '20px' }} />);
-    })
+    uniqueValues(select.lessonPlan, 'weekday')
+      .sort((a, b) => {
+        return a - b;
+      })
+      .forEach((i) => {
+        rows.push(<LessonPlanRow key={`lpr-${i}`} groups={groups} onItemClick={callbacks.openModalLesson} weekday={i} list={select.lessonPlan.filter(
+          function (item) {
+            return item.weekday === i;
+          }
+        )} />);
+        rows.push(<hr key={`hr-${i}`} style={{ top: '20px', bottom: '20px' }} />);
+      })
     return rows;
   }, [select.lessonPlan, select.waiting])
 

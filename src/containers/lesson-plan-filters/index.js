@@ -20,36 +20,35 @@ function LessonPlanFilters() {
 
   const [params, setParams] = useState({ audience: null, group: null, teacher: null });
 
-  // let params = useMemo(() => {
-  //   return select.params
-  // }, [select.params])
 
   const callbacks = {
     onTeacher: useCallback(teacher => {
-      setParams({...params, teacher: teacher})
-      console.log(params);
-      //params = { ...params, teacher: teacher };
-      dispatch(lessonPlanActions.setParams(params));
-    }, [dispatch, params]),
+      setParams(prevParams => {
+        const newParams = { ...prevParams, teacher };
+        dispatch(lessonPlanActions.setParams(newParams));
+        return newParams;
+      });
+    }, [dispatch]),
     onAudience: useCallback(audience => {
-      setParams({...params, audience: audience})
-      console.log(params);
-      //params = { ...params, audience: audience };
-      dispatch(lessonPlanActions.setParams(params));
-    }, [dispatch, params]),
+      setParams(prevParams => {
+        const newParams = { ...prevParams, audience };
+        dispatch(lessonPlanActions.setParams(newParams));
+        return newParams;
+      });
+    }, [dispatch]),
     onGroup: useCallback(group => {
-      setParams({...params, group: group})
-      console.log(params);
-      //params = { ...params, group: group };
-      dispatch(lessonPlanActions.setParams(params));
-    }, [dispatch, params]),
+      setParams(prevParams => {
+        const newParams = { ...prevParams, group };
+        dispatch(lessonPlanActions.setParams(newParams));
+        return newParams;
+      });
+    }, [dispatch]),
     onReset: useCallback(() => {
-      //params = { audience: null, group: null, teacher: null }
-      setParams({ audience: null, group: null, teacher: null });
-      console.log(params);
-      dispatch(lessonPlanActions.setParams(params))
-    }, [dispatch, params])
-  }
+      const resetParams = { audience: null, group: null, teacher: null };
+      setParams(resetParams);
+      dispatch(lessonPlanActions.setParams(resetParams));
+    }, [dispatch])
+  };
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
@@ -77,8 +76,8 @@ function LessonPlanFilters() {
           }
         })}
         onChange={callbacks.onTeacher}
-        loading={select.teachersWaitnig} 
-        value={params.teacher}/>
+        loading={select.teachersWaitnig}
+        value={params.teacher} />
       <LessonSelect
         showSearch
         placeholder={'Кабинет'}
@@ -90,8 +89,8 @@ function LessonPlanFilters() {
           }
         })}
         loading={select.audiencesWaiting}
-        onChange={callbacks.onAudience} 
-        value={params.audience}/>
+        onChange={callbacks.onAudience}
+        value={params.audience} />
       <Button type="primary" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
     </Flex>
   );
