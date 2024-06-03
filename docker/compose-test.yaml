@@ -1,0 +1,15 @@
+version: "0.1"
+services:
+  AKVT-raspisanie-frontend-test:
+    build: ../
+    image: akvt-raspisanie:test
+    restart: always
+    container_name: akvt-raspisanie-test
+    ports:
+      - 4910:80
+    networks:
+      - AKVT-raspisanie-frontend-test
+
+networks:
+  AKVT-raspisanie-frontend-test:
+    name: AKVT-raspisanie-frontend-test
