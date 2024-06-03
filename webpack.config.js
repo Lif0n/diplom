@@ -64,7 +64,7 @@ let config = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://raspisanie.hnt8.ru':'http://hnt8.ru:1149')
+        API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://raspisanie.hnt8.ru':'http://hnt8.ru:13657')
       },
     }),
     new CompressionPlugin({
@@ -88,7 +88,7 @@ if (process.env.NODE_ENV === 'development') {
     historyApiFallback: true,
     proxy: {
       '/api/**': {
-        target: 'http://hnt8.ru:1149',
+        target: 'http://hnt8.ru:13657',
         secure: false,
         changeOrigin: true,
       }
@@ -105,7 +105,7 @@ if(process.env.NODE_ENV === 'production'){
     historyApiFallback: true,
     proxy: {
       '/api/**': {
-        target: 'http://hnt8.ru:1149',
+        target: 'http://hnt8.ru:13657',
         secure: false,
         changeOrigin: true,
       }
