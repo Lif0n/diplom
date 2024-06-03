@@ -83,14 +83,15 @@ export default {
   setParams: (newParams) => {
     return async (dispatch, getState, services) => {
       dispatch({type: 'lesson-plan/setParams-start'});
-
-      const params = {...this.getState().params, ...newParams};
-
+      console.log(newParams);
       try {
         const res = await services.api.request({
-          url: `/api.LessonPlan/Search?${params.teacher && `teacherId=`+params.teacher}${params.group && `&groupId=`+params.group}${params.audience && `&audienceId=`+params.audience}`
+          url: `/api/LessonPlan/Search?
+          ${newParams.teacher ? 'teacherId='+newParams.teacher : ''}
+          ${newParams.group ? '&groupId='+newParams.group : ''}
+          ${newParams.audience ? '&audienceId='+newParams.audience : ''}`
         })
-        dispatch({type: 'lesson-plan/setParams-success', payload: {data: res.data, params: params}})
+        dispatch({type: 'lesson-plan/setParams-success', payload: {data: res.data}})
       } catch (e) {
         dispatch({type: 'lesson-plan/setParams-error'})
       }
