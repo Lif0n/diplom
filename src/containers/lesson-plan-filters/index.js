@@ -56,12 +56,12 @@ function LessonPlanFilters() {
         showSearch
         placeholder={'Группа'}
         defaultValue={params.group}
-        selectOptions={select.groups.map((group) => {
+        selectOptions={[{value: null, label: 'Все группы'}, ...select.groups.map((group) => {
           return {
             value: group.id,
             label: `${group.speciality.shortname}-${group.name}`
           }
-        })}
+        })]}
         onChange={callbacks.onGroup}
         loading={select.groupsWaiting}
         value={params.group} />
@@ -69,12 +69,12 @@ function LessonPlanFilters() {
         showSearch
         placeholder={'Преподаватель'}
         defaultValue={params.teacher}
-        selectOptions={select.teachers.map((teacher) => {
+        selectOptions={[{value: null, label: 'Все преподаватели'}, ...select.teachers.map((teacher) => {
           return {
             value: teacher.id,
-            label: `${teacher.surname} ${teacher.name}.${teacher.patronymic}`
+            label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
           }
-        })}
+        })]}
         onChange={callbacks.onTeacher}
         loading={select.teachersWaitnig}
         value={params.teacher} />
@@ -82,12 +82,12 @@ function LessonPlanFilters() {
         showSearch
         placeholder={'Кабинет'}
         defaultValue={params.audience}
-        selectOptions={select.audiences.map((audience) => {
+        selectOptions={[{value: null, label: 'Все кабинеты'}, ...select.audiences.map((audience) => {
           return {
             value: audience.id,
             label: audience.number
           }
-        })}
+        })]}
         loading={select.audiencesWaiting}
         onChange={callbacks.onAudience}
         value={params.audience} />
