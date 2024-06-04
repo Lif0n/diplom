@@ -27,7 +27,6 @@ class APIService {
       headers: {...this.defaultHeaders, ...headers},
       ...options,
     });
-    console.log(url);
     return {data: await res.json(), status: res.status, headers: res.headers};
   }
 
@@ -38,7 +37,6 @@ class APIService {
       headers: {...this.defaultHeaders, ...headers},
       ...options,
     });
-    console.log(url);
     return {data: await res.text(), status: res.status, headers: res.headers};
   }
 

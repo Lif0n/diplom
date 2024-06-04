@@ -67,9 +67,7 @@ export default {
   getPDF: ({groupId, teacherId, name}) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/getPdf-start' });
-      console.log(groupId);
-      console.log(teacherId);
-      console.log(name);
+
       try {
         const res = await services.api.requestPlainText({
           url: `/api/LessonPlan/Pdf/?${groupId ? 'groupId='+groupId : ''}${teacherId ? 'teacherId='+teacherId : ''}`,
@@ -85,12 +83,12 @@ export default {
   setParams: (newParams) => {
     return async (dispatch, getState, services) => {
       dispatch({type: 'lesson-plan/setParams-start'});
-      console.log(newParams);
+
       try {
         const res = await services.api.request({
           url: `/api/LessonPlan/Search?${newParams.teacher ? 'teacherId='+newParams.teacher : ''}${newParams.group ? '&groupId='+newParams.group : ''}${newParams.audience ? '&audienceId='+newParams.audience : ''}`
         })
-        console.log(res.data);
+
         dispatch({type: 'lesson-plan/setParams-success', payload: {data: res.data}})
       } catch (e) {
         dispatch({type: 'lesson-plan/setParams-error'})

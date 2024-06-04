@@ -28,7 +28,6 @@ function Groups() {
 
     const callbacks = {
         onDownload: useCallback(props => {
-            console.log(props);
             dispatch(lessonPlanActions.getPDF(props))
         }, [dispatch])
     }
