@@ -64,16 +64,18 @@ export default {
       }
     }
   },
-  getPDF: (groupId) => {
+  getPDF: ({groupId, teacherId, name}) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/getPdf-start' });
-
+      console.log(groupId);
+      console.log(teacherId);
+      console.log(name);
       try {
         const res = await services.api.requestPlainText({
-          url: `/api/LessonPlan/Pdf/?groupId=${groupId}`,
+          url: `/api/LessonPlan/Pdf/?${groupId ? 'groupId='+groupId : ''}${teacherId ? 'teacherId='+teacherId : ''}`,
           method: 'GET'
         });
-        base64ToPdf(res.data);
+        base64ToPdf(res.data, name);
         dispatch({ type: 'lesson-plan/getPdf-success', payload: { data: res.data } })
       } catch (e) {
         dispatch({ type: 'lesson-plan/getPdf-error' })

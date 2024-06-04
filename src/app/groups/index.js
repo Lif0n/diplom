@@ -27,13 +27,14 @@ function Groups() {
     }))
 
     const callbacks = {
-        onDownload: useCallback(groupId => {
-            dispatch(lessonPlanActions.getPDF(groupId))
+        onDownload: useCallback(props => {
+            console.log(props);
+            dispatch(lessonPlanActions.getPDF(props))
         }, [dispatch])
     }
 
-    const onDownload = (groupId) => (
-        <DownloadOutlined onClick={() =>callbacks.onDownload(groupId)} />
+    const onDownload = (props) => (
+        <DownloadOutlined onClick={() =>callbacks.onDownload(props)} />
     )
 
     const groups = useMemo(() => {
@@ -43,7 +44,7 @@ function Groups() {
                 key: group.id,
                 label: `${group.speciality.shortname}-${group.name}`,
                 children: <GroupComponent group={group} />,
-                extra: onDownload(group.id)
+                extra: onDownload({groupId: group.id, name: `${group.speciality.shortname}-${group.name}`})
             })
         })
         return groups;
