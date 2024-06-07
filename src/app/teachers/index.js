@@ -7,11 +7,10 @@ import lessonPlanActions from '../../store/lesson-plan/actions'
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
-import { SearchOutlined } from '@ant-design/icons';
 import { Collapse, Button } from "antd";
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import TeacherComponent from "../../containers/teacher-component";
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, SearchOutlined } from '@ant-design/icons';
 import Wrapper from "../../components/wrapper";
 import InputSearch from "../../components/input-search";
 import Spinner from "../../components/spinner";
@@ -54,7 +53,7 @@ function Teachers() {
     select.teachers.forEach(teacher => {
       teachers.push({
         key: teacher.id,
-        label: `${teacher.surname} ${teacher.name} ${teacher.patronymic}`,
+        label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
         children: <TeacherComponent teacher={teacher} />,
         extra: onDownload({teacherId: teacher.id, name: `${teacher.surname} ${teacher.name[0]} ${teacher.patronymic[0]}`})
       })

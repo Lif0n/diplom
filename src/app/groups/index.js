@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
@@ -9,13 +9,16 @@ import Wrapper from "../../components/wrapper";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
 import Spinner from "../../components/spinner";
-import { Collapse } from "antd";
-import { DownloadOutlined } from '@ant-design/icons'
+import { Collapse, Button } from "antd";
+import InputSearch from "../../components/input-search";
+import { DownloadOutlined, SearchOutlined } from '@ant-design/icons'
 import GroupComponent from "../../containers/group-component";
 
 function Groups() {
 
     const dispatch = useDispatch();
+
+    const [query, setQuery] = useState('');
 
     useInit(() => {
         dispatch(groupsActions.load());
@@ -29,11 +32,15 @@ function Groups() {
     const callbacks = {
         onDownload: useCallback(props => {
             dispatch(lessonPlanActions.getPDF(props))
-        }, [dispatch])
+        }, [dispatch]),
+        onSearch: useCallback(query => {
+            
+            setQuery(query);
+        })
     }
 
     const onDownload = (props) => (
-        <DownloadOutlined onClick={() =>callbacks.onDownload(props)} />
+        <DownloadOutlined onClick={() => callbacks.onDownload(props)} />
     )
 
     const groups = useMemo(() => {
@@ -43,7 +50,7 @@ function Groups() {
                 key: group.id,
                 label: `${group.speciality.shortname}-${group.name}`,
                 children: <GroupComponent group={group} />,
-                extra: onDownload({groupId: group.id, name: `${group.speciality.shortname}-${group.name}`})
+                extra: onDownload({ groupId: group.id, name: `${group.speciality.shortname}-${group.name}` })
             })
         })
         return groups;
@@ -55,6 +62,12 @@ function Groups() {
             <Header logo={logo} selected={'groups'} />
             <LessonPlanLayout>
                 <Wrapper>
+                    <InputSearch
+                        value={query}
+                        placeholder='Поиск'
+                        prefix={<SearchOutlined />}
+                        size='large' />
+                    <Button type="primary"> Добавить новую группу</Button>
                     <Spinner active={select.waiting}>
                         <Collapse items={groups} />
                     </Spinner>
