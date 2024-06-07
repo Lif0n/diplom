@@ -2,11 +2,6 @@ import FetchLessonPlan from '../../utils/fetch-lesson-plan';
 
 export const initialState = {
   list: [],
-  // params: {
-  //   audience: null,
-  //   group: null,
-  //   teacher: null
-  // },
   waiting: false
 }
 

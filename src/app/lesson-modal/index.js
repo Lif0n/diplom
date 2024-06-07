@@ -9,7 +9,7 @@ import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
 import Spinner from "../../components/spinner";
-import { Radio, Flex, Button } from "antd";
+import { Radio, Flex, Button, Checkbox } from "antd";
 import LessonSelect from "../../components/lesson-select";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +19,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const [lesson, setLesson] = useState(lessonPlan);
 
   const [teachers, setTeachers] = useState(lessonPlan.teachers ? [(lessonPlan.teachers[0] ? lessonPlan.teachers[0] : null), (lessonPlan.teachers[1] ? lessonPlan.teachers[1] : null)] : [null, null]);
+
+  const [isDistantce, setIsDistantce] = useState(lessonPlan.isDistantce ? lessonPlan.isDistantce : false);
 
   const dispatch = useDispatch();
 
@@ -41,14 +43,14 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const putLesson = async (bool) => {
     if (bool) {
-      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistance: false }))]);
+      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
       dispatch(lessonPlanActions.load());
       dispatch(modalsActions.close('lesson'));
     }
   }
 
   const postLesson = async (bool) => {
-    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistance: false }))]);
+    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
     dispatch(lessonPlanActions.load());
     dispatch(modalsActions.close('lesson'));
   }
@@ -73,7 +75,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
         return;
       }
 
-      if (teachers[0] == teachers[1]) {
+      if (teachers[0].id == teachers[1].id) {
         toast.error('Первый и второй преподаватель не могут быть одинаковыми');
         return;
       }
@@ -87,6 +89,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
           }))
         }
         else {
+
           dispatch(modalsActions.open('confirm', {
             title: 'Внимание',
             text: 'Вы действительно хотите добавить новую пару пару?',
@@ -158,6 +161,9 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 label: audience.number
               }
             })} />
+          <Checkbox defaultChecked={isDistantce}
+            style={{ margin: 'auto' }} size='large'
+            onChange={(value) => setIsDistantce(value)}>Дистанционно</Checkbox>
           {!notChangeWeek && <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
             <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
               buttonStyle="solid" size="large"
