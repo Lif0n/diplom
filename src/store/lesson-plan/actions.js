@@ -5,7 +5,6 @@ export default {
   load: () => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/load-start' });
-
       try {
         const res = await services.api.request({
           url: `/api/LessonPlan?formating=Standard`

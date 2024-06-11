@@ -53,6 +53,11 @@ function LessonPlanFilters() {
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
       <LessonSelect
+      showSearch
+      placeholder={'Отделение'}
+      
+      />
+      <LessonSelect
         showSearch
         placeholder={'Группа'}
         defaultValue={params.group}
