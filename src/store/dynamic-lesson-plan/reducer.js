@@ -1,8 +1,10 @@
+import DateToString from '../../utils/date-to-string'
+
 export const initialState = {
   list: [],
   step: 7,
-  startDate: new Date(),
-  endDate: null,
+  startDate: DateToString(new Date()),
+  endDate: DateToString(new Date(), 7),
   waiting: false
 }
 

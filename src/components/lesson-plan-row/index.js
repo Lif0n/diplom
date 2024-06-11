@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react'
 import { cn as bem } from '@bem-react/classname';
 import './style.css'
 import Weekday from '../weekday';
-import Lesson from '../lesson';
 import LessonPlanColumn from '../lesson-plan-column';
 
 function LessonPlanRow({ list, weekday, groups, onItemClick }) {
