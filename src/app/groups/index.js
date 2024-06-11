@@ -34,7 +34,7 @@ function Groups() {
             dispatch(lessonPlanActions.getPDF(props))
         }, [dispatch]),
         onSearch: useCallback(query => {
-            
+            dispatch(groupsActions.load(query))
             setQuery(query);
         })
     }
@@ -66,7 +66,7 @@ function Groups() {
                         value={query}
                         placeholder='Поиск'
                         prefix={<SearchOutlined />}
-                        size='large' />
+                        size='large' onChange={callbacks.onSearch}/>
                     <Button type="primary"> Добавить новую группу</Button>
                     <Spinner active={select.waiting}>
                         <Collapse items={groups} />

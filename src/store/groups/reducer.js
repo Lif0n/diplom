@@ -11,7 +11,7 @@ function reducer(state = initialState, action) {
       return { ...state, list: action.payload.data, waiting: false };
 
     case 'groups/load-error':
-      return {...state, list: [], waiting: false};
+      return { ...state, list: [], waiting: false };
 
     default:
       return state;

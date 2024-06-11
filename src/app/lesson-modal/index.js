@@ -75,9 +75,11 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
         return;
       }
 
-      if (teachers[0].id == teachers[1].id) {
-        toast.error('Первый и второй преподаватель не могут быть одинаковыми');
-        return;
+      if (teachers[1]) {
+        if (teachers[0].id == teachers[1].id) {
+          toast.error('Первый и второй преподаватель не могут быть одинаковыми');
+          return;
+        }
       }
 
       if (lesson.subject && teachers[0] != teachers[1] && teachers[0]) {
@@ -106,6 +108,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       }))
     })
   }
+
+  console.log({ ...lesson, teachers: teachers, isDistantce: isDistantce });
 
   return (
     <>
@@ -163,7 +167,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
             })} />
           <Checkbox defaultChecked={isDistantce}
             style={{ margin: 'auto' }} size='large'
-            onChange={(value) => setIsDistantce(value)}>Дистанционно</Checkbox>
+            onChange={(e) => setIsDistantce(e.target.checked)}>Дистанционно</Checkbox>
           {!notChangeWeek && <Flex vertical gap='middle' style={{ margin: '15px 0px', alignItems: 'center' }}>
             <Radio.Group defaultValue={lessonPlan.weekNumber ? lessonPlan.weekNumber : 0}
               buttonStyle="solid" size="large"
