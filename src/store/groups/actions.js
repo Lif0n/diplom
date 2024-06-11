@@ -6,7 +6,7 @@ export default {
      
      try {
       const res = await services.api.request({
-        url: `/api/Group?query=${query}`
+        url: `/api/Group${query ? `?query=`+query:''}`
       });
 
       dispatch({type: 'groups/load-success', payload: {data: res.data}})

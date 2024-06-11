@@ -146,12 +146,12 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
             onChange={(value) => setTeachers([teachers[0], select.teachers.find((teacher) => {
               return teacher.id === value
             })])}
-            selectOptions={select.teachers.map((teacher) => {
+            selectOptions={[{value: null, label: 'Нет'}, ...select.teachers.map((teacher) => {
               return {
                 value: teacher.id,
                 label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
               }
-            })} />
+            })]} />
           <LessonSelect placeholder='Кабинет'
             defaultValue={lessonPlan.audience && lessonPlan.audience.id}
             onChange={(value) => setLesson({
