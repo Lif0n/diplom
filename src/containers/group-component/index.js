@@ -33,7 +33,7 @@ function GroupComponent({ group }) {
 
 
     return (
-        <Card key={group.id} title={`${group.speciality.shortname}-${group.name}`}
+        <Card key={group.id} title={`${group.groupCode}`}
             extra={<Button>Добавить преподавателя к группе</Button>}>
         </Card>
     );

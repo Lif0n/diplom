@@ -53,9 +53,9 @@ function Teachers() {
     select.teachers.forEach(teacher => {
       teachers.push({
         key: teacher.id,
-        label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
+        label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`,
         children: <TeacherComponent teacher={teacher} />,
-        extra: onDownload({teacherId: teacher.id, name: `${teacher.surname} ${teacher.name[0]} ${teacher.patronymic[0]}`})
+        extra: onDownload({teacherId: teacher.id, name: `${teacher.lastName} ${teacher.firstName[0]} ${teacher.middleName[0]}`})
       })
     });
     return teachers;

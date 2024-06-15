@@ -115,7 +115,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
     <>
       <ToastContainer position="top-center" autoClose={2000} />
       <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
-        title={`${lessonPlan.group.speciality.shortname}-${lessonPlan.group?.name}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
+        title={`${lessonPlan.groupCode}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
         <Spinner active={select.waiting}>
           <LessonSelect placeholder='Предмет'
             defaultValue={lessonPlan.subject && lessonPlan.subject.id}
@@ -138,7 +138,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
             selectOptions={select.teachers.map((teacher) => {
               return {
                 value: teacher.id,
-                label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
+                label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
               }
             })} />
           <LessonSelect placeholder='Второй преподаватель'
@@ -149,7 +149,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
             selectOptions={[{value: null, label: 'Нет'}, ...select.teachers.map((teacher) => {
               return {
                 value: teacher.id,
-                label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
+                label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
               }
             })]} />
           <LessonSelect placeholder='Кабинет'

@@ -7,6 +7,7 @@ import useInit from "../../hooks/use-init";
 import logo from '../../img/logo.png';
 import teachersActions from '../../store/teachers/actions'
 import audiencesActions from '../../store/audiences/actions'
+import schedulesActions from '../../store/schedule/actions'
 import groupsActions from '../../store/groups/actions'
 import LessonPlanFilters from "../../containers/lesson-plan-filters";
 import LessonPlanTable from "../../containers/lesson-plan-table";
@@ -20,6 +21,7 @@ function LessonPlan() {
     dispatch(teachersActions.load());
     dispatch(groupsActions.load());
     dispatch(audiencesActions.load());
+    dispatch(schedulesActions.load())
   })
 
   return (

@@ -1,5 +1,5 @@
 const isProduction = process.env.NODE_ENV === 'production';
-const apiUrl = process.env.API_URL || 'localhost:8080';
+const apiUrl = process.env.API_URL || 'localhost:7293';
 
 /**
  * Настройки сервисов

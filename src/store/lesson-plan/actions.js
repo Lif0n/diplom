@@ -7,7 +7,7 @@ export default {
       dispatch({ type: 'lesson-plan/load-start' });
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan?formating=Standard`
+          url: `/api/Lesson?formating=Standard`
         });
 
         dispatch({ type: 'lesson-plan/load-success', payload: { data: res.data } })
@@ -22,7 +22,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan?id=${id}`,
+          url: `/api/Lesson?id=${id}`,
           method: 'DELETE'
         });
         dispatch({ type: 'lesson-plan/delete-success', payload: { id } })
@@ -37,7 +37,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan`,
+          url: `/api/Lesson`,
           method: 'POST',
           body: JSON.stringify(lesson)
         });
@@ -53,7 +53,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan`,
+          url: `/api/Lesson`,
           method: 'PUT',
           body: JSON.stringify(lesson)
         });
@@ -63,13 +63,14 @@ export default {
       }
     }
   },
-  getPDF: ({groupId, teacherId, name}) => {
+  getPDF: ({ groupId, teacherId, name }) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/getPdf-start' });
 
       try {
         const res = await services.api.requestPlainText({
-          url: `/api/LessonPlan/Pdf/?${groupId ? 'groupId='+groupId : ''}${teacherId ? 'teacherId='+teacherId : ''}`,
+          url: `/api/Lesson/Pdf/?
+          ${groupId ? 'groupId=' + groupId : ''}${teacherId ? 'teacherId=' + teacherId : ''}`,
           method: 'GET'
         });
         base64ToPdf(res.data, name);
@@ -81,16 +82,21 @@ export default {
   },
   setParams: (newParams) => {
     return async (dispatch, getState, services) => {
-      dispatch({type: 'lesson-plan/setParams-start'});
+      dispatch({ type: 'lesson-plan/setParams-start' });
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonPlan/Search?${newParams.teacher ? 'teacherId='+newParams.teacher : ''}${newParams.group ? '&groupId='+newParams.group : ''}${newParams.audience ? '&audienceId='+newParams.audience : ''}`
+          url: `/api/Lesson/Search?
+          ${newParams.teacher ? 'teacherId=' + newParams.teacher : ''}
+          ${newParams.group ? '&groupId=' + newParams.group : ''}
+          ${newParams.audience ? '&audienceId=' + newParams.audience : ''}
+          ${newParams.schedule ? '&scheduleId=' + newParams.schedule : ''}
+          ${newParams.department ? '&department=' + newParams.department : ''}`
         })
 
-        dispatch({type: 'lesson-plan/setParams-success', payload: {data: res.data}})
+        dispatch({ type: 'lesson-plan/setParams-success', payload: { data: res.data } })
       } catch (e) {
-        dispatch({type: 'lesson-plan/setParams-error'})
+        dispatch({ type: 'lesson-plan/setParams-error' })
       }
     }
   }

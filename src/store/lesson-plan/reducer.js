@@ -2,6 +2,7 @@ import FetchLessonPlan from '../../utils/fetch-lesson-plan';
 
 export const initialState = {
   list: [],
+  schedule: {},
   waiting: false
 }
 

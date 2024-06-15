@@ -13,12 +13,14 @@ function LessonPlanFilters() {
     groups: state.groups.list,
     teachers: state.teachers.list,
     audiences: state.audiences.list,
+    schedules: state.schedules.list,
     teachersWaitnig: state.teachers.waiting,
     groupsWaiting: state.groups.waiting,
-    audiencesWaiting: state.audiences.waiting
+    audiencesWaiting: state.audiences.waiting,
+    schedulesWaiting: state.schedules.waiting
   }))
 
-  const [params, setParams] = useState({ audience: null, group: null, teacher: null });
+  const [params, setParams] = useState({ audience: null, group: null, teacher: null, schedule: null, department: null });
 
 
   const callbacks = {
@@ -43,6 +45,13 @@ function LessonPlanFilters() {
         return newParams;
       });
     }, [dispatch]),
+    onSchedule: useCallback(schedule => {
+      setParams(prevParams => {
+        const newParams = { ...prevParams, schedule };
+        dispatch(lessonPlanActions.setParams(newParams));
+        return newParams;
+      });
+    }, [dispatch]),
     onReset: useCallback(() => {
       const resetParams = { audience: null, group: null, teacher: null };
       setParams(resetParams);
@@ -53,18 +62,29 @@ function LessonPlanFilters() {
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
       <LessonSelect
-      showSearch
-      placeholder={'Отделение'}
-      
+        showSearch
+        placeholder={'Расписание'}
+        selectOptions={select.schedules.map((schedule) => {
+          return {
+            value: schedule.id,
+            label: `${schedule.academicYear} год, ${schedule.semester} семестр`
+          }
+        })}
+      />
+      <LessonSelect
+        showSearch
+        placeholder={'Отделение'}
+        selectOptions={[{ value: 1, label: '1-е отделение' }, { value: 2, label: '2-е отделение' }]}
+        defaultValue={1}
       />
       <LessonSelect
         showSearch
         placeholder={'Группа'}
         defaultValue={params.group}
-        selectOptions={[{value: null, label: 'Все группы'}, ...select.groups.map((group) => {
+        selectOptions={[{ value: null, label: 'Все группы' }, ...select.groups.map((group) => {
           return {
             value: group.id,
-            label: `${group.speciality.shortname}-${group.name}`
+            label: `${group.groupCode}`
           }
         })]}
         onChange={callbacks.onGroup}
@@ -74,10 +94,10 @@ function LessonPlanFilters() {
         showSearch
         placeholder={'Преподаватель'}
         defaultValue={params.teacher}
-        selectOptions={[{value: null, label: 'Все преподаватели'}, ...select.teachers.map((teacher) => {
+        selectOptions={[{ value: null, label: 'Все преподаватели' }, ...select.teachers.map((teacher) => {
           return {
             value: teacher.id,
-            label: `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`
+            label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
           }
         })]}
         onChange={callbacks.onTeacher}
@@ -87,7 +107,7 @@ function LessonPlanFilters() {
         showSearch
         placeholder={'Кабинет'}
         defaultValue={params.audience}
-        selectOptions={[{value: null, label: 'Все кабинеты'}, ...select.audiences.map((audience) => {
+        selectOptions={[{ value: null, label: 'Все кабинеты' }, ...select.audiences.map((audience) => {
           return {
             value: audience.id,
             label: audience.number

@@ -13,7 +13,7 @@ export default function FetchLessonPlan(arr) {
         lp1.teachers.forEach(teacher1 => {
           //проверка на то, одинаковые ли преподы
           if (teacher.id == teacher1.id) {
-            errors = [...errors, `${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}. уже ведет пару в это время у группы ${lp1.group.speciality.name}-${lp1.group.name}`];
+            errors = [...errors, `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}. уже ведет пару в это время у группы ${lp1.group.groupCode}`];
           }
         })
       })
