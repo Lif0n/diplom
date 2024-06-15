@@ -3,13 +3,13 @@ import { memo, useCallback, useMemo, useState } from "react";
 import LessonSelect from "../../components/lesson-select";
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import { useDispatch, useSelector } from "react-redux";
+import GetClosestSchedule from "../../utils/get-closest-schedule";
 
 function LessonPlanFilters() {
 
   const dispatch = useDispatch();
 
   const select = useSelector(state => ({
-    params: state.lessonPlan.params,
     groups: state.groups.list,
     teachers: state.teachers.list,
     audiences: state.audiences.list,
@@ -20,7 +20,7 @@ function LessonPlanFilters() {
     schedulesWaiting: state.schedules.waiting
   }))
 
-  const [params, setParams] = useState({ audience: null, group: null, teacher: null, schedule: null, department: null });
+  const [params, setParams] = useState({ audience: null, group: null, teacher: null, schedule: select.schedules.length > 0 ? GetClosestSchedule(select.schedules).id : null, department: 1 });
 
 
   const callbacks = {
@@ -51,7 +51,14 @@ function LessonPlanFilters() {
         dispatch(lessonPlanActions.setParams(newParams));
         return newParams;
       });
-    }, [dispatch]),
+    }, [dispatch, params]),
+    onDepartment: useCallback(department => {
+      setParams(prevParams => {
+        const newParams = { ...prevParams, department };
+        dispatch(lessonPlanActions.setParams(newParams));
+        return newParams;
+      });
+    }, [dispatch, params]),
     onReset: useCallback(() => {
       const resetParams = { audience: null, group: null, teacher: null };
       setParams(resetParams);
@@ -64,18 +71,22 @@ function LessonPlanFilters() {
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
+        value={params.schedule}
         selectOptions={select.schedules.map((schedule) => {
           return {
             value: schedule.id,
             label: `${schedule.academicYear} год, ${schedule.semester} семестр`
           }
         })}
+        onChange={callbacks.onSchedule}
       />
       <LessonSelect
         showSearch
         placeholder={'Отделение'}
+        value={params.department}
         selectOptions={[{ value: 1, label: '1-е отделение' }, { value: 2, label: '2-е отделение' }]}
         defaultValue={1}
+        onChange={callbacks.onDepartment}
       />
       <LessonSelect
         showSearch
