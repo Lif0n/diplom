@@ -1,9 +1,7 @@
-export default function GetAudiencesErrors(arr){
+export default function GetAudiencesErrors(arr) {
 
   const newArr = arr.map(lp => {
-    console.log(lp);
-    if(lp.audience == null){
-      console.log(lp);
+    if (lp.audience == null) {
       return lp;
     }
 
@@ -12,13 +10,12 @@ export default function GetAudiencesErrors(arr){
     let errors = [];
 
     lpAtSameTime.filter((lp1) => lp1.audience != null).forEach(lp1 => {
-      console.log(lp1);
-      if(lp.audience == lp1.audience){
+      if (lp.audience == lp1.audience) {
         errors = [...errors, `В ${lp1.audience.number} уже идет пара в это время у ${lp1.group.groupCode}`]
       }
     });
-    if (errors.length > 0){
-      return {...lp, errors: [...lp.errors, errors]}
+    if (errors.length > 0) {
+      return { ...lp, errors: [...lp.errors, errors] }
     }
     return lp;
   })

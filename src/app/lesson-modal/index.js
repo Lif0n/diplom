@@ -1,10 +1,12 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import modalsActions from '../../store/modals/actions';
 import ModalLayout from '../../components/modal-layout'
 import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
 import subjectsActions from '../../store/subjects/actions';
+import teacherSubjectsActions from '../../store/teacher-subject/actions';
+import lessonGroupsActions from '../../store/lesson-group/actions';
 import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
@@ -13,6 +15,7 @@ import { Radio, Flex, Button, Checkbox } from "antd";
 import LessonSelect from "../../components/lesson-select";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import uniqueValues from "../../utils/unique-values";
 
 function LessonModal({ lessonPlan, notChangeWeek }) {
 
@@ -26,17 +29,17 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   useInit(() => {
     dispatch(teachersActions.load());
-    dispatch(subjectsActions.load());
-    dispatch(groupTeachersActions.load(lessonPlan.group.id));
+    dispatch(lessonGroupsActions.load(lessonPlan.group.id, null));
     dispatch(audiencesActions.load());
   })
 
   const select = useSelector(state => ({
     teachers: state.teachers.list,
+    lessonGroups: state.lessonGroups.list,
     groupTeachers: state.groupTeachers.list,
-    subjects: state.subjects.list,
+    subjects: state.lessonGroups.list,
     audiences: state.audiences.list,
-    waiting: state.subjects.waiting && state.groupTeachers.waiting && state.teachers.waiting && state.audiences.waiting,
+    waiting: state.groupTeachers.waiting && state.teachers.waiting && state.audiences.waiting,
   }))
 
   const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
@@ -109,13 +112,39 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
     })
   }
 
+  const availableSubjects = useMemo(() => {
+    if (select.lessonGroups) {
+      return uniqueValues(select.lessonGroups, 'subject').map(s => {
+        return {
+          value: s.id,
+          label: s.name
+        }
+      })
+    }
+    return null;
+  }, [dispatch, select.lessonGroups]);
+
+  const availableTeachers = useMemo(() => {
+    if (select.lessonGroups) {
+      return uniqueValues(uniqueValues(select.lessonGroups, 'lessonGroupTeachers')
+        .flatMap(arr => arr.filter(item => item.teacher).map(item => item.teacher))).map(t => {
+          console.log(t);
+          return {
+            value: t.id,
+            label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
+          }
+        });
+    }
+    return null;
+  }, [dispatch, select.lessonGroups])
+
   console.log({ ...lesson, teachers: teachers, isDistantce: isDistantce });
 
   return (
     <>
       <ToastContainer position="top-center" autoClose={2000} />
       <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
-        title={`${lessonPlan.groupCode}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
+        title={`${lessonPlan.group.groupCode}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
         <Spinner active={select.waiting}>
           <LessonSelect placeholder='Предмет'
             defaultValue={lessonPlan.subject && lessonPlan.subject.id}
@@ -124,29 +153,33 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 return subject.id === value
               })
             })}
-            selectOptions={select.subjects.map((subject) => {
-              return {
-                value: subject.id,
-                label: subject.name
-              }
-            })} />
+            // selectOptions={uniqueValues(select.lessonGroups, 'subject').map((subject) => {
+            //   return {
+            //     value: subject.id,
+            //     label: subject.name
+            //   }
+            // })}
+            selectOptions={availableSubjects}
+          />
           <LessonSelect placeholder='Первый преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[0] && lessonPlan.teachers[0].id}
             onChange={(value) => setTeachers([select.teachers.find((teacher) => {
               return teacher.id === value
             }), teachers[1]])}
-            selectOptions={select.teachers.map((teacher) => {
-              return {
-                value: teacher.id,
-                label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
-              }
-            })} />
+            // selectOptions={uniqueValues(select.lessonGroups, 'lessonGroupTeachers.teacher').map((teacher) => {
+            //   return {
+            //     value: teacher.id,
+            //     label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
+            //   }
+            // })}
+            selectOptions={availableTeachers}
+          />
           <LessonSelect placeholder='Второй преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[1] && lessonPlan.teachers[1].id}
             onChange={(value) => setTeachers([teachers[0], select.teachers.find((teacher) => {
               return teacher.id === value
             })])}
-            selectOptions={[{value: null, label: 'Нет'}, ...select.teachers.map((teacher) => {
+            selectOptions={[{ value: null, label: 'Нет' }, ...select.teachers.map((teacher) => {
               return {
                 value: teacher.id,
                 label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
@@ -159,12 +192,12 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 return audience.id === value
               })
             })}
-            selectOptions={select.audiences.map((audience) => {
+            selectOptions={[{value: null, label: 'Нет'}, ...select.audiences.map((audience) => {
               return {
                 value: audience.id,
                 label: audience.number
               }
-            })} />
+            })]} />
           <Checkbox defaultChecked={isDistantce}
             style={{ margin: 'auto' }} size='large'
             onChange={(e) => setIsDistantce(e.target.checked)}>Дистанционно</Checkbox>

@@ -7,3 +7,5 @@ export {default as groupTeachers} from './group-teachers/reducer';
 export {default as audiences} from './audiences/reducer';
 export {default as dynamicLessonPlan} from './dynamic-lesson-plan/reducer';
 export {default as schedules} from './schedule/reducer'
+export {default as lessonGroups} from './lesson-group/reducer'
+export {default as teacherSubjects} from './teacher-subject/reducer'
