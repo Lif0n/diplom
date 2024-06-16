@@ -1,5 +1,7 @@
 .LessonContent {
   height: 100%;
+  width: 100%;
+  padding: 0px 5px;
 }
 
 .LessonContent:hover {
@@ -20,4 +22,8 @@
 
 .second {
   color: gray;
+}
+
+.distance {
+  background-color:lightgray;
 }

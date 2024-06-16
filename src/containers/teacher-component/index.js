@@ -13,11 +13,11 @@ function TeacherComponent({ teacher }) {
 
   const dispatch = useDispatch();
 
-  const [surname, setSurname] = useState(teacher.surname);
+  const [surname, setSurname] = useState(teacher.lastName);
 
-  const [name, setName] = useState(teacher.name);
+  const [name, setName] = useState(teacher.firstName);
 
-  const [patronymic, setPatronymic] = useState(teacher.patronymic);
+  const [patronymic, setPatronymic] = useState(teacher.middleName);
 
   const select = useSelector(state => ({
     query: state.teachers.query
@@ -42,9 +42,9 @@ function TeacherComponent({ teacher }) {
 
   const callbacks = {
     onCancelTeacherChange: () => {
-      setSurname(teacher.surname);
-      setPatronymic(teacher.patronymic);
-      setName(teacher.name);
+      setSurname(teacher.lastName);
+      setPatronymic(teacher.middleName);
+      setName(teacher.firstName);
     },
     onAcceptTeacherChange: () => {
       if (name.trim() == ''
@@ -86,7 +86,7 @@ function TeacherComponent({ teacher }) {
         <Input value={surname} style={{ width: '80%' }} className='teacherSurname' size='large' addonBefore='Фамилия' onChange={(e) => setSurname(e.target.value)} />
         <Input value={name} style={{ width: '80%' }} className='teacherName' size='large' addonBefore='Имя' onChange={(e) => setName(e.target.value)} />
         <Input value={patronymic} style={{ width: '80%' }} className='teacherPatronymic' size='large' addonBefore='Отчество' onChange={(e) => setPatronymic(e.target.value)} />
-        <Flex gap='middle' justify='center' style={(name == teacher.name && surname == teacher.surname && patronymic == teacher.patronymic) ? { display: 'none' } : { width: '80%' }}>
+        <Flex gap='middle' justify='center' style={(name == teacher.firstName && surname == teacher.lastName && patronymic == teacher.middleName) ? { display: 'none' } : { width: '80%' }}>
           <Button type='primary' onClick={callbacks.onAcceptTeacherChange}>Сохранить изменения</Button>
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>

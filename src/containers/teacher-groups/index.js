@@ -41,7 +41,7 @@ function TeacherGroup({ teacher }) {
 
   const groups = uniqueValues(groupTeachers, 'group').map(group => ({
     key: group.id,
-    label: `${group.speciality.shortname}-${group.name}`
+    label: `${group.groupCode}`
   })).concat(newGroups);
 
   const putSubject = (bool, value) => {
@@ -60,8 +60,7 @@ function TeacherGroup({ teacher }) {
       }
       setNewGroups([...newGroups, {
         key: value,
-        label: select.groups.find(group => group.id == value).speciality.shortname +
-          '-' + select.groups.find(group => group.id == value).name
+        label: select.groups.find(group => group.id == value).groupCode
       }]);
       dispatch(modalsActions.close('list'));
     }
@@ -77,7 +76,7 @@ function TeacherGroup({ teacher }) {
       dispatch(modalsActions.open('confirm', {
         title: 'Внимание',
         text: `Вы уверены, что хотите добавить ${newSubject.name}
-         в группе ${group?.speciality?.shortname}-${group.name} к ${teacher.surname} ${teacher.name[0]}. ${teacher.patronymic[0]}.`,
+         в группе ${group?.groupCode} к ${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`,
         value: newSubject,
         onOk: putSubject
       }))
@@ -90,7 +89,7 @@ function TeacherGroup({ teacher }) {
         selectOptions: select.groups.map((group) => {
           return {
             value: group.id,
-            label: group.speciality.shortname + '-' + group.name
+            label: group.groupCode
           }
         }),
         onChange: putGroup

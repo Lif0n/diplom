@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
@@ -9,13 +9,16 @@ import Wrapper from "../../components/wrapper";
 import { useDispatch, useSelector } from "react-redux";
 import useInit from "../../hooks/use-init";
 import Spinner from "../../components/spinner";
-import { Collapse } from "antd";
-import { DownloadOutlined } from '@ant-design/icons'
+import { Collapse, Button } from "antd";
+import InputSearch from "../../components/input-search";
+import { DownloadOutlined, SearchOutlined } from '@ant-design/icons'
 import GroupComponent from "../../containers/group-component";
 
 function Groups() {
 
     const dispatch = useDispatch();
+
+    const [query, setQuery] = useState('');
 
     useInit(() => {
         dispatch(groupsActions.load());
@@ -27,13 +30,17 @@ function Groups() {
     }))
 
     const callbacks = {
-        onDownload: useCallback(groupId => {
-            dispatch(lessonPlanActions.getPDF(groupId))
-        }, [dispatch])
+        onDownload: useCallback(props => {
+            dispatch(lessonPlanActions.getPDF(props))
+        }, [dispatch]),
+        onSearch: useCallback(query => {
+            dispatch(groupsActions.load(query))
+            setQuery(query);
+        })
     }
 
-    const onDownload = (groupId) => (
-        <DownloadOutlined onClick={() =>callbacks.onDownload(groupId)} />
+    const onDownload = (props) => (
+        <DownloadOutlined onClick={() => callbacks.onDownload(props)} />
     )
 
     const groups = useMemo(() => {
@@ -41,9 +48,9 @@ function Groups() {
         select.groups.forEach(group => {
             groups.push({
                 key: group.id,
-                label: `${group.speciality.shortname}-${group.name}`,
+                label: `${group.groupCode}`,
                 children: <GroupComponent group={group} />,
-                extra: onDownload(group.id)
+                extra: onDownload({ groupId: group.id, name: `${group.groupCode}` })
             })
         })
         return groups;
@@ -55,6 +62,12 @@ function Groups() {
             <Header logo={logo} selected={'groups'} />
             <LessonPlanLayout>
                 <Wrapper>
+                    <InputSearch
+                        value={query}
+                        placeholder='Поиск'
+                        prefix={<SearchOutlined />}
+                        size='large' onChange={callbacks.onSearch}/>
+                    <Button type="primary"> Добавить новую группу</Button>
                     <Spinner active={select.waiting}>
                         <Collapse items={groups} />
                     </Spinner>

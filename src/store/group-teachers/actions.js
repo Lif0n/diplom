@@ -25,7 +25,6 @@ export default {
         });
         dispatch({type: 'group-teachers/delete-success', payload: {data: id}})
       } catch (e) {
-        console.log(e);
         dispatch({type: 'group-teachers/delete-error'})
       }
     }
@@ -41,11 +40,8 @@ export default {
           body: JSON.stringify(groupTeacher)
         });
 
-        console.log(res.data);
-        console.log(groupTeacher);
         dispatch({type: 'group-teachers/post-success', payload: {data: res.data}})
       } catch (e) {
-        console.log(e);
         dispatch({type: 'group-teachers/post-error'})
       }
     }

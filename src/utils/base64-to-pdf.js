@@ -1,4 +1,4 @@
-export default function base64ToPdf(base64) {
+export default function base64ToPdf(base64, name) {
     const binaryString = atob(base64);
     const uint8Array = new Uint8Array(binaryString.length);
 
@@ -13,7 +13,7 @@ export default function base64ToPdf(base64) {
     // window.open(url);
     const a = document.createElement("a");
     a.href = url;
-    a.download = 'plan';
+    a.download = name;
     
     document.body.appendChild(a);
     a.click();

@@ -10,6 +10,10 @@ const services = new Services(config);
 
 const root = createRoot(document.getElementById('root'));
 
+const now = new Date();
+localStorage.setItem('currentYear', now.getFullYear());
+localStorage.setItem('currentSemester', ((now.getMonth()+1) > 8 ? 1 : 2))
+
 // Первый рендер приложения
 root.render(
   <Provider store={services.redux}>

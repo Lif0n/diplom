@@ -8,6 +8,7 @@ import Groups from './groups'
 import ConfirmModal from './confirm-modal';
 import TeacherModal from './teacher-modal';
 import ListModal from './list-modal';
+import ScheduleModal from './schedule-modal';
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
       <Routes>
         {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
         <Route path={'teachers'} element={<Teachers />} />
-        <Route path={'groups'} element={<Groups />}/>
+        <Route path={'groups'} element={<Groups />} />
         <Route path={'subjects'} />
       </Routes>
 
@@ -46,6 +47,12 @@ function App() {
         return item.name === 'list'
       }) && <ListModal props={activeModals.find((item) => {
         return item.name === 'list'
+      }).params} />}
+
+      {activeModals.some(item => {
+        return item.name === 'schedule'
+      }) && <ScheduleModal props={activeModals.find((item) => {
+        return item.name === 'schedule'
       }).params} />}
     </>
   )

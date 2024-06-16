@@ -1,10 +1,11 @@
 import {memo} from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
+import { Spin } from 'antd';
 
 function Spinner({active, children}) {
   if (active) {
-    return <div className='Spinner'>{children}</div>
+    return <div className='Spinner'><Spin size='large' style={{margin: 'auto'}}/></div>
   } else {
     return children;
   }

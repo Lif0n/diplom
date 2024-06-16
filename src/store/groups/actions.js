@@ -1,12 +1,12 @@
 export default {
 
-  load: () => {
+  load: (query) => {
     return async(dispatch, getState, services) => {
      dispatch({type: 'groups/load-start'});
      
      try {
       const res = await services.api.request({
-        url: `/api/Group`
+        url: `/api/Group${query ? `?query=`+query:''}`
       });
 
       dispatch({type: 'groups/load-success', payload: {data: res.data}})

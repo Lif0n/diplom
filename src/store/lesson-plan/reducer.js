@@ -1,12 +1,9 @@
-import FetchLessonPlan from '../../utils/fetch-lesson-plan';
+import GetTeacherErrors from '../../util../../utils/get-teachers-errors'
+import GetAudiencesErrors from '../../utils/get-audiences-errors';
 
 export const initialState = {
   list: [],
-  // params: {
-  //   audience: null,
-  //   group: null,
-  //   teacher: null
-  // },
+  schedule: {},
   waiting: false
 }
 
@@ -16,7 +13,7 @@ function reducer(state = initialState, action) {
       return { ...state, list: [], waiting: true };
 
     case 'lesson-plan/load-success':
-      return { ...state, list: FetchLessonPlan(action.payload.data), waiting: false };
+      return { ...state, list: GetAudiencesErrors(GetTeacherErrors(action.payload.data)), waiting: false };
 
     case 'lesson-plan/load-error':
       return { ...state, list: [], waiting: false };

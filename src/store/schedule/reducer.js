@@ -5,13 +5,14 @@ export const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case 'groups/load-start':
+    case 'schedules/load-start':
       return { ...state, list: [], waiting: true };
-    case 'groups/load-success':
+
+    case 'schedules/load-success':
       return { ...state, list: action.payload.data, waiting: false };
 
-    case 'groups/load-error':
-      return { ...state, list: [], waiting: false };
+    case 'schedules/load-error':
+      return { ...state, list: [], waiting: false }
 
     default:
       return state;

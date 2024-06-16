@@ -11,14 +11,14 @@ function LessonPlanHead({ groups, teachers }) {
       {groups &&
         groups.map((group) => {
           return (<div key={group.id} className={cn('element')}>
-            {<h6 className='text-center'>{group.speciality.shortname + '-' + group.name}</h6>}
+            {<h6 className='text-center'>{group.groupCode}</h6>}
           </div>)
         })
       }
       {teachers &&
         teachers.map((teacher) => {
           return (<div key={teacher.id} className={cn('element')}>
-            {<h6 className='text-center'>{teacher.surname} {teacher.name}. {teacher.patronymic}.</h6>}
+            {<h6 className='text-center'>{teacher.lastName} {teacher.firstName}. {teacher.middleName}.</h6>}
           </div>)
         })
       }
