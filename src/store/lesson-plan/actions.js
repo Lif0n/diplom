@@ -86,12 +86,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/Lesson/Search?
-          ${newParams.teacher ? 'teacherId=' + newParams.teacher : ''}
-          ${newParams.group ? '&groupId=' + newParams.group : ''}
-          ${newParams.audience ? '&audienceId=' + newParams.audience : ''}
-          ${newParams.schedule ? '&scheduleId=' + newParams.schedule : ''}
-          ${newParams.department ? '&department=' + newParams.department : ''}`
+          url: `/api/Lesson/Search?${newParams.teacher ? 'teacherId=' + newParams.teacher : ''}${newParams.group ? '&groupId=' + newParams.group : ''}${newParams.audience ? '&audienceId=' + newParams.audience : ''}${newParams.schedule ? '&scheduleId=' + newParams.schedule : ''}${newParams.department ? '&department=' + newParams.department : ''}`
         })
 
         dispatch({ type: 'lesson-plan/setParams-success', payload: { data: res.data } })

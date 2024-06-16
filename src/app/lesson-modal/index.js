@@ -47,8 +47,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const putLesson = async (bool) => {
     if (bool) {
       await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
-      dispatch(lessonPlanActions.load());
       dispatch(modalsActions.close('lesson'));
+      dispatch(lessonPlanActions.load());
     }
   }
 

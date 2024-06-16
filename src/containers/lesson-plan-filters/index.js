@@ -1,6 +1,7 @@
 import { Button, Flex } from "antd";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, useEffect } from "react";
 import LessonSelect from "../../components/lesson-select";
+import modalsActions from '../../store/modals/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import { useDispatch, useSelector } from "react-redux";
 import GetClosestSchedule from "../../utils/get-closest-schedule";
@@ -20,7 +21,15 @@ function LessonPlanFilters() {
     schedulesWaiting: state.schedules.waiting
   }))
 
-  const [params, setParams] = useState({ audience: null, group: null, teacher: null, schedule: select.schedules.length > 0 ? GetClosestSchedule(select.schedules).id : null, department: 1 });
+  const initialSchedule= useMemo(() => {
+    if (select.schedules.length > 0) {
+      console.log(GetClosestSchedule(select.schedules));
+      return GetClosestSchedule(select.schedules).id;
+    }
+    return null;
+  }, [select.schedules]);
+
+  const [params, setParams] = useState({ audience: null, group: null, teacher: null, schedule: null, department: 1 });
 
 
   const callbacks = {
@@ -63,14 +72,27 @@ function LessonPlanFilters() {
       const resetParams = { audience: null, group: null, teacher: null };
       setParams(resetParams);
       dispatch(lessonPlanActions.setParams(resetParams));
-    }, [dispatch])
+    }, [dispatch]),
+    onLoadSchedule: useCallback(() => {
+      dispatch(modalsActions.open('schedule'))
+    })
   };
+
+  useEffect(() => {
+    setParams(prevParams => ({
+      ...prevParams,
+      schedule: initialSchedule
+    }));
+  }, [initialSchedule]);
+
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
+      <Button onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
+        defaultValue={initialSchedule}
         value={params.schedule}
         selectOptions={select.schedules.map((schedule) => {
           return {
