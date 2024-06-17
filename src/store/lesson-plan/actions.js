@@ -31,32 +31,39 @@ export default {
       }
     }
   },
-  post: (lesson) => {
+  post: (lesson, teachers) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/post-start' });
 
+      console.log(lesson);
+      console.log(teachers);
+      console.log( JSON.stringify({lesson, teachers}))
       try {
-        const res = await services.api.request({
-          url: `/api/Lesson`,
-          method: 'POST',
-          body: JSON.stringify(lesson)
-        });
+         const res = await services.api.request({
+           url: `/api/Lesson`,
+           method: 'POST',
+           body: JSON.stringify({lesson, teachers})
+         });
         dispatch({ type: 'lesson-plan/post-success', payload: { data: res.data } })
       } catch (e) {
         dispatch({ type: 'lesson-plan/post-error' })
       }
     }
   },
-  put: (lesson) => {
+  put: (lesson, teachers) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/put-start' });
 
+      console.log(lesson);
+      console.log(teachers);
+      console.log( JSON.stringify({lesson, teachers}))
+
       try {
-        const res = await services.api.request({
-          url: `/api/Lesson`,
-          method: 'PUT',
-          body: JSON.stringify(lesson)
-        });
+         const res = await services.api.request({
+           url: `/api/Lesson`,
+           method: 'PUT',
+           body: JSON.stringify({lesson, teachers})
+         });
         dispatch({ type: 'lesson-plan/put-success', payload: { data: res.data } })
       } catch (e) {
         dispatch({ type: 'lesson-plan/put-error' })

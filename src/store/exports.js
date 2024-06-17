@@ -9,3 +9,4 @@ export {default as dynamicLessonPlan} from './dynamic-lesson-plan/reducer';
 export {default as schedules} from './schedule/reducer'
 export {default as lessonGroups} from './lesson-group/reducer'
 export {default as teacherSubjects} from './teacher-subject/reducer'
+export {default as parser} from './parser/reducer'

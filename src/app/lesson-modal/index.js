@@ -46,7 +46,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const putLesson = async (bool) => {
     if (bool) {
-      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
+      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+        [{ ...teachers[0], isMain: true }, { ...teachers[1], isMain: true }]))]);
       dispatch(modalsActions.close('lesson'));
       dispatch(lessonPlanActions.load());
     }
@@ -192,7 +193,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 return audience.id === value
               })
             })}
-            selectOptions={[{value: null, label: 'Нет'}, ...select.audiences.map((audience) => {
+            selectOptions={[{ value: null, label: 'Нет' }, ...select.audiences.map((audience) => {
               return {
                 value: audience.id,
                 label: audience.number

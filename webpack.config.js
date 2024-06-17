@@ -1,6 +1,6 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 //process.env.NODE_ENV = 'production';
-process.env.API_URL = 'https://localhost:7293'
+process.env.API_URL = 'http://localhost:5251'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
@@ -66,7 +66,7 @@ let config = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         //API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://raspisanie.hnt8.ru':'http://hnt8.ru:1149')
-        API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://localhost:7293':'https://localhost:7293')
+        API_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'http://localhost:5251':'http://localhost:5251')
       },
     }),
     new CompressionPlugin({
@@ -91,7 +91,7 @@ if (process.env.NODE_ENV === 'development') {
     proxy: {
       '/api/**': {
         //target: 'http://hnt8.ru:1149',
-        target: 'https://localhost:7293',
+        target: 'http://localhost:5251',
         secure: false,
         changeOrigin: true,
       }
@@ -109,7 +109,7 @@ if(process.env.NODE_ENV === 'production'){
     proxy: {
       '/api/**': {
         //target: 'http://hnt8.ru:1149',
-        target: 'https://localhost:7293',
+        target: 'http://localhost:5251',
         secure: false,
         changeOrigin: true,
       }
