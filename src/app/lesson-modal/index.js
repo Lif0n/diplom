@@ -7,7 +7,7 @@ import teachersActions from '../../store/teachers/actions';
 import subjectsActions from '../../store/subjects/actions';
 import teacherSubjectsActions from '../../store/teacher-subject/actions';
 import lessonGroupsActions from '../../store/lesson-group/actions';
-import groupTeachersActions from '../../store/group-teachers/actions';
+//import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
 import Spinner from "../../components/spinner";
@@ -36,10 +36,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const select = useSelector(state => ({
     teachers: state.teachers.list,
     lessonGroups: state.lessonGroups.list,
-    groupTeachers: state.groupTeachers.list,
     subjects: state.lessonGroups.list,
     audiences: state.audiences.list,
-    waiting: state.groupTeachers.waiting && state.teachers.waiting && state.audiences.waiting,
   }))
 
   const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
@@ -47,7 +45,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const putLesson = async (bool) => {
     if (bool) {
       await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
-        [{ ...teachers[0], isMain: true }, { ...teachers[1], isMain: true }]))]);
+        [{ ...teachers[0], isMain: true },  (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))]);
       dispatch(modalsActions.close('lesson'));
       dispatch(lessonPlanActions.load());
     }

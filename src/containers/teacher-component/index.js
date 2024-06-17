@@ -25,7 +25,7 @@ function TeacherComponent({ teacher }) {
 
   const putTeacher = (bool) => {
     if (bool) {
-      dispatch(teachersActions.put({ ...teacher, surname: surname, name: name, patronymic: patronymic }));
+      dispatch(teachersActions.put({ ...teacher, lastName: surname, firstName: name, middleName: patronymic }));
       if (select.query) {
         dispatch(teachersActions.search(select.query));
       } else {
