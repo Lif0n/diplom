@@ -76,8 +76,7 @@ export default {
 
       try {
         const res = await services.api.requestPlainText({
-          url: `/api/Lesson/Pdf/?
-          ${groupId ? 'groupId=' + groupId : ''}${teacherId ? 'teacherId=' + teacherId : ''}`,
+          url: `/api/Lesson/Pdf/?${groupId ? 'groupId=' + groupId : ''}${teacherId ? 'teacherId=' + teacherId : ''}`,
           method: 'GET'
         });
         base64ToPdf(res.data, name);

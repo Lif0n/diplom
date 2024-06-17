@@ -88,7 +88,7 @@ function LessonPlanFilters() {
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
-      <Button onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
+      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
@@ -149,7 +149,7 @@ function LessonPlanFilters() {
         loading={select.audiencesWaiting}
         onChange={callbacks.onAudience}
         value={params.audience} />
-      <Button type="primary" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
+      <Button type="primary" size="large" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
     </Flex>
   );
 }

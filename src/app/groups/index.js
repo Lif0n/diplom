@@ -3,6 +3,7 @@ import PageLayout from "../../components/page-layout";
 import Header from "../../components/header";
 import logo from '../../img/logo.png';
 import groupsActions from '../../store/groups/actions';
+import modalsActions from '../../store/modals/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import LessonPlanLayout from "../../components/lesson-plan-layout";
 import Wrapper from "../../components/wrapper";
@@ -36,7 +37,10 @@ function Groups() {
         onSearch: useCallback(query => {
             dispatch(groupsActions.load(query))
             setQuery(query);
-        })
+        }),
+        newGroup: () => {
+            dispatch(modalsActions.open('newGroup'))
+        }
     }
 
     const onDownload = (props) => (
@@ -66,8 +70,8 @@ function Groups() {
                         value={query}
                         placeholder='Поиск'
                         prefix={<SearchOutlined />}
-                        size='large' onChange={callbacks.onSearch}/>
-                    <Button type="primary"> Добавить новую группу</Button>
+                        size='large' onChange={callbacks.onSearch} />
+                    <Button type="primary" onClick={ callbacks.newGroup}> Добавить новую группу</Button>
                     <Spinner active={select.waiting}>
                         <Collapse items={groups} />
                     </Spinner>
