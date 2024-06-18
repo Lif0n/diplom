@@ -9,6 +9,7 @@ import ConfirmModal from './confirm-modal';
 import TeacherModal from './teacher-modal';
 import ListModal from './list-modal';
 import ScheduleModal from './schedule-modal';
+import GroupModal from './group-modal';
 
 function App() {
 
@@ -53,6 +54,12 @@ function App() {
         return item.name === 'schedule'
       }) && <ScheduleModal props={activeModals.find((item) => {
         return item.name === 'schedule'
+      }).params} />}
+
+      {activeModals.some(item => {
+        return item.name === 'newGroup'
+      }) && <GroupModal props={activeModals.find((item) => {
+        return item.name === 'newGroup'
       }).params} />}
     </>
   )

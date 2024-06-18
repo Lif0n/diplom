@@ -51,7 +51,7 @@ function TeacherModal({ props }) {
           toast.error('Текст во всех полях не может превышать 30 символов');
           return;
       }
-      dispatch(teachersActions.post({ name: name, surname: surname, patronymic: patronymic }));
+      dispatch(teachersActions.post({ firstName: name, lastName: surname, middleName: patronymic }));
       dispatch(modalsActions.close('newTeacher'))
     }, [patronymic, name, surname])
   }

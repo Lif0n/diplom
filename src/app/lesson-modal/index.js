@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import modalsActions from '../../store/modals/actions';
 import ModalLayout from '../../components/modal-layout'
 import useInit from "../../hooks/use-init";
-import teachersActions from '../../store/teachers/actions';
-import subjectsActions from '../../store/subjects/actions';
-import teacherSubjectsActions from '../../store/teacher-subject/actions';
 import lessonGroupsActions from '../../store/lesson-group/actions';
-import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
 import Spinner from "../../components/spinner";
@@ -28,34 +24,35 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const dispatch = useDispatch();
 
   useInit(() => {
-    dispatch(teachersActions.load());
-    dispatch(lessonGroupsActions.load(lessonPlan.group.id, null));
+    dispatch(lessonGroupsActions.load());
     dispatch(audiencesActions.load());
   })
 
   const select = useSelector(state => ({
-    teachers: state.teachers.list,
+    schedule: state.schedules.selected,
     lessonGroups: state.lessonGroups.list,
-    groupTeachers: state.groupTeachers.list,
-    subjects: state.lessonGroups.list,
     audiences: state.audiences.list,
-    waiting: state.groupTeachers.waiting && state.teachers.waiting && state.audiences.waiting,
+    lessonGroupsWaiting: state.lessonGroups.waiting,
+    audiencesWaiting: state.audiences.waiting,
   }))
 
   const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
 
   const putLesson = async (bool) => {
     if (bool) {
-      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
       dispatch(modalsActions.close('lesson'));
+      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))]);
       dispatch(lessonPlanActions.load());
     }
   }
 
   const postLesson = async (bool) => {
-    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce }))]);
-    dispatch(lessonPlanActions.load());
     dispatch(modalsActions.close('lesson'));
+    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+      [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule.id))]);
+    dispatch(lessonPlanActions.load());
+
   }
 
   const deleteLesson = async (bool) => {
@@ -112,31 +109,59 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
     })
   }
 
-  const availableSubjects = useMemo(() => {
+  const allSubjects = useMemo(() => {
     if (select.lessonGroups) {
-      return uniqueValues(select.lessonGroups, 'subject').map(s => {
-        return {
-          value: s.id,
-          label: s.name
-        }
-      })
+      return uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'subject')
+      // .map(s => {
+      //   return {
+      //     value: s.id,
+      //     label: s.name
+      //   }
+      // })
     }
     return null;
   }, [dispatch, select.lessonGroups]);
 
-  const availableTeachers = useMemo(() => {
+  const allTeachers = useMemo(() => {
     if (select.lessonGroups) {
-      return uniqueValues(uniqueValues(select.lessonGroups, 'lessonGroupTeachers')
-        .flatMap(arr => arr.filter(item => item.teacher).map(item => item.teacher))).map(t => {
-          console.log(t);
-          return {
-            value: t.id,
-            label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
-          }
-        });
+      if (lessonPlan.subject != null) {
+        const newTeachers = []
+        select.lessonGroups.filter((lg) => lg.subject.id == lessonPlan.subject.id).forEach(lg => {
+          lg.lessonGroupTeachers.forEach(lt => {
+            if (lt != null) {
+              const { teacher } = lt;
+              newTeachers.push(teacher);
+            }
+          })
+        })
+        const unique = {};
+
+        newTeachers.forEach(t => {
+          unique[t.id] = t;
+        })
+
+        const uniqueArray = Object.values(unique);
+        return uniqueArray
+        // .map(t => {
+        //   return {
+        //     value: t.id,
+        //     label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
+        //   }
+        // })
+      }
+
+      return uniqueValues(uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'lessonGroupTeachers')
+        .flatMap(arr => arr.filter(item => item.teacher).map(item => item.teacher)))
+      // .map(t => {
+      //   return {
+      //     value: t.id,
+      //     label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
+      //   }
+      // });
     }
     return null;
-  }, [dispatch, select.lessonGroups])
+  }, [select.lessonGroups])
+
 
   console.log({ ...lesson, teachers: teachers, isDistantce: isDistantce });
 
@@ -146,45 +171,48 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       <ModalLayout labelClose={'Х'} onClose={callbacks.closeModal}
         title={`${lessonPlan.group.groupCode}, ${weekdays[lessonPlan.weekday - 1]}, ${lessonPlan.lessonNumber}-я пара`}>
         <Spinner active={select.waiting}>
+
           <LessonSelect placeholder='Предмет'
             defaultValue={lessonPlan.subject && lessonPlan.subject.id}
             onChange={(value) => setLesson({
-              ...lesson, subject: select.subjects.find((subject) => {
+              ...lesson, subject: allSubjects.find((subject) => {
                 return subject.id === value
               })
             })}
-            // selectOptions={uniqueValues(select.lessonGroups, 'subject').map((subject) => {
-            //   return {
-            //     value: subject.id,
-            //     label: subject.name
-            //   }
-            // })}
-            selectOptions={availableSubjects}
-          />
+            selectOptions={allSubjects.map(s => {
+              return {
+                value: s.id,
+                label: s.name
+              }
+            })}
+            loading={select.lessonGroupsWaiting} />
+
           <LessonSelect placeholder='Первый преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[0] && lessonPlan.teachers[0].id}
-            onChange={(value) => setTeachers([select.teachers.find((teacher) => {
+            onChange={(value) => setTeachers([allTeachers.find((teacher) => {
               return teacher.id === value
             }), teachers[1]])}
-            // selectOptions={uniqueValues(select.lessonGroups, 'lessonGroupTeachers.teacher').map((teacher) => {
-            //   return {
-            //     value: teacher.id,
-            //     label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
-            //   }
-            // })}
-            selectOptions={availableTeachers}
-          />
+            selectOptions={[{ value: null, label: 'Нет' }, ...allTeachers.map(t => {
+              return {
+                value: t.id,
+                label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
+              }
+            })]}
+            loading={select.teacherSubjectsWaiting && select.lessonGroupsWaiting} />
+
           <LessonSelect placeholder='Второй преподаватель'
             defaultValue={lessonPlan.teachers && lessonPlan.teachers[1] && lessonPlan.teachers[1].id}
-            onChange={(value) => setTeachers([teachers[0], select.teachers.find((teacher) => {
+            onChange={(value) => setTeachers([teachers[0], allTeachers.find((teacher) => {
               return teacher.id === value
             })])}
-            selectOptions={[{ value: null, label: 'Нет' }, ...select.teachers.map((teacher) => {
+            selectOptions={[{ value: null, label: 'Нет' }, ...allTeachers.map(t => {
               return {
-                value: teacher.id,
-                label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
+                value: t.id,
+                label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
               }
-            })]} />
+            })]}
+            loading={select.teacherSubjectsWaiting && select.lessonGroupsWaiting} />
+
           <LessonSelect placeholder='Кабинет'
             defaultValue={lessonPlan.audience && lessonPlan.audience.id}
             onChange={(value) => setLesson({
@@ -192,12 +220,13 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
                 return audience.id === value
               })
             })}
-            selectOptions={[{value: null, label: 'Нет'}, ...select.audiences.map((audience) => {
+            selectOptions={[{ value: null, label: 'Нет' }, ...select.audiences.map((audience) => {
               return {
                 value: audience.id,
                 label: audience.number
               }
-            })]} />
+            })]} loading={select.audiencesWaiting} />
+
           <Checkbox defaultChecked={isDistantce}
             style={{ margin: 'auto' }} size='large'
             onChange={(e) => setIsDistantce(e.target.checked)}>Дистанционно</Checkbox>

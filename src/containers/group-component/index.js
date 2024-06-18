@@ -1,8 +1,9 @@
 import { Button, Card } from "antd";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import modalsActions from '../../store/modals/actions'
-import groupTeachersActions from '../../store/group-teachers/actions';
+import lessonGroupActions from '../../store/lesson-group/actions'
+//import groupTeachersActions from '../../store/group-teachers/actions';
 import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
 import subjectsActions from '../../store/subjects/actions'
@@ -11,15 +12,20 @@ import subjectsActions from '../../store/subjects/actions'
 function GroupComponent({ group }) {
     const dispatch = useDispatch();
 
+    const [groupCode, setGroupCode] = useState(group.groupCode);
+
+    const [department, setDepartment] = useState(group.department);
     useInit(() => {
-        dispatch(groupTeachersActions.load({ groupId: group.id }));
+        dispatch(lessonGroupActions.load(group.id, null))
+        //dispatch(groupTeachersActions.load({ groupId: group.id }));
         dispatch(teachersActions.load());
         dispatch(subjectsActions.load());
     })
 
     const select = useSelector(state => ({
-        groupTeachers: state.groupTeachers.list,
-        groupTeachersWaiting: state.groupTeachers.waiting,
+        //groupTeachers: state.groupTeachers.list,
+        lessonGroups: state.lessonGroups.list,
+        //groupTeachersWaiting: state.groupTeachers.waiting,
         teachers: state.teachers.list,
         teachersWaiting: state.teachers.waiting,
         subjects: state.subjects.list,
@@ -27,8 +33,12 @@ function GroupComponent({ group }) {
     }))
 
     const groupTeachers = useMemo(() => {
-        return select.groupTeachers.filter((gt) => gt.group.id === group.id)
-    }, [select.groupTeachers, select.groupTeachersWaiting])
+        return
+    })
+
+    // const groupTeachers = useMemo(() => {
+    //     return select.groupTeachers.filter((gt) => gt.group.id === group.id)
+    // }, [select.groupTeachers, select.groupTeachersWaiting])
 
 
 

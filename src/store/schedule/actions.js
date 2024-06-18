@@ -14,5 +14,19 @@ export default {
         dispatch({type: 'schedules/load-error'})
       }
     }
-  }
+  },
+
+  set: (schedule) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'schedules/set-start'});
+      console.log(schedule);
+      try {
+        dispatch({type: 'schedules/set-success', payload: {data: schedule}})
+      } catch (e) {
+        console.log(e);
+        dispatch({type: 'schedules/set-error'})
+      }
+    }
+  },
+
 }

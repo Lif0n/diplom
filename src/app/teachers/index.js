@@ -14,7 +14,9 @@ import { DownloadOutlined, SearchOutlined } from '@ant-design/icons';
 import Wrapper from "../../components/wrapper";
 import InputSearch from "../../components/input-search";
 import Spinner from "../../components/spinner";
+import subjectsActions from '../../store/subjects/actions'
 import { ToastContainer } from "react-toastify";
+import groupsActions from '../../store/groups/actions';
 
 function Teachers() {
 
@@ -23,6 +25,8 @@ function Teachers() {
   const [query, setQuery] = useState('');
 
   useInit(() => {
+    dispatch(groupsActions.load());
+    dispatch(subjectsActions.load())
     dispatch(teachersActions.load());
   })
 

@@ -41,7 +41,7 @@ function LessonPlanTable() {
         rows.push(<hr key={`hr-${i}`} style={{ top: '20px', bottom: '20px' }} />);
       })
     return rows;
-  }, [select.lessonPlan, select.waiting])
+  }, [select.lessonPlan, dispatch])
 
   return (
     <LessonPlanLayout>

@@ -36,7 +36,7 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'lesson-plan/post-success':
-      return { ...state, waiting: false }
+      return { ...state, list: [...list, action.payload.data], waiting: false }
 
     case 'lesson-plan/post-error':
       return { ...state, waiting: false };
@@ -45,7 +45,14 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'lesson-plan/put-success':
-      return { ...state, waiting: false }
+      return {
+        ...state, list: list.map((l) => {
+          if(l.id == action.payload.data.id){
+            return action.payload.data;
+          }
+          return l;
+        }), waiting: false
+      }
 
     case 'lesson-plan/put-error':
       return { ...state, waiting: false };

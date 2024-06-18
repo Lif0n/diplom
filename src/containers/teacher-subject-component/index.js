@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import modalsActions from '../../store/modals/actions'
-import groupTeachersActions from '../../store/group-teachers/actions'
+//import groupTeachersActions from '../../store/group-teachers/actions'
 import './style.css'
 import { Button, Card, Flex } from 'antd';
 import { useDispatch } from 'react-redux';
@@ -9,11 +9,11 @@ function TeacherSubjectComponent(props){
 
   const dispatch = useDispatch();
 
-  const deleteGt = (bool) => {
-    if(bool){
-      dispatch(groupTeachersActions.delete(props.groupTeacher.id))
-    }
-  }
+  // const deleteGt = (bool) => {
+  //   if(bool){
+  //     dispatch(groupTeachersActions.delete(props.groupTeacher.id))
+  //   }
+  // }
 
   const callbacks = {
     onDelete: () => {
@@ -28,7 +28,7 @@ function TeacherSubjectComponent(props){
   return(
     <Card size='small'>
       <Flex gap='small' justify='space-between'>
-        <h6>{props.groupTeacher.subject.name}</h6>
+        {/* <h6>{props.groupTeacher.subject.name}</h6> */}
         <Button onClick={callbacks.onDelete} type='primary' danger>Удалить</Button>
       </Flex>
     </Card>

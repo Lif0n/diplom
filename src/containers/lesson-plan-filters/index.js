@@ -2,6 +2,7 @@ import { Button, Flex } from "antd";
 import { memo, useCallback, useMemo, useState, useEffect } from "react";
 import LessonSelect from "../../components/lesson-select";
 import modalsActions from '../../store/modals/actions';
+import schedulesActions from '../../store/schedule/actions'
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import { useDispatch, useSelector } from "react-redux";
 import GetClosestSchedule from "../../utils/get-closest-schedule";
@@ -23,8 +24,10 @@ function LessonPlanFilters() {
 
   const initialSchedule= useMemo(() => {
     if (select.schedules.length > 0) {
-      console.log(GetClosestSchedule(select.schedules));
-      return GetClosestSchedule(select.schedules).id;
+      const closest = GetClosestSchedule(select.schedules);
+      console.log(closest);
+      dispatch(schedulesActions.set(closest))
+      return closest.id;
     }
     return null;
   }, [select.schedules]);
@@ -88,7 +91,7 @@ function LessonPlanFilters() {
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
-      <Button onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
+      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
@@ -149,7 +152,7 @@ function LessonPlanFilters() {
         loading={select.audiencesWaiting}
         onChange={callbacks.onAudience}
         value={params.audience} />
-      <Button type="primary" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
+      <Button type="primary" size="large" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
     </Flex>
   );
 }
