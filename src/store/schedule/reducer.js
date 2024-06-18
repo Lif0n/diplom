@@ -19,7 +19,7 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'schedules/set-success':
-      return { ...state, waiting: false, selected: action.payload.data };
+      return { ...state, selected: action.payload.data, waiting: false };
 
     case 'schedules/set-error':
       return { ...state, waiting: false }

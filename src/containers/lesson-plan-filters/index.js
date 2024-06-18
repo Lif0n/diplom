@@ -24,9 +24,10 @@ function LessonPlanFilters() {
 
   const initialSchedule= useMemo(() => {
     if (select.schedules.length > 0) {
-      console.log(GetClosestSchedule(select.schedules));
-      dispatch(schedulesActions.set(GetClosestSchedule(select.schedules)))
-      return GetClosestSchedule(select.schedules).id;
+      const closest = GetClosestSchedule(select.schedules);
+      console.log(closest);
+      dispatch(schedulesActions.set(closest))
+      return closest.id;
     }
     return null;
   }, [select.schedules]);

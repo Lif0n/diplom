@@ -31,16 +31,15 @@ export default {
       }
     }
   },
-  post: (lesson, teachers) => {
+  post: (lesson, teachers, scheduleId) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'lesson-plan/post-start' });
 
       console.log(lesson);
       console.log(teachers);
-      console.log( JSON.stringify({lesson, teachers}))
       try {
          const res = await services.api.request({
-           url: `/api/Lesson`,
+           url: `/api/Lesson?scheduleId=${scheduleId}`,
            method: 'POST',
            body: JSON.stringify({lesson, teachers})
          });

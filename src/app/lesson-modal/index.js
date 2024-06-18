@@ -27,7 +27,6 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const dispatch = useDispatch();
 
   useInit(() => {
-    //dispatch(teachersActions.load());
     dispatch(lessonGroupsActions.load());
     dispatch(audiencesActions.load());
   })
@@ -35,7 +34,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const select = useSelector(state => ({
     //teachers: state.teachers.list,
     //subjects: state.lessonGroups.list,
-    schedule: state.schedule.selected,
+    schedule: state.schedules.selected,
     lessonGroups: state.lessonGroups.list,
     audiences: state.audiences.list,
     lessonGroupsWaiting: state.lessonGroups.waiting,
@@ -46,17 +45,19 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const putLesson = async (bool) => {
     if (bool) {
-      [dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
-        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))];
       dispatch(modalsActions.close('lesson'));
-      //dispatch(lessonPlanActions.load());
+      await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))]);
+      dispatch(lessonPlanActions.load());
     }
   }
 
   const postLesson = async (bool) => {
-    [dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce }))];
-    //dispatch(lessonPlanActions.load());
     dispatch(modalsActions.close('lesson'));
+    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+      [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule.id))]);
+    dispatch(lessonPlanActions.load());
+
   }
 
   const deleteLesson = async (bool) => {
@@ -115,12 +116,13 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
 
   const allSubjects = useMemo(() => {
     if (select.lessonGroups) {
-      return uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'subject').map(s => {
-        return {
-          value: s.id,
-          label: s.name
-        }
-      })
+      return uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'subject')
+      // .map(s => {
+      //   return {
+      //     value: s.id,
+      //     label: s.name
+      //   }
+      // })
     }
     return null;
   }, [dispatch, select.lessonGroups]);
@@ -179,10 +181,15 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
             defaultValue={lessonPlan.subject && lessonPlan.subject.id}
             onChange={(value) => setLesson({
               ...lesson, subject: allSubjects.find((subject) => {
-                return subject.value === value
+                return subject.id === value
               })
             })}
-            selectOptions={allSubjects}
+            selectOptions={allSubjects.map(s => {
+              return {
+                value: s.id,
+                label: s.name
+              }
+            })}
             loading={select.lessonGroupsWaiting} />
 
           <LessonSelect placeholder='Первый преподаватель'
