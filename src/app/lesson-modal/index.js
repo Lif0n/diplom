@@ -45,7 +45,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       dispatch(modalsActions.close('lesson'));
       await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
         [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))]);
-      dispatch(lessonPlanActions.load());
+      dispatch(lessonPlanActions.setParams({schedule: select.schedule}));
     }
   }
 
@@ -55,8 +55,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       console.log({ ...lesson, teachers: teachers, isDistantce: isDistantce });
       console.log(select.schedule)
       await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce },
-        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule.id))]);
-      dispatch(lessonPlanActions.load());
+        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule))]);
+      dispatch(lessonPlanActions.setParams({schedule: select.schedule}));
     }
 
   }

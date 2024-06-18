@@ -26,7 +26,7 @@ function LessonPlanFilters() {
     if (select.schedules.length > 0) {
       const closest = GetClosestSchedule(select.schedules);
       console.log(closest);
-      dispatch(schedulesActions.set(closest))
+      dispatch(schedulesActions.set(closest.id))
       return closest.id;
     }
     return null;
@@ -61,6 +61,7 @@ function LessonPlanFilters() {
       setParams(prevParams => {
         const newParams = { ...prevParams, schedule };
         dispatch(lessonPlanActions.setParams(newParams));
+        dispatch(schedulesActions.set(schedule));
         return newParams;
       });
     }, [dispatch, params]),
