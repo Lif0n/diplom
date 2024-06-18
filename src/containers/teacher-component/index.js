@@ -5,7 +5,7 @@ import teachersActions from '../../store/teachers/actions';
 import Wrapper from '../../components/wrapper';
 import modalsActions from '../../store/modals/actions';
 import './style.css'
-import TeacherGroups from '../teacher-groups';
+import TeacherSubject from '../teacher-subject';
 import { toast } from 'react-toastify';
 
 //элемент со всей информацией по преподавателю
@@ -90,7 +90,7 @@ function TeacherComponent({ teacher }) {
           <Button type='primary' onClick={callbacks.onAcceptTeacherChange}>Сохранить изменения</Button>
           <Button type='primary' onClick={callbacks.onCancelTeacherChange}>Отменить изменения</Button>
         </Flex>
-        <TeacherGroups teacher={teacher} />
+        <TeacherSubject teacher={teacher} />
         <Button type='primary' danger style={{ width: '80%' }} onClick={callbacks.deleteTeacher}>Удалить преподавателя</Button>
       </Flex>
     </Wrapper>

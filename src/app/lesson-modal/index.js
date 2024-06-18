@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import modalsActions from '../../store/modals/actions';
 import ModalLayout from '../../components/modal-layout'
 import useInit from "../../hooks/use-init";
-import teachersActions from '../../store/teachers/actions';
-import subjectsActions from '../../store/subjects/actions';
-import teacherSubjectsActions from '../../store/teacher-subject/actions';
 import lessonGroupsActions from '../../store/lesson-group/actions';
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import audiencesActions from '../../store/audiences/actions';
@@ -32,8 +29,6 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   })
 
   const select = useSelector(state => ({
-    //teachers: state.teachers.list,
-    //subjects: state.lessonGroups.list,
     schedule: state.schedules.selected,
     lessonGroups: state.lessonGroups.list,
     audiences: state.audiences.list,
