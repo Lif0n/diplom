@@ -10,6 +10,7 @@ import TeacherModal from './teacher-modal';
 import ListModal from './list-modal';
 import ScheduleModal from './schedule-modal';
 import GroupModal from './group-modal';
+import Subjects from './subjects'
 
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
         {['', 'lesson-plan'].map(path => <Route key={path} path={path} element={<LessonPlan />} />)}
         <Route path={'teachers'} element={<Teachers />} />
         <Route path={'groups'} element={<Groups />} />
-        <Route path={'subjects'} />
+        <Route path={'subjects'} element={<Subjects/>}/>
       </Routes>
 
       {activeModals.some(item => {
