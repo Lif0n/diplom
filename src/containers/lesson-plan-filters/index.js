@@ -2,6 +2,7 @@ import { Button, Flex } from "antd";
 import { memo, useCallback, useMemo, useState, useEffect } from "react";
 import LessonSelect from "../../components/lesson-select";
 import modalsActions from '../../store/modals/actions';
+import schedulesActions from '../../store/schedule/actions'
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import { useDispatch, useSelector } from "react-redux";
 import GetClosestSchedule from "../../utils/get-closest-schedule";
@@ -24,6 +25,7 @@ function LessonPlanFilters() {
   const initialSchedule= useMemo(() => {
     if (select.schedules.length > 0) {
       console.log(GetClosestSchedule(select.schedules));
+      dispatch(schedulesActions.set(GetClosestSchedule(select.schedules)))
       return GetClosestSchedule(select.schedules).id;
     }
     return null;
