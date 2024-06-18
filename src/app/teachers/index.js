@@ -16,7 +16,7 @@ import InputSearch from "../../components/input-search";
 import Spinner from "../../components/spinner";
 import subjectsActions from '../../store/subjects/actions'
 import { ToastContainer } from "react-toastify";
-import lessonGroupsActions from '../../store/lesson-group/actions';
+import groupsActions from '../../store/groups/actions';
 
 function Teachers() {
 
@@ -25,6 +25,7 @@ function Teachers() {
   const [query, setQuery] = useState('');
 
   useInit(() => {
+    dispatch(groupsActions.load());
     dispatch(subjectsActions.load())
     dispatch(teachersActions.load());
   })

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import uniqueValues from "../../utils/unique-values";
 import SubjectGroupComponent from "../subject-group-component";
+import LessonSelect from "../../components/lesson-select";
 
 
 //карточка с группами и предметами преподавателя
@@ -25,6 +26,7 @@ function TeacherSubject({ teacher }) {
   })
 
   const select = useSelector(state => ({
+    groups: state.groups.list,
     subjects: state.subjects.list,
     lessonGroups: state.lessonGroups.list,
     lessonGroupTeachers: state.lessonGroupTeachers.list,
@@ -34,18 +36,21 @@ function TeacherSubject({ teacher }) {
 
   const lessonGroupTeachers = useMemo(() => {
     return select.lessonGroupTeachers.filter((lgt) => lgt.teacher.id == teacher.id)
-  }, [select.lessonGroupTeachers])
+  }, [select.lessonGroupTeachers, teacher.id])
 
   const subjects = useMemo(() => {
     var lessonGroups = [];
     lessonGroupTeachers.forEach(lgt => {
       lessonGroups = [...lessonGroups, lgt.lessonGroup]
     })
-    return uniqueValues(lessonGroups, 'subject').map(s => ({
-      key: s.id,
-      label: s.name
-    })).concat(newSubjects);
-  })
+    return uniqueValues(lessonGroups, 'subject').map(s => {
+      console.log(s);
+      return {
+        key: s.id,
+        label: s.name
+      }
+    }).concat(newSubjects);
+  }, [lessonGroupTeachers, newSubjects])
 
   // const putSubject = (bool, value) => {
   //   if (bool) {
@@ -54,6 +59,13 @@ function TeacherSubject({ teacher }) {
   //     setNewGroups([]);
   //   }
   // }
+
+  const putGroup = (bool, value) => {
+    if (bool) {
+      const group = select.groups.find(g => g.id == value)
+      dispatch();
+    }
+  }
 
   const putSubject = (bool, value) => {
     if (bool) {
@@ -70,9 +82,9 @@ function TeacherSubject({ teacher }) {
   }
 
   const callbacks = {
-    // onTabChange: useCallback((key) => {
-    //   setActiveTab(key);
-    // }, [groups, newGroups]),
+    onTabChange: useCallback((key) => {
+      setActiveTab(key);
+    }, [subjects, newSubjects]),
     onAcceptAddSubject: (value) => {
       const newSubject = select.subjects.find(s => s.id == value);
       const group = select.groups.find(g => g.id == activeTab);
@@ -101,16 +113,30 @@ function TeacherSubject({ teacher }) {
   }
 
   const contentList = useMemo(() => {
+    if (subjects.length === 0) {
+      return {};
+    }
     const contentList = {};
     var lessonGroups = [];
     subjects.forEach(s => {
+      console.log(s);
       lessonGroupTeachers.forEach(lgt => {
-        lessonGroups = [...lessonGroups, lgt.lessonGroup]
-      });
-      const groups = uniqueValues(lessonGroups.filter(lg => lg.subject.id = s.key), 'subject')
+          console.log(lgt);
+          contentList[s.key] = [...(contentList[s.key] || []), <SubjectGroupComponent lgt={lgt} />]
+        });
+        console.log(contentList);
+      contentList[s.key] = [...contentList[s.key],
+      <LessonSelect placeholder={'Добавить группу'}
+        defaultValue={null}
+        selectOptions={select.groups.map(g => {
+          return {
+            value: g.id,
+            label: g.groupCode
+          }
+        })} />]
     })
-    contentList[s.key] = [...contentList[s.key], <SubjectGroupComponent teacher={teacher} subject/>]
-  })
+    return contentList;
+  }, [subjects, lessonGroupTeachers, select.groups])
 
   // const contentList = useMemo(() => {
   //   const contentList = {};
@@ -140,10 +166,10 @@ function TeacherSubject({ teacher }) {
     <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
       extra={<Button onClick={callbacks.onAddSubject}>Добавить предмет к преподавателю</Button>}
       loading={select.waiting}>
-      <Tabs items={subjects} activeKey={activeTab}/>
-      {/* <Flex vertical gap='middle'>
-        {contentList[activeTab]}
-      </Flex> */}
+      <Tabs items={subjects} activeKey={activeTab} onChange={callbacks.onTabChange} />
+      <Flex vertical gap='middle'>
+        {contentList && contentList[activeTab]}
+      </Flex>
     </Card>
   )
 }
