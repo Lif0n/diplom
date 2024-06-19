@@ -29,7 +29,7 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'lesson-group-teachers/delete-success':
-      return { ...state, list : state.list.filter(lgt => {lgt.id != action.payload}), waiting: false };
+      return { ...state, list : state.list.filter(lgt => lgt.id != action.payload), waiting: false };
 
     case 'lesson-group-teachers/delete-error':
       return { ...state, waiting: false }

@@ -138,12 +138,12 @@ function TeacherSubject({ teacher }) {
       );
     });
     return contentList;
-  }, [subjects, lessonGroupTeachers, select.groups]);
+  }, [subjects]);
 
   return (
     <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
       extra={<Button onClick={callbacks.onAddSubject}>Добавить предмет к преподавателю</Button>}
-      loading={select.waiting}>
+      loading={select.lessonGroupTeachersWaiting}>
       <Tabs items={subjects} activeKey={activeTab} onChange={callbacks.onTabChange} />
       <Flex vertical gap='middle'>
         {contentList[activeTab] || null}
