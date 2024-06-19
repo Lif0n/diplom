@@ -68,7 +68,10 @@ function TeacherSubject({ teacher }) {
   }
 
   const putSubject = (bool, value) => {
+    console.log(bool);
+    console.log(value)
     if (bool) {
+      console.log(value);
       if (subjects.some((s) => s.key == value)) {
         toast.error('Такой предмет уже есть у преподавателя');
         return;
@@ -85,17 +88,17 @@ function TeacherSubject({ teacher }) {
     onTabChange: useCallback((key) => {
       setActiveTab(key);
     }, [subjects, newSubjects]),
-    onAcceptAddSubject: (value) => {
-      const newSubject = select.subjects.find(s => s.id == value);
-      const group = select.groups.find(g => g.id == activeTab);
-      dispatch(modalsActions.open('confirm', {
-        title: 'Внимание',
-        text: `Вы уверены, что хотите добавить ${newSubject.name}
-         в группе ${group?.groupCode} к ${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`,
-        value: newSubject,
-        onOk: putSubject
-      }))
-    },
+    // onAcceptAddSubject: (value) => {
+    //   const newSubject = select.subjects.find(s => s.id == value);
+    //   const group = select.groups.find(g => g.id == activeTab);
+    //   dispatch(modalsActions.open('confirm', {
+    //     title: 'Внимание',
+    //     text: `Вы уверены, что хотите добавить ${newSubject.name}
+    //      в группе ${group?.groupCode} к ${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`,
+    //     value: newSubject,
+    //     onOk: putSubject
+    //   }))
+    // },
     onAddSubject: () => {
       dispatch(modalsActions.open('list', {
         title: 'Добавление предмета к преподавателю',
@@ -117,50 +120,25 @@ function TeacherSubject({ teacher }) {
       return {};
     }
     const contentList = {};
-    var lessonGroups = [];
     subjects.forEach(s => {
-      console.log(s);
-      lessonGroupTeachers.forEach(lgt => {
-          console.log(lgt);
-          contentList[s.key] = [...(contentList[s.key] || []), <SubjectGroupComponent lgt={lgt} />]
-        });
-        console.log(contentList);
-      contentList[s.key] = [...contentList[s.key],
-      <LessonSelect placeholder={'Добавить группу'}
-        defaultValue={null}
-        selectOptions={select.groups.map(g => {
-          return {
+      contentList[s.key] = (lessonGroupTeachers.filter(l => l.lessonGroup.subject.id === s.key) || []).map(lgt => (
+        <SubjectGroupComponent key={lgt.id} lgt={lgt} />
+      ));
+      contentList[s.key].push(
+        <LessonSelect 
+          key={`lesson-select-${s.key}`}
+          placeholder={'Добавить группу'}
+          defaultValue={null}
+          selectOptions={select.groups.map(g => ({
             value: g.id,
             label: g.groupCode
-          }
-        })} />]
-    })
+          }))}
+          onChange={(value) => putGroup(true, value)}
+        />
+      );
+    });
     return contentList;
-  }, [subjects, lessonGroupTeachers, select.groups])
-
-  // const contentList = useMemo(() => {
-  //   const contentList = {};
-  //   groups.forEach(group => {
-  //     const subjs = groupTeachers.filter(groupTeacher => groupTeacher.group.id === group.key);
-  //     contentList[group.key] = [];
-  //     subjs.forEach(subj => {
-  //       contentList[group.key] = [...contentList[group.key], <TeacherSubjectComponent groupTeacher={subj} />]
-  //     });
-  //     contentList[group.key] = [...contentList[group.key],
-  //     <LessonSelect placeholder='Добавить предмет'
-  //       defaultValue={null}
-  //       selectOptions={select.subjects.map((subject) => {
-  //         return {
-  //           value: subject.id,
-  //           label: subject.name
-  //         }
-  //       })}
-  //       onChange={(value) => {
-  //         callbacks.onAcceptAddSubject(value);
-  //       }} />]
-  //   });
-  //   return contentList;
-  // }, [groupTeachers, groups, select.subjects])
+  }, [subjects, lessonGroupTeachers, select.groups]);
 
   return (
     <Card key={teacher.id} title='Связи' style={{ width: '80%' }}
@@ -168,7 +146,7 @@ function TeacherSubject({ teacher }) {
       loading={select.waiting}>
       <Tabs items={subjects} activeKey={activeTab} onChange={callbacks.onTabChange} />
       <Flex vertical gap='middle'>
-        {contentList && contentList[activeTab]}
+        {contentList[activeTab] || null}
       </Flex>
     </Card>
   )
