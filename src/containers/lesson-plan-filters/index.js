@@ -96,7 +96,7 @@ function LessonPlanFilters() {
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
-      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Добавит расписание</Button>
+      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Добавить расписание</Button>
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
