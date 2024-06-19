@@ -1,6 +1,5 @@
 import { Card, Flex, Tabs, Button } from "antd";
 import useInit from '../../hooks/use-init';
-import subjectsActions from '../../store/subjects/actions'
 import modalsActions from '../../store/modals/actions'
 //import groupTeachersActions from '../../store/group-teachers/actions';
 import lessonGroupTeachersActions from '../../store/lesson-group-teachers/actions'
