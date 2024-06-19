@@ -5,13 +5,14 @@ import groupsActions from '../../store/groups/actions'
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Flex, Input } from "antd";
 import Wrapper from "../../components/wrapper";
+import LessonSelect from "../../components/lesson-select";
 import { ToastContainer, toast } from "react-toastify";
 
 function GroupModal({ props }) {
 
   const dispatch = useDispatch();
 
-  cont [groupCode, setGroupCode] = useState('');
+  const [groupCode, setGroupCode] = useState('');
 
   const [department, setDepartment] = useState(null);
 
@@ -25,17 +26,17 @@ function GroupModal({ props }) {
     }, [dispatch]),
 
     addGroup: useCallback(() => {
-      if(select.groups.find(group => {
+      if (select.groups.find(group => {
         return group.groupCode.toLowerCase() == groupCode.toLowerCase()
       })) {
         toast.error('Такая группа уже есть');
         return;
       }
-      if(groupCode.trim() == '' || department == null) {
+      if (groupCode.trim() == '' || department == null) {
         toast.error('Все поля должны быть заполненны');
         return;
       }
-      if(!/[а-яА-Я]{2,5}-\d{2}[а-яА-Я]?$/.test(groupCode)){
+      if (!/[а-яА-Я]{2,5}-\d{2}[а-яА-Я]?$/.test(groupCode)) {
         toast.error('Проверьте правильность заполнения кода группы');
         return;
       }
@@ -44,20 +45,19 @@ function GroupModal({ props }) {
     })
   }
 
-
-
-
   return (
     <>
       <ToastContainer position="top-center" autoClose={2000} />
       <ModalLayout labelClose='X' title='Добавление новой группы' onClose={callbacks.closeModal}>
         <Wrapper>
           <Flex vertical gap='large' style={{ margin: '15px 0px' }} >
-            <Input value={null} className='teacherSurname' size='large' placeholder='Код группы' />
+            <Input value={groupCode} className='teacherSurname' size='large' placeholder='Код группы' onChange={(e) => setGroupCode(e.target.value)} />
             <LessonSelect placeholder='Отделение'
               defaultValue={null}
               onChange={(value) => setDepartment(value)}
-              selectOptions={[{ value: 1, label: 'Первое' }, { value: 2, label: 'Второе' }]} />          <Button type="primary" onClick={callbacks.addTeacher}>Добавить группу</Button>
+              selectOptions={[{ value: 1, label: 'Первое' }, { value: 2, label: 'Второе' }]}
+            />
+            <Button type="primary" onClick={callbacks.addTeacher}>Добавить группу</Button>
           </Flex>
         </Wrapper>
       </ModalLayout>
