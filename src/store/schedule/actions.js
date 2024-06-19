@@ -29,4 +29,23 @@ export default {
     }
   },
 
+  publish: (schedule) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'schedules/publishing-start'});
+      try {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        console.log(schedule)
+        const res = await services.api.request({
+          url: `/api/Schedule/active?scheduleId=${schedule}`,
+          method: "POST",
+        });
+
+        dispatch({type: 'schedules/publishing-success'})
+      } catch (e) {
+        console.log(e);
+        dispatch({type: 'schedules/publishing-error'})
+      }
+    }
+  },
+
 }

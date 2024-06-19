@@ -24,6 +24,13 @@ function reducer(state = initialState, action) {
     case 'schedules/set-error':
       return { ...state, waiting: false }
 
+    case 'schedules/publishing-start':
+      return { ...state, waiting: false };
+    case 'schedules/publishing-success':
+      return { ...state, waiting: false };
+    case 'schedules/publishing-error':
+      return { ...state, waiting: false };
+
     default:
       return state;
   }
