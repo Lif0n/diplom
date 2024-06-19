@@ -31,5 +31,38 @@ export default {
        dispatch({type: 'groups/post-error'})
       }
      }
+  },
+  put: (group) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'groups/put-start'});
+      
+      try {
+       const res = await services.api.request({
+         url: `/api/Group`,
+         method: 'PUT',
+         body: JSON.stringify(group)
+       });
+ 
+       dispatch({type: 'groups/put-success', payload: {data: res.data}})
+      } catch (e) {
+       dispatch({type: 'groups/put-error'})
+      }
+     }
+  },
+  delete: (id) => {
+    return async(dispatch, getState, services) => {
+      dispatch({type: 'groups/delete-start'});
+      
+      try {
+       const res = await services.api.request({
+         url: `/api/Group?id=${id}`,
+         method: 'DELETE'
+       });
+ 
+       dispatch({type: 'groups/delete-success', payload: {data: res.data}})
+      } catch (e) {
+       dispatch({type: 'groups/delete-error'})
+      }
+     }
   }
 }

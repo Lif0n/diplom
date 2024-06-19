@@ -57,7 +57,7 @@ function GroupModal({ props }) {
               onChange={(value) => setDepartment(value)}
               selectOptions={[{ value: 1, label: 'Первое' }, { value: 2, label: 'Второе' }]}
             />
-            <Button type="primary" onClick={callbacks.addTeacher}>Добавить группу</Button>
+            <Button type="primary" onClick={callbacks.addGroup}>Добавить группу</Button>
           </Flex>
         </Wrapper>
       </ModalLayout>
