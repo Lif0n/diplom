@@ -13,6 +13,14 @@ function reducer(state = initialState, action) {
     case 'groups/load-error':
       return { ...state, list: [], waiting: false };
 
+    case 'groups/post-start':
+      return { ...state, list: [], waiting: true };
+    case 'groups/post-success':
+      return { ...state, list: [...state.list, action.payload.data], waiting: false };
+
+    case 'groups/post-error':
+      return { ...state, list: [], waiting: false };
+
     default:
       return state;
   }

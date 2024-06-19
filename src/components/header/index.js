@@ -15,10 +15,9 @@ function Header({ logo, selected }) {
           </Navbar.Brand>
           <Nav className='me-auto'>
             <Nav.Link className={selected === '' ? 'active' : ''} href='lesson-plan'>Основное расписание</Nav.Link>
-            <Nav.Link className={selected === 'dynamic' ? 'active' : ''}>Динамическое расписание</Nav.Link>
             <Nav.Link className={selected === 'teachers' ? 'active' : ''} href='teachers'>Преподаватели</Nav.Link>
             <Nav.Link className={selected === 'groups' ? 'active' : ''} href='groups'>Группы</Nav.Link>
-            <Nav.Link className={selected === 'subjects' ? 'active' : ''}>Предметы</Nav.Link>
+            <Nav.Link className={selected === 'subjects' ? 'active' : ''} href='subjects'>Предметы</Nav.Link>
             {/* <Nav.Link href='teacher-lesson-plan'>Расписание преподавателей</Nav.Link> */}
           </Nav>
         </Container>

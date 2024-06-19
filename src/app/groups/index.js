@@ -14,6 +14,8 @@ import { Collapse, Button } from "antd";
 import InputSearch from "../../components/input-search";
 import { DownloadOutlined, SearchOutlined } from '@ant-design/icons'
 import GroupComponent from "../../containers/group-component";
+import subjectsActions from '../../store/subjects/actions'
+import teachersActions from '../../store/teachers/actions';
 
 function Groups() {
 
@@ -23,6 +25,8 @@ function Groups() {
 
     useInit(() => {
         dispatch(groupsActions.load());
+        dispatch(subjectsActions.load());
+        dispatch(teachersActions.load())
     })
 
     const select = useSelector(state => ({

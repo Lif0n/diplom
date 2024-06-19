@@ -1,4 +1,5 @@
-import { Button, Card } from "antd";
+
+import { Input, Button, Flex } from 'antd';
 import { memo, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import modalsActions from '../../store/modals/actions'
@@ -7,6 +8,8 @@ import lessonGroupActions from '../../store/lesson-group/actions'
 import useInit from "../../hooks/use-init";
 import teachersActions from '../../store/teachers/actions';
 import subjectsActions from '../../store/subjects/actions'
+import Wrapper from "../../components/wrapper";
+import LessonSelect from '../../components/lesson-select';
 
 
 function GroupComponent({ group }) {
@@ -43,9 +46,21 @@ function GroupComponent({ group }) {
 
 
     return (
-        <Card key={group.id} title={`${group.groupCode}`}
-            extra={<Button>Добавить преподавателя к группе</Button>}>
-        </Card>
+        <Wrapper>
+            <Flex vertical gap='middle'>
+                <Input value={groupCode} size='large' addonBefore='Код группы' onChange={(e) => setGroupCode(e.target.value)} />
+                <LessonSelect placeholder='Отделение'
+                    defaultValue={department}
+                    onChange={(value) => setDepartment(value)}
+                    selectOptions={[{ value: 1, label: 'Первое' }, { value: 2, label: 'Второе' }]} />
+                <Flex gap='middle' justify='center' style={(groupCode == group.groupCode && department == group.department) ? { display: 'none' } : {}}>
+                    <Button type='primary'>Сохранить изменения</Button>
+                    <Button type='primary'>Отменить изменения</Button>
+                </Flex>
+
+                <Button type='primary' >Удалить группу</Button>
+            </Flex>
+        </Wrapper>
     );
 }
 

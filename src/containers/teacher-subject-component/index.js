@@ -5,7 +5,7 @@ import './style.css'
 import { Button, Card, Flex } from 'antd';
 import { useDispatch } from 'react-redux';
 
-function TeacherSubjectComponent(props){
+function TeacherSubjectComponent(props) {
 
   const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ function TeacherSubjectComponent(props){
     }
   }
 
-  return(
+  return (
     <Card size='small'>
       <Flex gap='small' justify='space-between'>
         {/* <h6>{props.groupTeacher.subject.name}</h6> */}

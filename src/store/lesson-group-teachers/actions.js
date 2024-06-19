@@ -22,7 +22,7 @@ export default {
 
       try {
         const res = await services.api.request({
-          url: `/api/LessonGroup?id=${id}`,
+          url: `/api/LessonGroupTeacher?id=${id}`,
           method: 'DELETE'
         });
         dispatch({type: 'lesson-group-teachers/delete-success', payload: id})
