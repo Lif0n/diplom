@@ -96,7 +96,7 @@ function GroupComponent({ group }) {
                     <Button type='primary' onClick={callbacks.onCancel}>Отменить изменения</Button>
                 </Flex>
 
-                <Button type='primary' onClick={callbacks.deleteGroup}>Удалить группу</Button>
+                <Button type='primary' onClick={callbacks.onDelete}>Удалить группу</Button>
             </Flex>
         </Wrapper>
     );

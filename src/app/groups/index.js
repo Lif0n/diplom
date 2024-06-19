@@ -55,7 +55,6 @@ function Groups() {
         const groups = [];
         select.groups.forEach(group => {
             groups.push({
-                key: group.id,
                 label: `${group.groupCode}`,
                 children: <GroupComponent group={group} />,
                 extra: onDownload({ groupId: group.id, name: `${group.groupCode}` })
