@@ -6,6 +6,7 @@ import schedulesActions from '../../store/schedule/actions'
 import lessonPlanActions from '../../store/lesson-plan/actions'
 import { useDispatch, useSelector } from "react-redux";
 import GetClosestSchedule from "../../utils/get-closest-schedule";
+import GroupSchedules from "../../utils/group-schedules-by-dates";
 
 function LessonPlanFilters() {
 
@@ -26,7 +27,7 @@ function LessonPlanFilters() {
     if (select.schedules.length > 0) {
       const closest = GetClosestSchedule(select.schedules);
       console.log(closest);
-      dispatch(schedulesActions.set(closest))
+      dispatch(schedulesActions.set(closest.id))
       return closest.id;
     }
     return null;
@@ -61,6 +62,7 @@ function LessonPlanFilters() {
       setParams(prevParams => {
         const newParams = { ...prevParams, schedule };
         dispatch(lessonPlanActions.setParams(newParams));
+        dispatch(schedulesActions.set(schedule));
         return newParams;
       });
     }, [dispatch, params]),
@@ -78,7 +80,10 @@ function LessonPlanFilters() {
     }, [dispatch]),
     onLoadSchedule: useCallback(() => {
       dispatch(modalsActions.open('schedule'))
-    })
+    }),
+    onPublish: useCallback(() => {      
+      dispatch(schedulesActions.publish(params.schedule));
+    }, [dispatch, params]),
   };
 
   useEffect(() => {
@@ -91,18 +96,13 @@ function LessonPlanFilters() {
 
   return (
     <Flex style={{ position: 'fixed', width: '100vw', top: '76px' }} gap={'large'} justify="center">
-      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Загрузить расписание</Button>
+      <Button size="large" onClick={callbacks.onLoadSchedule} style={{ margin: '15px 0px' }}>Добавить расписание</Button>
       <LessonSelect
         showSearch
         placeholder={'Расписание'}
         defaultValue={initialSchedule}
         value={params.schedule}
-        selectOptions={select.schedules.map((schedule) => {
-          return {
-            value: schedule.id,
-            label: `${schedule.academicYear} год, ${schedule.semester} семестр`
-          }
-        })}
+        selectOptions={GroupSchedules(select.schedules)}
         onChange={callbacks.onSchedule}
       />
       <LessonSelect
@@ -116,8 +116,10 @@ function LessonPlanFilters() {
       <LessonSelect
         showSearch
         placeholder={'Группа'}
+        mode="multiple"
+        allowClear
         defaultValue={params.group}
-        selectOptions={[{ value: null, label: 'Все группы' }, ...select.groups.map((group) => {
+        selectOptions={[ ...select.groups.map((group) => {
           return {
             value: group.id,
             label: `${group.groupCode}`
@@ -129,8 +131,10 @@ function LessonPlanFilters() {
       <LessonSelect
         showSearch
         placeholder={'Преподаватель'}
+        mode="multiple"
+        allowClear
         defaultValue={params.teacher}
-        selectOptions={[{ value: null, label: 'Все преподаватели' }, ...select.teachers.map((teacher) => {
+        selectOptions={[...select.teachers.map((teacher) => {
           return {
             value: teacher.id,
             label: `${teacher.lastName} ${teacher.firstName[0]}. ${teacher.middleName[0]}.`
@@ -142,8 +146,10 @@ function LessonPlanFilters() {
       <LessonSelect
         showSearch
         placeholder={'Кабинет'}
+        mode="multiple"
+        allowClear
         defaultValue={params.audience}
-        selectOptions={[{ value: null, label: 'Все кабинеты' }, ...select.audiences.map((audience) => {
+        selectOptions={[ ...select.audiences.map((audience) => {
           return {
             value: audience.id,
             label: audience.number
@@ -152,7 +158,8 @@ function LessonPlanFilters() {
         loading={select.audiencesWaiting}
         onChange={callbacks.onAudience}
         value={params.audience} />
-      <Button type="primary" size="large" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
+      <Button type="secondary" size="large" style={{ margin: '15px 0px' }} onClick={callbacks.onReset}>Сбросить фильтры</Button>
+      <Button type="primary" size="large" style={{ margin: '15px 0px' }} onClick={callbacks.onPublish}>Опубликовать</Button>
     </Flex>
   );
 }

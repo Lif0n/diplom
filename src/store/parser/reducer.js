@@ -1,12 +1,12 @@
 export const initialState = {
-  result: false,
+  result: null,
   waiting: false
 }
 
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'parcer/load-start':
-      return { ...state, result: false, waiting: true };
+      return { ...state, result: null, waiting: true };
 
     case 'parcer/load-success':
       return { ...state, result: true, waiting: false };

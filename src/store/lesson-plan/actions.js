@@ -90,9 +90,27 @@ export default {
       dispatch({ type: 'lesson-plan/setParams-start' });
 
       try {
+        const queryParams = new URLSearchParams();
+  
+        if (newParams.teacher && newParams.teacher.length > 0) {
+          newParams.teacher.forEach(id => queryParams.append('teacherId', id));
+        }
+        if (newParams.group && newParams.group.length > 0) {
+          newParams.group.forEach(id => queryParams.append('groupId', id));
+        }
+        if (newParams.audience && newParams.audience.length > 0) {
+          newParams.audience.forEach(id => queryParams.append('audienceId', id));
+        }
+        if (newParams.schedule) {
+          queryParams.append('scheduleId', newParams.schedule);
+        }
+        if (newParams.department) {
+          queryParams.append('department', newParams.department);
+        }
+  
         const res = await services.api.request({
-          url: `/api/Lesson/Search?${newParams.teacher ? 'teacherId=' + newParams.teacher : ''}${newParams.group ? '&groupId=' + newParams.group : ''}${newParams.audience ? '&audienceId=' + newParams.audience : ''}${newParams.schedule ? '&scheduleId=' + newParams.schedule : ''}${newParams.department ? '&department=' + newParams.department : ''}`
-        })
+          url: `/api/Lesson/Search?${queryParams.toString()}`
+        });
 
         dispatch({ type: 'lesson-plan/setParams-success', payload: { data: res.data } })
       } catch (e) {

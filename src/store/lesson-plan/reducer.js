@@ -71,7 +71,7 @@ function reducer(state = initialState, action) {
       return { ...state, waiting: true };
 
     case 'lesson-plan/setParams-success': {
-      return { ...state, list: action.payload.data, waiting: false }
+      return { ...state, list: GetAudiencesErrors(GetTeacherErrors(action.payload.data)), waiting: false }
     }
 
     case 'lesson-plan/setParams-error':

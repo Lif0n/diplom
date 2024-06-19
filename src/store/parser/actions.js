@@ -2,7 +2,7 @@ import ToBase64 from "../../utils/to-base64";
 
 export default {
 
-  load: (file, year, semester, status, department) => {
+  load: (file, year, semester, department) => {
     return async (dispatch, getState, services) => {
       dispatch({ type: 'parcer/load-start' });
 
@@ -10,7 +10,7 @@ export default {
         ToBase64(file)
           .then(async base64 => {
             const res = await services.api.request({
-              url: `/api/Parser?year=${year}&semester=${semester}&statusId=${status}&department=${department}`,
+              url: `/api/Parser?year=${year}&semester=${semester}&department=${department}`,
               method: 'POST',
               body: JSON.stringify(base64)
             });

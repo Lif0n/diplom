@@ -36,6 +36,8 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
     audiencesWaiting: state.audiences.waiting,
   }))
 
+  console.log(select.schedule);
+
   const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота',];
 
   const putLesson = async (bool) => {
@@ -43,15 +45,19 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
       dispatch(modalsActions.close('lesson'));
       await Promise.all([dispatch(lessonPlanActions.put({ ...lesson, teachers: teachers, isDistantce: isDistantce },
         [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)]))]);
-      dispatch(lessonPlanActions.load());
+      dispatch(lessonPlanActions.setParams({schedule: select.schedule}));
     }
   }
 
   const postLesson = async (bool) => {
-    dispatch(modalsActions.close('lesson'));
-    await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce },
-      [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule.id))]);
-    dispatch(lessonPlanActions.load());
+    if (bool) {
+      dispatch(modalsActions.close('lesson'));
+      console.log({ ...lesson, teachers: teachers, isDistantce: isDistantce });
+      console.log(select.schedule)
+      await Promise.all([dispatch(lessonPlanActions.post({ ...lesson, teachers: teachers, isDistantce: isDistantce },
+        [{ ...teachers[0], isMain: true }, (teachers[1] != null ? { ...teachers[1], isMain: false } : null)], select.schedule))]);
+      dispatch(lessonPlanActions.setParams({schedule: select.schedule}));
+    }
 
   }
 
@@ -91,7 +97,10 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
           }))
         }
         else {
-
+          if(lesson.subject.id == lessonPlan.subject.id){
+            toast.error('Пара на другой неделе не может иметь такой же предмет');
+            return;
+          }
           dispatch(modalsActions.open('confirm', {
             title: 'Внимание',
             text: 'Вы действительно хотите добавить новую пару пару?',
@@ -112,12 +121,7 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
   const allSubjects = useMemo(() => {
     if (select.lessonGroups) {
       return uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'subject')
-      // .map(s => {
-      //   return {
-      //     value: s.id,
-      //     label: s.name
-      //   }
-      // })
+
     }
     return null;
   }, [dispatch, select.lessonGroups]);
@@ -135,29 +139,14 @@ function LessonModal({ lessonPlan, notChangeWeek }) {
           })
         })
         const unique = {};
-
         newTeachers.forEach(t => {
           unique[t.id] = t;
         })
-
         const uniqueArray = Object.values(unique);
         return uniqueArray
-        // .map(t => {
-        //   return {
-        //     value: t.id,
-        //     label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
-        //   }
-        // })
       }
-
       return uniqueValues(uniqueValues(select.lessonGroups.filter((lg) => lg.group.id == lessonPlan.group.id), 'lessonGroupTeachers')
         .flatMap(arr => arr.filter(item => item.teacher).map(item => item.teacher)))
-      // .map(t => {
-      //   return {
-      //     value: t.id,
-      //     label: `${t.lastName} ${t.firstName[0]}. ${t.middleName[0]}.`
-      //   }
-      // });
     }
     return null;
   }, [select.lessonGroups])
